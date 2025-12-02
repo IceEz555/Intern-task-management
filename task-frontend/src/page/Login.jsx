@@ -32,7 +32,8 @@ export function Login() {
 };
 
     return (
-    <div className="login-container">
+        <>
+        <div className="login-container">
     <div className="login-wrapper">
         {/* Logo & Title */}
         <div className="header">
@@ -101,5 +102,7 @@ export function Login() {
             </div>
         </div>
     </div>
+        </>
+    
     );
 }
