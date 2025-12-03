@@ -3,30 +3,37 @@ import { useState } from "react";
 import '../../assets/styles/LoginPage.css';
 import Button from "../../components/common/Button";
 import { LaptopMinimalCheck } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export function Login() {
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [selectedRole, setSelectedRole] = useState(""); // No default selection initially
+    const [selectedRole, setSelectedRole] = useState(""); // Keep for UI highlighting
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setLoading(true);
 
-        // จำลองการ Login (Fake Login)
         try {
-            // หน่วงเวลา 1.5 วินาที ให้เห็นปุ่ม Loading หมุนๆ
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            console.log("ส่งข้อมูลไป Login:", { email, password });
+            // Call login from AuthContext
+            const user = await login(email, password);
 
-            // สมมติว่าถ้าใส่ password ผิด (test error)
-            if (password.length < 6) {
-                throw new Error("รหัสผ่านต้องมากกว่า 6 ตัวอักษร");
+            // Redirect logic based on role from context result
+            if (user.role === 'Admin') {
+                navigate('/admin');
+            } else if (user.role === 'PM') {
+                navigate('/project-manager');
+            } else {
+                navigate('/admin'); // Default fallback
             }
-            alert("เข้าสู่ระบบสำเร็จ! (ดูค่าใน Console)");
+
         } catch (err) {
             setError(err instanceof Error ? err.message : 'เกิดข้อผิดพลาด');
         } finally {
