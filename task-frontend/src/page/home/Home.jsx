@@ -1,13 +1,13 @@
-import Navbar from "../../components/common/Navbar";
+import HomeNavbar from "../../components/common/HomeNavbar";
 import FeatureCard from "../../components/common/FeatureCard";
-import { Link } from "react-router-dom";
 import "../../assets/styles/Home.css";
 import { FolderPen, ListTodo, UsersRound } from 'lucide-react';
+import Button from "../../components/common/Button";
 
 export function Home() {
     return (
         <div className="home-container">
-            <Navbar />
+            <HomeNavbar />
 
             <div className="home-content">
 
@@ -25,9 +25,9 @@ export function Home() {
                         Tasks management system is a tool that helps you to manage your tasks and projects. This is my first Project for Internship.
                     </p>
 
-                    <Link to="/login" className="btn-primary">
-                        Get Started
-                    </Link>
+                    <Button to="/login" variant="primary" size="lg" className="btn-primary">
+                        Login to Continue
+                    </Button>
                 </main>
 
                 {/* Divider */}
