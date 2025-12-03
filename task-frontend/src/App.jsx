@@ -1,66 +1,21 @@
-import { useState } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
-import reactLogo from './assets/image/react.svg';
+import { Route, Routes } from 'react-router-dom';
 import './assets/styles/App.css';
 import { Login } from './page/Login';
-import viteLogo from '/vite.svg';
+import { Home } from './page/home/Home';
 
 function App() {
-  
-  return (
-    <>
-    <div>
-      <Routes>
-        {/* 1. หน้าแรก (Home) */}
-        <Route path="/" element={<HomePage />} />
-        
-        {/* 2. หน้า Login */}
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </div>
-    </>
-  )
-}
 
-function HomePage() {
-  const [count, setCount] = useState(0);
-  
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Routes>
+          {/* 1. หน้าแรก (Home) */}
+          <Route path="/" element={<Home />} />
+
+          {/* 2. หน้า Login */}
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <Link to="/login">
-        <button style={{ 
-          padding: '10px 20px', 
-          fontSize: '16px', 
-          cursor: 'pointer',
-          backgroundColor: '#2563eb',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          marginTop: '20px'
-        }}>
-          ไปที่หน้าเข้าสู่ระบบ
-        </button>
-      </Link>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }

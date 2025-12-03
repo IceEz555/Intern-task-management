@@ -5,11 +5,7 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: 'Prompt', sans-serif;
-  overflow: hidden; /* ล็อคหน้าจอไม่ให้เลื่อน */
-}
+/* body rule removed to prevent global scroll lock */
 
 /* 1. ฉากหลัง */
 .login-container {
@@ -25,19 +21,29 @@ body {
 .login-wrapper {
   background-color: #ffffff;
   width: 100%;
-  max-width: 440px; /* ความกว้างการ์ด */
-  padding: 48px;    /* ระยะขอบใน ให้ดูโล่งๆ ไม่อึดอัด */
+  max-width: 440px;
+  /* ความกว้างการ์ด */
+  padding: 48px;
+  /* ระยะขอบใน ให้ดูโล่งๆ ไม่อึดอัด */
   border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05); /* เงาฟุ้งๆ นุ่มๆ */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+  /* เงาฟุ้งๆ นุ่มๆ */
   text-align: center;
-  
+
   /* Animation ลอยขึ้นมา */
   animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 3. จัดการส่วนหัว (Title) */
@@ -94,24 +100,27 @@ body {
   color: #9ca3af;
   display: flex;
   transition: color 0.2s;
-  pointer-events: none; /* ให้คลิกทะลุไอคอนได้ */
+  pointer-events: none;
+  /* ให้คลิกทะลุไอคอนได้ */
 }
 
 .form-input {
   width: 100%;
-  padding: 14px 16px 14px 48px; /* เว้นซ้าย 48px หลบไอคอน */
+  padding: 14px 16px 14px 48px;
+  /* เว้นซ้าย 48px หลบไอคอน */
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   font-size: 0.95rem;
   outline: none;
-  background-color: #f9fafb; /* พื้นหลังเทาจางๆ */
+  background-color: #f9fafb;
+  /* พื้นหลังเทาจางๆ */
   transition: all 0.2s;
   font-family: inherit;
   color: #1f2937;
 }
 
 .form-input::placeholder {
-    color: #d1d5db;
+  color: #d1d5db;
 }
 
 .form-input:focus {
@@ -120,7 +129,7 @@ body {
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-.form-input:focus + .input-icon {
+.form-input:focus+.input-icon {
   color: #3b82f6;
 }
 

@@ -1,0 +1,120 @@
+.home-container {
+    min-height: 100vh;
+    background-color: #ffffff;
+    background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.home-content {
+    max-width: 80rem;
+    /* max-w-7xl */
+    margin: 0 auto;
+    padding: 8rem 1.5rem 5rem;
+    /* pt-32 pb-20 px-6 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-wrapper {
+    width: 100%;
+    max-width: 48rem;
+    /* max-w-3xl */
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.new-feature-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background-color: #eff6ff;
+    /* bg-blue-50 */
+    color: #2563eb;
+    /* text-blue-600 */
+    font-size: 0.875rem;
+    /* text-sm */
+    font-weight: 600;
+    margin-bottom: 2rem;
+    border: 1px solid #dbeafe;
+    /* border-blue-100 */
+}
+
+.hero-title {
+    font-size: 3rem;
+    /* text-5xl */
+    font-weight: 800;
+    color: #111827;
+    /* text-gray-900 */
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+    line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 3.75rem;
+        /* md:text-6xl */
+    }
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    /* text-xl */
+    color: #6b7280;
+    /* text-gray-500 */
+    margin-bottom: 2.5rem;
+    max-width: 42rem;
+    /* max-w-2xl */
+    line-height: 1.625;
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #2563eb;
+    /* bg-blue-600 */
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 1.125rem;
+    /* text-lg */
+    transition: all 0.2s;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+    /* hover:bg-blue-700 */
+    box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.4);
+    transform: translateY(-4px);
+}
+
+.divider {
+    width: 100%;
+    max-width: 64rem;
+    /* max-w-5xl */
+    height: 1px;
+    background-color: #e5e7eb;
+    /* bg-gray-200 */
+    margin: 5rem 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 72rem;
+    /* max-w-6xl */
+}
+
+@media (min-width: 768px) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
