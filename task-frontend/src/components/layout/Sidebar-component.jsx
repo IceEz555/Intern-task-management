@@ -22,7 +22,7 @@ const Sidebar = () => {
     // Define menus for each role
     const menus = {
         Admin: [
-            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/admin' },
+            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/AdminDashboard' },
             { icon: <Users size={20} />, label: 'User Management', path: '/admin/users' },
         ],
         PM: [

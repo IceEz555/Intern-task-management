@@ -1,0 +1,351 @@
+/* Admin Dashboard Styles */
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    /* space-y-6 */
+}
+
+.dashboard-header h1 {
+    font-size: 1.5rem;
+    /* text-2xl */
+    font-weight: 700;
+    /* font-bold */
+    color: #111827;
+    /* text-gray-900 */
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: #6b7280;
+    /* text-gray-500 */
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.stat-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    /* rounded-2xl */
+    border: 1px solid #f3f4f6;
+    /* border-gray-100 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /* shadow-sm */
+    transition: box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    /* shadow-md */
+}
+
+.stat-icon-wrapper {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+/* Helper classes for dynamic backgrounds */
+.bg-blue-50 {
+    background-color: #eff6ff;
+}
+
+.bg-purple-50 {
+    background-color: #faf5ff;
+}
+
+.bg-green-50 {
+    background-color: #f0fdf4;
+}
+
+/* Helper classes for dynamic text colors */
+.text-blue-600 {
+    color: #2563eb;
+}
+
+.text-purple-600 {
+    color: #9333ea;
+}
+
+.text-green-600 {
+    color: #16a34a;
+}
+
+.stat-title {
+    font-size: 0.75rem;
+    /* text-xs */
+    font-weight: 700;
+    color: #9ca3af;
+    /* text-gray-400 */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    /* tracking-wider */
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 1.875rem;
+    /* text-3xl */
+    font-weight: 700;
+    color: #111827;
+    /* text-gray-900 */
+}
+
+/* Skeleton Loader */
+.skeleton-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+.skeleton-icon {
+    width: 3rem;
+    height: 3rem;
+    background-color: #e5e7eb;
+    /* bg-gray-200 */
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.skeleton-text {
+    height: 0.75rem;
+    width: 6rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-value {
+    height: 2rem;
+    width: 4rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+}
+
+/* Charts Section */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.chart-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.chart-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chart-title {
+    font-weight: 700;
+    color: #111827;
+}
+
+.chart-select {
+    font-size: 0.875rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    color: #6b7280;
+    background-color: #f9fafb;
+    outline: none;
+}
+
+/* Bar Chart */
+.bar-chart-container {
+    height: 16rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0 1rem;
+}
+
+.bar-wrapper {
+    width: 100%;
+    background-color: #eff6ff;
+    /* bg-blue-50 */
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    position: relative;
+    /* group hover effect needs JS or simpler CSS structure, kept simple here */
+}
+
+.bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #3b82f6;
+    /* bg-blue-500 */
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    transition: all 0.5s;
+}
+
+.bar-wrapper:hover .bar-fill {
+    background-color: #2563eb;
+    /* bg-blue-600 */
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+/* Pie Chart */
+.pie-chart-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 16rem;
+    position: relative;
+}
+
+.donut-chart {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 9999px;
+    border: 16px solid #dbeafe;
+    /* border-blue-100 */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-segment-1 {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 16px solid #3b82f6;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    transform: rotate(45deg);
+}
+
+.donut-segment-2 {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 16px solid #a855f7;
+    /* border-purple-500 */
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    transform: rotate(200deg);
+}
+
+.donut-center-text {
+    text-align: center;
+    z-index: 10;
+}
+
+.donut-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.donut-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.chart-legend {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 9999px;
+}
+
+.bg-blue-500 {
+    background-color: #3b82f6;
+}
+
+.bg-purple-500 {
+    background-color: #a855f7;
+}
+
+.bg-blue-100 {
+    background-color: #dbeafe;
+}
+
+.legend-text {
+    font-size: 0.875rem;
+    color: #4b5563;
+}

@@ -1,0 +1,106 @@
+{
+    "info": {
+        "_postman_id": "b7891234-5678-9012-3456-789012345678",
+        "name": "Task Management API",
+        "description": "Collection for testing Task Management System APIs",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Login (Admin)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@internflow.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/api/login",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "login"
+                            ]
+                        },
+                        "description": "Authenticate user and return user details."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login (PM)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"sarah@internflow.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/api/login",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login (Member)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"mike@internflow.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:5000/api/login",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext(null);
 
@@ -11,29 +12,18 @@ export const AuthProvider = ({ children }) => {
     const [loading] = useState(false); // No need to load if we read sync from localStorage
 
     const login = async (email, password) => {
-        // Simulate API Call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Mock Logic
-        if (password.length < 6) {
-            throw new Error("Password must be at least 6 characters long");
+        try {
+            const response = await axios.post('http://localhost:5000/api/login', {
+                email,
+                password
+            });
+            const userData = response.data.user;
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            return userData;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || 'Login failed');
         }
-
-        let role = 'Member';
-        let name = 'Member User';
-
-        if (email.includes('admin') || email === 'admin@example.com') {
-            role = 'Admin';
-            name = 'Admin User';
-        } else if (email.includes('pm') || email === 'pm@example.com') {
-            role = 'PM';
-            name = 'Project Manager';
-        }
-
-        const userData = { email, name, role };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        return userData;
     };
 
     const logout = () => {
