@@ -4,6 +4,7 @@ import { Login } from './pages/Auth/Login';
 import { Home } from './pages/Home/HomePage';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import RoleRoute from './routes/RoleRoute';
+import UserManagement from './pages/Admin/UserManagement';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           {/* 3. หน้า Admin Dashboard (Protected) */}
           <Route element={<RoleRoute allowedRoles={['Admin']} />}>
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
+            <Route path="/Admin/UserManagement" element={<UserManagement />} />
           </Route>
         </Routes>
       </div>

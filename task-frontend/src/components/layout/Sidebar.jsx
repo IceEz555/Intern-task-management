@@ -23,7 +23,7 @@ const Sidebar = () => {
     const menus = {
         Admin: [
             { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/AdminDashboard' },
-            { icon: <Users size={20} />, label: 'User Management', path: '/admin/users' },
+            { icon: <Users size={20} />, label: 'User Management', path: '/Admin/UserManagement' },
         ],
         PM: [
             { icon: <Folder size={20} />, label: 'Project', path: '/project-manager' },
@@ -35,7 +35,7 @@ const Sidebar = () => {
         ]
     };
 
-    const currentMenu = menus[role] || menus.Admin;
+    const currentMenu = menus[role];
 
     return (
         <aside className="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">

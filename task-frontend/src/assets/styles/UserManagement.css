@@ -1,0 +1,33 @@
+.management-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-management-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-management-content table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-management-content table th,
+.user-management-content table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-management-content table th {
+    background-color: #f2f2f2;
+}
