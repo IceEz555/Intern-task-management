@@ -11,7 +11,7 @@ const UserManagement = () => {
     const getRoleBadgeClass = (role) => {
         switch (role) {
             case 'Admin': return 'role-badge admin';
-            case 'PM': return 'role-badge pm';
+            case 'ProjectManager': return 'role-badge pm';
             default: return 'role-badge member';
         }
     };
