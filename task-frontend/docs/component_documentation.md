@@ -124,3 +124,31 @@ const MyComponent = () => {
     );
 };
 ```
+
+---
+
+## 5. UserManagement (`src/pages/Admin/UserManagement.jsx`)
+
+หน้าจัดการผู้ใช้สำหรับ **Admin** เท่านั้น ทำหน้าที่แสดงรายชื่อผู้ใช้ทั้งหมดในระบบ
+
+### Features
+- **API Integration**: ดึงข้อมูลจาก `GET /api/users`
+- **Auto Initials**: สร้างรูป Avatar จากตัวอักษรแรกของชื่ออัตโนมัติ
+- **Role & Status Badges**: แสดงสีของ Role และ Status ตามเงื่อนไข (Admin=ฟ้า, PM=ม่วง, Active=เขียว)
+
+### Fetching Logic
+ใช้ `useEffect` ร่วมกับ `axios` ในการดึงข้อมูลเมื่อ Component ถูกโหลด
+
+```javascript
+/* src/pages/Admin/UserManagement.jsx */
+useEffect(() => {
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/users');
+            // Logic สร้าง Initials...
+            setUsers(formattedUsers);
+        } catch (error) { ... }
+    };
+    fetchUsers();
+}, []);
+```
