@@ -1,4 +1,4 @@
-import Sidebar from './Sidebar-component';
+import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import { useAuth } from '../../context/AuthContext';
 

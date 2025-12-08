@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Topbar = ({ namepage, name, role }) => {
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-10">
