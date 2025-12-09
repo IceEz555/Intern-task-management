@@ -65,27 +65,47 @@ task-backend/
 ดึงรายชื่อผู้ใช้ทั้งหมดในระบบ (สำหรับหน้า Admin User Management)
 
 - **Endpoint**: `GET /api/users`
-- **Request**: ไม่ต้องส่ง Body
-- **Response (Success - 200 OK)**:
-  ส่งกลับเป็น Array ของ User Object
+- **Response**: Array ของ User Object
+
+### 2. Create User
+สร้างผู้ใช้ใหม่ (Password จะถูก Hash อัตโนมัติ)
+
+- **Endpoint**: `POST /api/users`
+- **Request Body**:
   ```json
-  [
-    {
-      "user_id": 1,
-      "name": "Admin User", // Aliased from fullname
-      "email": "admin@internflow.com",
-      "role": "Admin",
-      "status": "Active"
-    },
-    {
-      "user_id": 2,
-      "name": "Sarah PM",
-      "email": "sarah@internflow.com",
-      "role": "PM",
-      "status": "Active"
-    }
-    // ...
-  ]
+  {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "Member", // Member, PM, Admin
+    "status": "Active", // Active, OnLeave
+    "password": "StrongPassword1!"
+  }
+  ```
+- **Response (201 Created)**: User Object ที่เพิ่งสร้าง
+
+### 3. Update User
+แก้ไขข้อมูลผู้ใช้ (สามารถส่ง password เพื่อ reset ได้)
+
+- **Endpoint**: `PUT /api/users/:id`
+- **Request Body**:
+  ```json
+  {
+    "name": "John Doe Updated",
+    "email": "john@example.com",
+    "role": "PM",
+    "status": "Active",
+    "password": "" // Optional: ส่งค่าว่างถ้าไม่ต้องการเปลี่ยน
+  }
+  ```
+- **Response (200 OK)**: User Object ที่อัปเดตแล้ว
+
+### 4. Delete User
+ลบผู้ใช้อออกจากระบบ
+
+- **Endpoint**: `DELETE /api/users/:id`
+- **Response (200 OK)**:
+  ```json
+  { "message": "User deleted successfully", "id": "123" }
   ```
 
 ---

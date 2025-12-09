@@ -129,26 +129,62 @@ const MyComponent = () => {
 
 ## 5. UserManagement (`src/pages/Admin/UserManagement.jsx`)
 
-หน้าจัดการผู้ใช้สำหรับ **Admin** เท่านั้น ทำหน้าที่แสดงรายชื่อผู้ใช้ทั้งหมดในระบบ
+หน้าจัดการผู้ใช้สำหรับ **Admin** ทำหน้าที่จัดการข้อมูลผู้ใช้แบบครบวงจร (CRUD)
 
-### Features
-- **API Integration**: ดึงข้อมูลจาก `GET /api/users`
-- **Auto Initials**: สร้างรูป Avatar จากตัวอักษรแรกของชื่ออัตโนมัติ
-- **Role & Status Badges**: แสดงสีของ Role และ Status ตามเงื่อนไข (Admin=ฟ้า, PM=ม่วง, Active=เขียว)
+### Key Features (Updated)
 
-### Fetching Logic
-ใช้ `useEffect` ร่วมกับ `axios` ในการดึงข้อมูลเมื่อ Component ถูกโหลด
+1.  **View All Users (Read)**:
+    - แสดงรายการผู้ใช้ทั้งหมดในรูปแบบตาราง
+    - รองรับ **Search** (ค้นหาตามชื่อ/อีเมล/บทบาท)
+    - รองรับ **Filter** (กรองตาม Role และ Status) โดยกดปุ่ม Filter เพื่อเปิด/ปิดเมนู
+2.  **Create User (Create)**:
+    - ฟอร์มสร้างผู้ใช้ใหม่ (Name, Email, Role, Status, Password)
+    - **Validation**: ตรวจสอบรหัสผ่านขั้นสูง (8+ ตัวอักษร, ตัวเล็ก/ใหญ่, ตัวเลข, อักขระพิเศษ) และ Confirm Password
+    - เชื่อมต่อ API `POST /api/users`
+3.  **Edit User (Update)**:
+    - แก้ไขข้อมูลผู้ใช้ (เปลี่ยน Role, Status, หรือ Reset Password)
+    - ฟิลด์ Password เป็น Optional (ถ้าระบุมา จะทำการ Hash และอัปเดตใหม่ ถ้าว่างไว้จะใช้รหัสเดิม)
+    - เชื่อมต่อ API `PUT /api/users/:id`
+4.  **Delete User (Delete)**:
+    - ลบผู้ใช้อออกจากระบบ พร้อม Modal ยืนยัน
+    - เชื่อมต่อ API `DELETE /api/users/:id`
+
+### Code Structure Logic
+
+**State Management:**
 
 ```javascript
-/* src/pages/Admin/UserManagement.jsx */
-useEffect(() => {
-    const fetchUsers = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/users');
-            // Logic สร้าง Initials...
-            setUsers(formattedUsers);
-        } catch (error) { ... }
-    };
-    fetchUsers();
-}, []);
+// Data State
+const [users, setUsers] = useState([]);      // รายชื่อผู้ใช้ทั้งหมด
+const [loading, setLoading] = useState(true); // สถานะการโหลด
+
+// Modal State
+const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+// Filter State (New)
+const [searchTerm, setSearchTerm] = useState('');
+const [roleFilter, setRoleFilter] = useState('All');
+const [statusFilter, setStatusFilter] = useState('All');
 ```
+
+**Filter Logic:**
+
+ระบบจะทำการกรองข้อมูลแบบ Real-time ที่ฝั่ง Client (Client-side Filtering) จาก State `users`:
+
+```javascript
+const filteredUsers = users.filter(user => {
+    const matchesSearch = ... // เช็คแา Search Term
+    const matchesRole = roleFilter === 'All' || user.role === roleFilter;
+    const matchesStatus = statusFilter === 'All' || user.status === statusFilter;
+    return matchesSearch && matchesRole && matchesStatus;
+});
+```
+
+**Password Validation:**
+
+มีการใช้ Regex ในการตรวจสอบความปลอดภัยของรหัสผ่าน ทั้งตอนสร้างและแก้ไข:
+Regex: `/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/`
+
+---
