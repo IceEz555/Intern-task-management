@@ -155,16 +155,77 @@ const ProjectList = () => {
                 <form onSubmit={handleSubmitCreate}>
                     <div className="form-group">
                         <label>Project Name</label>
-                        <input type="text" className="form-input" required placeholder="e.g. Website Redesign" value={newProject.name} onChange={(e) => setNewProject({ ...newProject, project_name: e.target.value })} />
+                        <input
+                            type="text"
+                            className="form-input"
+                            required
+                            placeholder="e.g. Website Redesign"
+                            value={newProject.project_name}
+                            onChange={(e) => setNewProject({ ...newProject, project_name: e.target.value })}
+                        />
                     </div>
+
                     <div className="form-group">
                         <label>Description</label>
-                        <input type="text" className="form-input-description" required placeholder="Project Description and details"
-                            value={newProject.description} onChange={(e) => setNewProject({ ...newProject, project_description: e.target.value })} />
+                        <textarea
+                            className="form-input-description"
+                            required
+                            placeholder="Project Description and details"
+                            rows="3"
+                            value={newProject.project_description}
+                            onChange={(e) => setNewProject({ ...newProject, project_description: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="form-group">
+                            <label>Start Date</label>
+                            <input
+                                type="date"
+                                className="form-input"
+                                required
+                                value={newProject.project_start_date}
+                                onChange={(e) => setNewProject({ ...newProject, project_start_date: e.target.value })}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>End Date</label>
+                            <input
+                                type="date"
+                                className="form-input"
+                                required
+                                value={newProject.project_end_date}
+                                onChange={(e) => setNewProject({ ...newProject, project_end_date: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Status</label>
+                        <select
+                            className="form-input"
+                            value={newProject.project_status}
+                            onChange={(e) => setNewProject({ ...newProject, project_status: e.target.value })}
+                        >
+                            <option value="">Select Status</option>
+                            <option value="Active">Active</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="On Hold">On Hold</option>
+                        </select>
+                    </div>
+
+                    <div className="modal-actions">
+                        <button type="button" className="btn-cancel" onClick={closeModal}>
+                            Cancel
+                        </button>
+                        <button type="submit" className="btn-confirm">
+                            Create Project
+                        </button>
                     </div>
                 </form>
-            </Modal>
-        </AdminLayout>
+            </Modal >
+        </AdminLayout >
     );
 };
 
