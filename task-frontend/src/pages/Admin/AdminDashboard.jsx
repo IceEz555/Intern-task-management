@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "../../components/layout/AdminLayout";
+import AdminLayout from "../../components/layout/Pagelayout";
 import { Users, Folder, CheckSquare, BarChart3, PieChart } from 'lucide-react';
 import '../../assets/styles/AdminDashboard.css';
 

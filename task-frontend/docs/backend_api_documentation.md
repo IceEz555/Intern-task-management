@@ -109,6 +109,42 @@ task-backend/
   ```
 
 ---
+## 📂 Project Management APIs
+
+### 1. Get All Projects
+ดึงรายชื่อโปรเจกต์ทั้งหมดพร้อมสถิติ (Task Count, Progress) สำหรับหน้า Dashboard
+
+- **Endpoint**: `GET /api/projects`
+- **Response**: Array ของ Project Object
+  ```json
+  [
+    {
+      "project_id": 1,
+      "name": "Marketing Website",
+      "status": "In Progress",
+      "task_count": "5",
+      "done_task_count": "2",
+      "progress": 40
+    }
+  ]
+  ```
+
+### 2. Create Project
+สร้างโปรเจกต์ใหม่
+
+- **Endpoint**: `POST /api/projects`
+- **Request Body**:
+  ```json
+  {
+    "name": "New Mobile App",
+    "description": "App for Q4",
+    "status": "Planning",
+    "start_date": "2023-01-01",
+    "end_date": "2023-03-31"
+  }
+  ```
+
+---
 
 ## 🗄️ Database Connection
 ไฟล์ `src/config/db.js` ทำหน้าที่สร้าง Pool Connection ไปยัง PostgreSQL

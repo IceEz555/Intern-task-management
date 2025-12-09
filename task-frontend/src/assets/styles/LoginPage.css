@@ -109,7 +109,7 @@
   /* ให้คลิกทะลุไอคอนได้ */
 }
 
-.form-input {
+.form-input-login {
   width: 100%;
   padding: 14px 16px 14px 48px !important;
   /* เว้นซ้าย 48px หลบไอคอน */
@@ -124,17 +124,17 @@
   color: #1f2937;
 }
 
-.form-input::placeholder {
+.form-input-login::placeholder {
   color: #d1d5db;
 }
 
-.form-input:focus {
+.form-input-login:focus {
   background-color: #fff;
   border-color: #3b82f6;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-.form-input:focus+.input-icon {
+.form-input-login:focus+.input-icon {
   color: #3b82f6;
 }
 

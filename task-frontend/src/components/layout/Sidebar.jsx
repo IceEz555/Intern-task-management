@@ -26,8 +26,8 @@ const Sidebar = () => {
             { icon: <Users size={20} />, label: 'User Management', path: '/Admin/UserManagement' },
         ],
         PM: [
-            { icon: <Folder size={20} />, label: 'Project', path: '/project-manager' },
-            { icon: <Folder size={20} />, label: 'My Kanban Board ', path: '/admin/projects' },
+            { icon: <Folder size={20} />, label: 'Projects', path: '/ProjectManagement' },
+            { icon: <LayoutDashboard size={20} />, label: 'My Kanban Board', path: '/pm/kanban' },
         ],
         Member: [
             { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/admin' },

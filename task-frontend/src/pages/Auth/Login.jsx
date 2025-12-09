@@ -28,7 +28,7 @@ export function Login() {
             if (user.role === 'Admin') {
                 navigate('/AdminDashboard');
             } else if (user.role === 'PM') {
-                navigate('/project-manager');
+                navigate('/ProjectManagement');
             } else {
                 navigate('/admin'); // Default fallback
             }
@@ -79,7 +79,7 @@ export function Login() {
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="form-input"
+                                        className="form-input-login"
                                         placeholder="your@email.com"
                                         required
                                     />
@@ -100,7 +100,7 @@ export function Login() {
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="form-input"
+                                        className="form-input-login"
                                         placeholder="••••••••"
                                         required
                                     />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import AdminLayout from "../../components/layout/AdminLayout";
+import AdminLayout from "../../components/layout/Pagelayout";
 import { Search, Filter, Plus } from 'lucide-react';
 import axios from 'axios';
 import "../../assets/styles/UserManagement.css";

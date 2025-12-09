@@ -5,6 +5,7 @@ import { Home } from './pages/Home/HomePage';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import RoleRoute from './routes/RoleRoute';
 import UserManagement from './pages/Admin/UserManagement';
+import ProjectList from './pages/ProjectManager/ProjectList';
 
 function App() {
 
@@ -22,6 +23,11 @@ function App() {
           <Route element={<RoleRoute allowedRoles={['Admin']} />}>
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
             <Route path="/Admin/UserManagement" element={<UserManagement />} />
+          </Route>
+
+          {/* 4. หน้า Project Manager (Protected) */}
+          <Route element={<RoleRoute allowedRoles={['PM']} />}>
+            <Route path="/ProjectManagement" element={<ProjectList />} />
           </Route>
         </Routes>
       </div>

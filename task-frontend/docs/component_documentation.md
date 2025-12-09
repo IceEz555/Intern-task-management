@@ -187,4 +187,41 @@ const filteredUsers = users.filter(user => {
 มีการใช้ Regex ในการตรวจสอบความปลอดภัยของรหัสผ่าน ทั้งตอนสร้างและแก้ไข:
 Regex: `/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/`
 
+## 6. StatCard (`src/components/dashboard/StatCard.jsx`)
+
+การ์ดแสดงตัวเลขสถิติในหน้า Dashboard
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `title` | String | หัวข้อสถิติ (e.g., "Total Active") |
+| `value` | String/Number | ค่าตัวเลขที่ต้องการแสดง |
+| `desc` | String | คำอธิบายเพิ่มเติมตัวเล็กๆ (e.g., "+2 this month") |
+| `icon` | Node | ไอคอนประกอบ (Optional) |
+| `isPrimary` | Boolean | ถ้า `true` จะเป็นพื้นหลังสีน้ำเงิน (สำหรับ Highlight) |
+
 ---
+
+## 7. ProjectCard (`src/components/dashboard/ProjectCard.jsx`)
+
+การ์ดแสดงรายละเอียดโปรเจกต์ (ชื่อ, สถานะ, Progress Bar)
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `project` | Object | Object ข้อมูลโปรเจกต์ที่ได้จาก API |
+| `onClick` | Function | ฟังก์ชันเมื่อคลิกที่การ์ด |
+
+**Project Object Structure:**
+```javascript
+{
+  name: "Project Name",
+  description: "...",
+  status: "In Progress", // Used for badge color
+  progress: 50, // Percentage 0-100
+  task_count: 10,
+  members: [...]
+}
+```
