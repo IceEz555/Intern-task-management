@@ -1,16 +1,59 @@
-# React + Vite
+# Task Management System - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend application for the Task Management System, built with modern web technologies to provide a responsive and interactive user experience.
 
-Currently, two official plugins are available:
+## 💻 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework**: [React](https://react.dev/) (v19)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + Custom CSS
+- **Routing**: [React Router](https://reactrouter.com/) (v7)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **HTTP Client**: [Axios](https://axios-http.com/)
 
-## React Compiler
+## 🏗 Project Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```
+src/
+├── assets/         # Static assets (images, global styles)
+├── components/     # Reusable components
+│   ├── common/     # Generic components (Modal, Button, etc.)
+│   └── layout/     # Layout components (Sidebar, Topbar)
+├── context/        # Context API (AuthContext, etc.)
+├── pages/          # Page components
+│   ├── Admin/      # Admin-specific pages (Dashboard, UserManagement)
+│   ├── Auth/       # Authentication pages (Login)
+│   └── Home/       # Public home page
+├── routes/         # Routing configuration (Protected Routes)
+└── utils/          # Helper functions
+```
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
+
+2.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
+    The app will be available at `http://localhost:5173`.
+
+## 🎨 Key Features
+
+- **Authentication**: Login page with role-based simulation.
+- **Admin Dashboard**: Overview of system stats.
+- **User Management**:
+  - Browse users with filtering.
+  - Add, Edit, and Delete users via Modal popups.
+  - *Note: Currently connects to a local backend API.*
+
+## 🔧 Configuration
+
+- **Tailwind**: Configured in `tailwind.config.js` and `src/index.css`.
+- **Vite**: Configured in `vite.config.js`.
+
+---
+*Part of the Intern Task Management Project*

@@ -251,10 +251,51 @@
     color: #2563eb;
 }
 
-.btn-action.delete {
+/* ... existing code ... */
+.btn-action.delete:hover {
+    color: #dc2626;
+}
+
+/* Modal Form Custom Styles */
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-group.half-width {
+    flex: 1;
+}
+
+.avatar-upload-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.avatar-placeholder {
+    width: 6rem;
+    height: 6rem;
+    border: 2px dashed #e5e7eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: #f9fafb;
+}
+
+.avatar-placeholder:hover {
+    border-color: #d1d5db;
+    background-color: #f3f4f6;
+}
+
+.plus-icon {
     color: #9ca3af;
 }
 
-.btn-action.delete:hover {
-    color: #dc2626;
+.helper-text {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
 }
