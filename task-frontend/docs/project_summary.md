@@ -13,6 +13,16 @@
 - **Backend (`projectController.js`, `projectRoutes.js`)**:
     - สร้าง API สำหรับดึงข้อมูล Projects พร้อมนับจำนวน Task และ Progress
     - สร้าง Table `projects` และ `tasks` ใน Database
+17: 
+18: ### 📝 Project Details & Task Management (New!)
+19: - **Frontend (`ProjectDetails.jsx`)**:
+20:     - แสดงรายละเอียดโปรเจกต์ (`GET /api/projects/:id`)
+21:     - แสดงรายการ Tasks และ Members แบบ Real-time
+22:     - **Task Creation**: Modal สร้างงานใหม่ (`POST /api/tasks`) พร้อม Auto-refresh
+23: - **Backend (`projectController.js`, `taskController.js`)**:
+24:     - `getProjectById`: ดึงข้อมูล Project + Tasks + Members (พร้อม Error Handling)
+25:     - `createTask`: API สร้างงานใหม่ บันทึกลง Table `tasks`
+
 
 ### 👥 User Management Feature (Full CRUD)
 - **Frontend (`UserManagement.jsx`)**:
@@ -38,10 +48,10 @@
 
 ## 2. สถานะปัจจุบัน (Current State)
 
-- **Frontend**: ✅ พร้อมใช้งาน (Admin Dashboard, User Management CRUD สมบูรณ์, Search/Filter ใช้ได้จริง)
-- **Backend**: ✅ พร้อมใช้งาน (API Login, User CRUD ครบถ้วน, เชื่อม Database จริง)
-- **Database**: ✅ เชื่อมต่อ PostgreSQL สำเร็จ (Schema Users, Projects รองรับการใช้งาน)
-- **Authentication**: ✅ Login ผ่าน API จริง / สร้าง User ใหม่เข้าระบบได้จริง
+- **Frontend**: ✅ พร้อมใช้งาน (Admin Dashboard, User Management, Project Lists, Project Details, Create Task)
+- **Backend**: ✅ พร้อมใช้งาน (API Login, User CRUD, Project CRUD, Task Creation)
+- **Database**: ✅ เชื่อมต่อ PostgreSQL สำเร็จ (users, projects, tasks)
+- **Authentication**: ✅ Login ผ่าน API จริง / สร้าง User ใหม่ได้ / User ID Tracking (Partial)
 
 ---
 

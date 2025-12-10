@@ -146,6 +146,50 @@ task-backend/
 
 ---
 
+
+### 3. Get Project Details
+ดึงรายละเอียดเจาะลึกของโปรเจกต์ รวมถึง Tasks และ Members
+
+- **Endpoint**: `GET /api/projects/:id`
+- **Response**: Object เดียวที่รวมทุกอย่าง
+  ```json
+  {
+    "project_id": 1,
+    "name": "Mobile App",
+    "description": "...",
+    "tasks": [
+        { "id": 101, "title": "Design UI", "status": "To Do", "assignee": "Sarah" }
+    ],
+    "members": [
+        { "user_id": 2, "name": "Sarah", "role": "PM" }
+    ]
+  }
+  ```
+
+---
+
+## 📝 Task Management APIs
+
+### 1. Create Task
+สร้างงานใหม่
+
+- **Endpoint**: `POST /api/tasks`
+- **Request Body**:
+  ```json
+  {
+    "title": "Fix Login Bug",
+    "description": "Auth fails on mobile",
+    "status": "To Do",
+    "priority": "High",
+    "project_id": 1,
+    "assignee_id": 2,
+    "due_date": "2023-12-31"
+  }
+  ```
+- **Response**: Task Object ที่สร้างเสร็จ
+
+---
+
 ## 🗄️ Database Connection
 ไฟล์ `src/config/db.js` ทำหน้าที่สร้าง Pool Connection ไปยัง PostgreSQL
 

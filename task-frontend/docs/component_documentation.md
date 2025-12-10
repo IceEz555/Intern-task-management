@@ -225,3 +225,57 @@ Regex: `/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/`
   members: [...]
 }
 ```
+
+---
+
+## 8. CreateTaskModal (`src/components/project/CreateTaskModal.jsx`)
+
+Modal สำหรับสร้างงานใหม่ (Task) ในโปรเจกต์
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `isOpen` | Boolean | ควบคุมการแสดงผล Modal |
+| `onClose` | Function | ฟังก์ชันเมื่อปิด Modal |
+| `projectId` | Number/String | ID ของโปรเจกต์ที่จะสร้างงานนี้ |
+| `members` | Array | รายชื่อสมาชิกทีม (ใช้สำหรับ Dropdown เลือก Assignee) |
+| `onTaskCreated` | Function | Callback เมื่อสร้างงานสำเร็จ (มักใช้ `fetchProject` เพื่อรีโหลดข้อมูล) |
+
+### Usage Example
+
+```jsx
+<CreateTaskModal
+    isOpen={isCreateTaskOpen}
+    onClose={() => setIsCreateTaskOpen(false)}
+    projectId={projectId}
+    members={project.members}
+    onTaskCreated={fetchProject} // Refresh parent data
+/>
+```
+
+---
+
+## 9. TaskItem (`src/components/project/TaskItem.jsx`)
+
+การ์ดแสดงรายละเอียดงานย่อยในหน้า Project Details
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `task` | Object | ข้อมูลงาน (Title, Status, Assignee, Priority) |
+| `onClick` | Function | เมื่อคลิกที่การ์ด (ยังไม่ได้ใช้จริงในปัจจุบัน) |
+
+---
+
+## 10. TeamMembers (`src/components/project/TeamMembers.jsx`)
+
+Component แสดงรายชื่อสมาชิกในทีม พร้อมปุ่ม "Manage Team"
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `members` | Array | รายชื่อสมาชิก (User Object) |
+| `onManageClick` | Function | เมื่อกดปุ่ม "+" เพื่อเปิด Modal จัดการสมาชิก |

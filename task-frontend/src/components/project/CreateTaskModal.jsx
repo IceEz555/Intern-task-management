@@ -2,16 +2,57 @@ import { useState } from 'react';
 import Modal from '../common/Modal';
 import { X, Calendar, ClipboardList } from 'lucide-react';
 
-const CreateTaskModal = ({ isOpen, onClose }) => {
+const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreated }) => {
     // Local state for form
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState('To Do');
     const [description, setDescription] = useState('');
-    const [assignee, setAssignee] = useState('');
-    const [priority, setPriority] = useState('Low');
+    const [assigneeId, setAssigneeId] = useState('');
+    const [priority, setPriority] = useState('Medium');
     const [dueDate, setDueDate] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     if (!isOpen) return null;
+
+    const handleSubmit = async () => {
+        if (!title.trim()) {
+            alert('Please enter a task title');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const response = await fetch('http://localhost:5000/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title,
+                    description,
+                    status,
+                    priority,
+                    due_date: dueDate || null,
+                    project_id: projectId,
+                    assignee_id: assigneeId || null
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to create task');
+
+            await response.json();
+            if (onTaskCreated) onTaskCreated(); // Refresh parent
+
+            // Reset form
+            setTitle('');
+            setDescription('');
+            setAssigneeId('');
+            onClose();
+        } catch (err) {
+            console.error(err);
+            alert('Error creating task');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     // Custom Header to match the design (Status dropdown on left)
     const customHeader = (
@@ -28,6 +69,8 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
             </select>
         </div>
     );
+
+
 
     return (
         <Modal open={isOpen} onClose={onClose} title={customHeader} size="md-plus" >
@@ -69,12 +112,15 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
                         <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Assignee</label>
                         <select
                             className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                            value={assignee}
-                            onChange={(e) => setAssignee(e.target.value)}
+                            value={assigneeId}
+                            onChange={(e) => setAssigneeId(e.target.value)}
                         >
                             <option value="">Unassigned</option>
-                            <option value="Sarah PM">Sarah PM</option>
-                            <option value="Mike Dev">Mike Dev</option>
+                            {members.map(member => (
+                                <option key={member.user_id} value={member.user_id}>
+                                    {member.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
@@ -110,8 +156,13 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
 
                     {/* Create Button (Inside Sidebar or Bottom) */}
                     <div className="pt-4 border-t border-gray-100 mt-auto">
-                        <button className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors">
-                            Add Task
+                        <button
+                            onClick={handleSubmit}
+                            disabled={isSubmitting}
+                            className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors ${isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                                }`}
+                        >
+                            {isSubmitting ? 'Creating...' : 'Add Task'}
                         </button>
                     </div>
                 </div>

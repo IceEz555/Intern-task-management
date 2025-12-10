@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../../components/layout/Pagelayout';
 import { ChevronLeft, Calendar, Clock, Plus, UserPlus } from 'lucide-react';
 import '../../assets/styles/ProjectDetails.css';
@@ -10,27 +10,40 @@ import CreateTaskModal from '../../components/project/CreateTaskModal';
 import AddMemberModal from '../../components/project/AddMemberModal';
 
 const ProjectDetails = () => {
+    const { projectId } = useParams();
     const navigate = useNavigate();
 
     // Modal States
     const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
     const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
 
-    // Mock Data
-    const project = {
-        name: "Mobile App Q3 Update",
-        description: "Implement dark mode and new navigation flow for iOS/Android to improve user experience and retention.",
-        dueDate: "2025-01-15",
-        status: "Planning",
-        members: [
-            { name: "Sarah PM", role: "Project Manager", avatar: "SP" },
-            { name: "Mike Dev", role: "Team Member", avatar: "MD" }
-        ],
-        tasks: [
-            { id: "T-103", title: "User Testing Session", date: "2024-12-25", assignee: "John Intern", status: "TO DO" },
-            { id: "T-105", title: "Fix Navigation Bug", date: "2023-11-26", assignee: "John Intern", status: "TO DO" }
-        ]
+    // Data States
+    const [project, setProject] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const fetchProject = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/projects/${projectId}`);
+            if (!response.ok) throw new Error('Failed to fetch project');
+            const data = await response.json();
+            console.log(data); // Debug
+            setProject(data);
+        } catch (err) {
+            console.error(err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    useEffect(() => {
+        if (projectId) fetchProject();
+    }, [projectId]);
+
+    if (loading) return <AdminLayout namepage="Project Detail"><div className="p-8">Loading...</div></AdminLayout>;
+    if (error) return <AdminLayout namepage="Project Detail"><div className="p-8 text-red-500">Error: {error}</div></AdminLayout>;
+    if (!project) return <AdminLayout namepage="Project Detail"><div className="p-8">Project not found</div></AdminLayout>;
 
     return (
         <AdminLayout namepage="Project Detail">
@@ -116,6 +129,9 @@ const ProjectDetails = () => {
                 <CreateTaskModal
                     isOpen={isCreateTaskOpen}
                     onClose={() => setIsCreateTaskOpen(false)}
+                    projectId={project?.project_id}
+                    members={project?.members}
+                    onTaskCreated={fetchProject}
                 />
                 <AddMemberModal
                     isOpen={isAddMemberOpen}
