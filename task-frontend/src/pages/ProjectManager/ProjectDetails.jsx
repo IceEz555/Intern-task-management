@@ -136,7 +136,10 @@ const ProjectDetails = () => {
                 <AddMemberModal
                     isOpen={isAddMemberOpen}
                     onClose={() => setIsAddMemberOpen(false)}
+                    projectId={project.project_id}
+                    projectName={project.name}
                     currentMembers={project.members}
+                    onMemberAdded={fetchProject}
                 />
 
             </div>

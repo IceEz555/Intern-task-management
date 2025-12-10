@@ -1,85 +1,160 @@
-import { useState } from 'react';
-import Modal from '../common/Modal';
-import { Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Check } from 'lucide-react';
+import '../../assets/styles/Modal.css';
 
-const AddMemberModal = ({ isOpen, onClose, currentMembers = [] }) => {
-    // Mock user list - in real app, fetch from API
-    const allUsers = [
-        { id: 1, name: 'Admin User', role: 'Admin', avatar: 'AU' },
-        { id: 2, name: 'Sarah PM', role: 'Project Manager', avatar: 'SP' },
-        { id: 3, name: 'John Intern', role: 'Team Member', avatar: 'JI' },
-        { id: 4, name: 'Emily Design', role: 'Team Member', avatar: 'ED' },
-        { id: 5, name: 'Mike Dev', role: 'Team Member', avatar: 'MD' },
-    ];
+const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMembers = [], onMemberAdded }) => {
+    const [allUsers, setAllUsers] = useState([]);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
 
-    // Initialize state with current members
-    // For demo, we just track IDs
-    const currentMemberIds = currentMembers.map(m => m.name); // Using name as ID for mock match
-    const [selectedIds, setSelectedIds] = useState(
-        allUsers.filter(u => currentMemberIds.includes(u.name)).map(u => u.id)
-    );
+    useEffect(() => {
+        if (isOpen) {
+            fetchUsers();
+            // Initialize selection based on current members
+            const currentIds = currentMembers.map(m => m.user_id);
+            setSelectedIds(currentIds);
+        }
+    }, [isOpen, currentMembers]);
 
-    const toggleUser = (id) => {
-        if (selectedIds.includes(id)) {
-            setSelectedIds(selectedIds.filter(uid => uid !== id));
-        } else {
-            setSelectedIds([...selectedIds, id]);
+    const fetchUsers = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:5000/api/users');
+            if (response.ok) {
+                const data = await response.json();
+                setAllUsers(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch users:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleSave = () => {
-        console.log("Saving members: ", selectedIds);
-        onClose();
+    const toggleUser = (userId) => {
+        if (selectedIds.includes(userId)) {
+            setSelectedIds(prev => prev.filter(id => id !== userId));
+        } else {
+            setSelectedIds(prev => [...prev, userId]);
+        }
     };
 
+    const handleSave = async () => {
+        setSaving(true);
+        const originalIds = currentMembers.map(m => m.user_id);
+
+        // Find users to Add (in selected but not in original)
+        const toAdd = selectedIds.filter(id => !originalIds.includes(id));
+
+        // Find users to Remove (in original but not in selected)
+        const toRemove = originalIds.filter(id => !selectedIds.includes(id));
+
+        try {
+            // Execute all changes
+            const addPromises = toAdd.map(userId =>
+                fetch(`http://localhost:5000/api/projects/${projectId}/members`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                })
+            );
+
+            const removePromises = toRemove.map(userId =>
+                fetch(`http://localhost:5000/api/projects/${projectId}/members/${userId}`, {
+                    method: 'DELETE'
+                })
+            );
+
+            await Promise.all([...addPromises, ...removePromises]);
+
+            onMemberAdded(); // Refresh parent
+            onClose();
+        } catch (error) {
+            console.error("Failed to update members:", error);
+            alert("Failed to update team members");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    if (!isOpen) return null;
+
     return (
-        <Modal open={isOpen} onClose={onClose} title="Manage Team">
-            <div className="py-2">
-                <p className="text-sm text-gray-500 mb-4">Select members to add to this project</p>
-                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
-                    {allUsers.map((user) => {
-                        const isSelected = selectedIds.includes(user.id);
-                        return (
-                            <div
-                                key={user.id}
-                                onClick={() => toggleUser(user.id)}
-                                className={`flex items-center justify-between p-3 rounded-lg cursor-pointer border transition-all ${isSelected
-                                    ? 'bg-blue-50 border-blue-200'
-                                    : 'bg-white border-transparent hover:bg-gray-50'
-                                    }`}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'
-                                        }`}>
-                                        {user.avatar}
-                                    </div>
-                                    <div>
-                                        <p className={`text-sm font-medium ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>{user.name}</p>
-                                        <p className="text-xs text-gray-500">{user.role}</p>
-                                    </div>
-                                </div>
-                                {isSelected && <Check size={18} className="text-blue-600" />}
-                            </div>
-                        );
-                    })}
+        <div className="modal-overlay" style={{ zIndex: 9999 }}>
+            <div className="modal-content">
+                {/* Header */}
+                <div className="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 className="text-xl font-bold text-gray-900">Manage Team</h2>
+                        {projectName && <p className="text-sm text-gray-500 mt-1">{projectName}</p>}
+                    </div>
+                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+                        <X size={24} />
+                    </button>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end gap-3">
+                {/* Body: User List */}
+                <div className="max-h-[60vh] overflow-y-auto pr-2 space-y-2 mb-6">
+                    {loading ? (
+                        <p className="text-center text-gray-500 py-4">Loading users...</p>
+                    ) : (
+                        allUsers.map((user) => {
+                            const isSelected = selectedIds.includes(user.user_id);
+                            return (
+                                <div
+                                    key={user.user_id}
+                                    onClick={() => toggleUser(user.user_id)}
+                                    className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${isSelected
+                                            ? 'bg-blue-50 border-blue-200'
+                                            : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold ${isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'
+                                            }`}>
+                                            {user.avatar ? (
+                                                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
+                                            ) : (
+                                                user.name ? user.name.charAt(0) : 'U'
+                                            )}
+                                        </div>
+                                        <div>
+                                            <h4 className={`font-semibold ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
+                                                {user.name}
+                                            </h4>
+                                            <p className="text-xs text-gray-500">{user.role}</p>
+                                        </div>
+                                    </div>
+                                    {isSelected && (
+                                        <div className="text-blue-600">
+                                            <Check size={20} />
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSave}
-                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors"
+                        disabled={saving}
+                        className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
                     >
-                        Save Team ({selectedIds.length})
+                        {saving ? 'Saving...' : `Save Team (${selectedIds.length})`}
                     </button>
                 </div>
             </div>
-        </Modal>
+        </div>
     );
 };
 

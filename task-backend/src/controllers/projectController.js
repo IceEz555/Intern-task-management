@@ -111,26 +111,19 @@ export const getProjectById = async (req, res) => {
         `;
         const taskResult = await pool.query(taskQuery, [id]);
 
-        // 3. Get Members (Try-catch specifically for table existence check)
-        let members = [];
-        try {
-            const memberQuery = `
-                SELECT 
-                    u.user_id, 
-                    u.fullname as name, 
-                    u.email, 
-                    u.avatar,
-                    pm.role
-                FROM project_members pm
-                JOIN users u ON pm.user_id = u.user_id
-                WHERE pm.project_id = $1
-            `;
-            const memberResult = await pool.query(memberQuery, [id]);
-            members = memberResult.rows;
-        } catch (memErr) {
-            console.warn("[WARN] Failed to fetch members (Table 'project_members' might not exist):", memErr.message);
-            // Don't crash, just return empty members
-        }
+        // 3. Get Members
+        const memberQuery = `
+            SELECT 
+                u.user_id, 
+                u.fullname as name, 
+                u.email, 
+                u.avatar,
+                u.role
+            FROM projectmembers pm
+            JOIN users u ON pm.user_id = u.user_id
+            WHERE pm.project_id = $1
+        `;
+        const memberResult = await pool.query(memberQuery, [id]);
 
         // Combine data
         const responseData = {
@@ -141,12 +134,56 @@ export const getProjectById = async (req, res) => {
             status: project.project_status,
             dueDate: project.end_date ? new Date(project.end_date).toISOString().split('T')[0] : null,
             tasks: taskResult.rows,
-            members: members
+            members: memberResult.rows
         };
 
         res.json(responseData);
     } catch (err) {
         console.error("[ERROR] getProjectById failed:", err);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
+// Add a member to a project
+export const addProjectMember = async (req, res) => {
+    const { id } = req.params; // projectId
+    const { user_id } = req.body;
+
+    try {
+        // Check if already a member
+        const checkQuery = `SELECT * FROM projectmembers WHERE project_id = $1 AND user_id = $2`;
+        const checkResult = await pool.query(checkQuery, [id, user_id]);
+
+        if (checkResult.rows.length > 0) {
+            return res.status(400).json({ message: "User is already a member of this project" });
+        }
+
+        // Add member
+        const insertQuery = `
+            INSERT INTO projectmembers (project_id, user_id)
+            VALUES ($1, $2)
+            RETURNING *
+        `;
+        await pool.query(insertQuery, [id, user_id]);
+
+        res.status(201).json({ message: "Member added successfully" });
+    } catch (err) {
+        console.error("[ERROR] addProjectMember failed:", err);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
+// Remove a member from a project
+export const removeProjectMember = async (req, res) => {
+    const { id, userId } = req.params;
+
+    try {
+        const deleteQuery = `DELETE FROM projectmembers WHERE project_id = $1 AND user_id = $2`;
+        await pool.query(deleteQuery, [id, userId]);
+
+        res.json({ message: "Member removed successfully" });
+    } catch (err) {
+        console.error("[ERROR] removeProjectMember failed:", err);
         res.status(500).json({ message: "Server error", error: err.message });
     }
 };
