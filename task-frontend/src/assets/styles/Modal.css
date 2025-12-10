@@ -23,6 +23,10 @@
     animation: slideIn 0.2s ease-out;
 }
 
+.modal-content.md-plus {
+    max-width: 700px;
+}
+
 .modal-header {
     display: flex;
     justify-content: space-between;

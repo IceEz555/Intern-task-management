@@ -42,7 +42,7 @@ task-backend/
   {
     "user": {
       "user_id": 1,
-      "fullname": "Admin User",
+      "name": "Admin User",
       "email": "admin@internflow.com",
       "role": "Admin",
       "status": "Active",
@@ -207,4 +207,25 @@ const pool = new Pool({
 });
 ```
 
-> **Note**: ใน Local Environment ต้องตรวจสอบไฟล์ `.env` ให้ค่าตรงกับเครื่องของท่าน
+
+---
+
+## 5. Manage Project Members APIs
+
+API สำหรับจัดการสมาชิกในโปรเจกต์ (เพิ่มและลบ)
+
+### 1. Add Project Member
+เพิ่มสมาชิกเข้าโปรเจกต์
+
+- **Endpoint**: `POST /api/projects/:id/members`
+- **Request Body**:
+  ```json
+  { "user_id": 5 }
+  ```
+- **Response**: 201 Created
+
+### 2. Remove Project Member
+ลบสมาชิกออกจากโปรเจกต์
+
+- **Endpoint**: `DELETE /api/projects/:id/members/:userId`
+- **Response**: 200 OK

@@ -278,4 +278,40 @@ Component แสดงรายชื่อสมาชิกในทีม พ
 | Prop Name | Type | Description |
 | :--- | :--- | :--- |
 | `members` | Array | รายชื่อสมาชิก (User Object) |
-| `onManageClick` | Function | เมื่อกดปุ่ม "+" เพื่อเปิด Modal จัดการสมาชิก |
+
+---
+
+## 11. AddMemberModal (`src/components/project/AddMemberModal.jsx`)
+
+Modal สำหรับจัดการสมาชิกในทีม (เพิ่ม/ลบ) ในรูปแบบ Multi-Select Dashboard
+
+### Key Features
+- **Multi-Select**: เลือกสมาชิกหลายคนพร้อมกันได้
+- **Real-time Search**: ค้นหาผู้ใช้จากชื่อหรืออีเมล
+- **Smart Filtering**: กรอง Admin ออกจากรายชื่ออัตโนมัติ (แสดงเฉพาะ Member/PM)
+- **Smart Diffing**: ระบบคำนวณอัตโนมัติว่าต้อง Add ใครและ Remove ใครเมื่อกด Save
+- **Visual Feedback**: แสดง Avatar และเครื่องหมายถูก ✅ สำหรับคนที่ถูกเลือก
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `isOpen` | Boolean | ควบคุมการแสดงผล Modal |
+| `onClose` | Function | ฟังก์ชันเมื่อปิด Modal |
+| `projectId` | Number/String | ID ของโปรเจกต์ |
+| `projectName` | String | ชื่อโปรเจกต์ (แสดงบน Header) |
+| `currentMembers` | Array | รายชื่อสมาชิกปัจจุบัน (เพื่อแสดงสถานะที่เลือกไว้แล้ว) |
+| `onMemberAdded` | Function | Callback เมื่อบันทึกสำเร็จ (Refresh Parent) |
+
+### Usage Example
+
+```jsx
+<AddMemberModal
+    isOpen={isAddMemberOpen}
+    onClose={() => setIsAddMemberOpen(false)}
+    projectId={project.project_id}
+    projectName={project.name}
+    currentMembers={project.members}
+    onMemberAdded={fetchProject} // Refresh list on success
+/>
+```

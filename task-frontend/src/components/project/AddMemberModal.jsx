@@ -99,41 +99,43 @@ const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMember
                     {loading ? (
                         <p className="text-center text-gray-500 py-4">Loading users...</p>
                     ) : (
-                        allUsers.map((user) => {
-                            const isSelected = selectedIds.includes(user.user_id);
-                            return (
-                                <div
-                                    key={user.user_id}
-                                    onClick={() => toggleUser(user.user_id)}
-                                    className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${isSelected
+                        allUsers
+                            .filter(user => user.role !== 'Admin')
+                            .map((user) => {
+                                const isSelected = selectedIds.includes(user.user_id);
+                                return (
+                                    <div
+                                        key={user.user_id}
+                                        onClick={() => toggleUser(user.user_id)}
+                                        className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${isSelected
                                             ? 'bg-blue-50 border-blue-200'
                                             : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'
-                                        }`}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold ${isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'
-                                            }`}>
-                                            {user.avatar ? (
-                                                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
-                                            ) : (
-                                                user.name ? user.name.charAt(0) : 'U'
-                                            )}
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold ${isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'
+                                                }`}>
+                                                {user.avatar ? (
+                                                    <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
+                                                ) : (
+                                                    user.name ? user.name.charAt(0) : 'U'
+                                                )}
+                                            </div>
+                                            <div>
+                                                <h4 className={`font-semibold ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
+                                                    {user.name}
+                                                </h4>
+                                                <p className="text-xs text-gray-500">{user.role}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h4 className={`font-semibold ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
-                                                {user.name}
-                                            </h4>
-                                            <p className="text-xs text-gray-500">{user.role}</p>
-                                        </div>
+                                        {isSelected && (
+                                            <div className="text-blue-600">
+                                                <Check size={20} />
+                                            </div>
+                                        )}
                                     </div>
-                                    {isSelected && (
-                                        <div className="text-blue-600">
-                                            <Check size={20} />
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })
+                                );
+                            })
                     )}
                 </div>
 
