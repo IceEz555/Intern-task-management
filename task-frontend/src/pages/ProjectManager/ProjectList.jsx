@@ -6,8 +6,10 @@ import StatCard from '../../components/dashboard/StatCard';
 import ProjectCard from '../../components/dashboard/ProjectCard';
 import '../../assets/styles/ProjectList.css';
 import Modal from '../../components/common/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectList = () => {
+    const navigate = useNavigate();
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -136,7 +138,7 @@ const ProjectList = () => {
                                 <ProjectCard
                                     key={project.project_id}
                                     project={project}
-                                    onClick={() => console.log(`Clicked project ${project.project_id}`)}
+                                    onClick={() => navigate(`/ProjectDetails/${project.project_id}`)}
                                 />
                             ))}
                             {/* New Project Placeholder */}

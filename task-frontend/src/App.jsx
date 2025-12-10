@@ -6,6 +6,7 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import RoleRoute from './routes/RoleRoute';
 import UserManagement from './pages/Admin/UserManagement';
 import ProjectList from './pages/ProjectManager/ProjectList';
+import ProjectDetails from './pages/ProjectManager/ProjectDetails';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           {/* 4. หน้า Project Manager (Protected) */}
           <Route element={<RoleRoute allowedRoles={['PM']} />}>
             <Route path="/ProjectManagement" element={<ProjectList />} />
+            <Route path="/ProjectDetails/:projectId" element={<ProjectDetails />} />
           </Route>
         </Routes>
       </div>
