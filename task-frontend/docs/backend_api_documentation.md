@@ -136,11 +136,11 @@ task-backend/
 - **Request Body**:
   ```json
   {
-    "name": "New Mobile App",
-    "description": "App for Q4",
-    "status": "Planning",
-    "start_date": "2023-01-01",
-    "end_date": "2023-03-31"
+    "project_name": "New Mobile App",
+    "project_description": "App for Q4",
+    "project_status": "Planning",
+    "project_start_date": "2023-01-01",
+    "project_end_date": "2023-03-31"
   }
   ```
 

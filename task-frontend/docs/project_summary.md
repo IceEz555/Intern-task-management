@@ -122,9 +122,9 @@ Based on the design, here is the schema structure:
 #### 2. Projects Table (`Project`)
 - `project_id` (PK)
 - `created_by` (FK -> User.user_id)
-- `name`
-- `description` (Fixed typo from 'decription')
-- `status` (Fixed casing from 'Status')
+- `project_name`
+- `project_description` (Fixed typo from 'decription')
+- `project_status` (Fixed casing from 'Status')
 - `start_date`
 - `end_date`
 - `created_at`
