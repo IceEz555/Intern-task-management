@@ -1,88 +1,83 @@
 # 📊 Project Implementation Status Report
 *Date: 2025-12-10*
 
-เอกสารเปรียบเทียบ Requirements เริ่มต้น กับสถานะปัจจุบันของระบบ (Actual Implementation)
+เอกสารเปรียบเทียบ Requirements เริ่มต้น กับสถานะปัจจุบันของระบบ (Actual Implementation) โดยอ้างอิงจาก **OOAD & Priority Table** ที่วางแผนไว้
 
 ---
 
-## 🔶 PART 1 — Requirements Analysis
+## 🔶 PART 1 — Priority Table Audit (ตรวจสอบความคืบหน้าตามความสำคัญ)
 
-### 1.1 Functional Requirements
+| Page / Feature | Priority | Status | Note |
+| :--- | :---: | :---: | :--- |
+| **Home Page** | Must | ✅ Done | หน้าแรกเสร็จสมบูรณ์ |
+| **Login Page** | Must | ✅ Done | เชื่อมต่อ API Auth (Partial JWT) |
+| **Admin Dashboard** | Must | ✅ Done | แสดงสถิติและเมนูครบ |
+| **User Management** | Must | ✅ Done | CRUD (Create, Read, Update, Delete) ครบถ้วน |
+| **Projects List** | Must | ✅ Done | แสดงรายการโปรเจกต์ดึงจาก DB จริง |
+| **Project Detail** | Must | ✅ Done | ดูรายละเอียด, Tasks, Members ได้ |
+| **Kanban Board** | Must | 🔴 Pending | *Critical Next Step* |
+| **Task Detail** | Must | 🟡 Partial | มี Modal สร้างงาน แต่ยังไม่มีหน้า Detail แยก |
+| **Overview (Member)** | Must | 🔴 Pending | ยังไม่ได้เริ่มหน้า Dashboard ของ Member |
+| **My Tasks** | Must | 🔴 Pending | ยังไม่ได้เริ่มหน้า List งานส่วนตัว |
+| **Profile Page** | Must | 🔴 Pending | มีหน้า UI เปล่าๆ ยังไม่เชื่อม API |
+| **Logout** | Must | ✅ Done | ใช้งานได้ (Clear Context/Token) |
+| **Filters/Sorting** | Should | 🟡 Partial | User Management มี Filter แล้ว, Project/Task ยังไม่มี |
+| **System Analytics** | Nice | 🟡 Partial | มี StatCard พื้นฐานใน Admin Dashboard |
 
-| Requirement | Status | Note |
-| :--- | :---: | :--- |
-| **Login / Authentication** | 🟡 Partial | มีหน้า Login, เช็ครหัสผ่าน (Bcrypt) ได้ แต่ยังไม่มี JWT Middleware เต็มรูปแบบ (ใช้ Hardcode/User ID ชั่วคราวในบางจุด) |
-| **Role Based Access Control** | ✅ Done | `RoleRoute` และ `AdminLayout` ทำงานถูกต้อง แยก Admin/PM ได้ |
-| **CRUD Projects** | 🟡 Partial | Create/Read ได้แล้ว. **Pending:** Update, Delete |
-| **CRUD Tasks** | 🟡 Partial | Create/Read ได้แล้ว. **Pending:** Update, Delete |
-| **Task Assignment** | ✅ Done | เลือก User ตอนสร้าง Task ได้แล้ว (เก็บลง DB) |
-| **Task Status Workflow** | 🟡 Partial | Database รองรับ Status แต่ยังไม่มี UI เปลี่ยนสถานะ (Kanban) |
-| **Kanban Board** | 🔴 Pending | ยังไม่ได้เริ่มพัฒนา (เป็น Next Step สำคัญ) |
-| **Dashboard** | 🟡 Partial | Admin/PM มีหน้า Dashboard พื้นฐานแล้ว. Member ยังไม่มี |
-| **Profile** | 🔴 Pending | ยังไม่ได้เชื่อมต่อ API |
-
-### 1.2 User Roles status
-
-*   **Admin**: ✅ จัดการ User ได้ครบ (CRUD), ดู Dashboard ได้
-*   **Project Manager**: 🟡 ดึงโปรเจกต์ได้, สร้าง Task ได้. **ขาด:** การเพิ่มคนเข้าทีม (Add Member), การแก้ไขโปรเจกต์
-*   **Member**: 🔴 ยังไม่มีหน้า Dashboard และ My Tasks ของตัวเอง
-
----
-
-## 🔶 PART 2 — Pages Structure Implementation
-
-### 2.1 Public Pages
-- [x] **Home Page**: เสร็จสมบูรณ์
-- [x] **Login Page**: เสร็จสมบูรณ์ (เชื่อมต่อ API Auth)
-
-### 2.2 Private Pages
-
-**👨‍💼 Admin Pages**
-- [x] **Admin Dashboard**: เสร็จสมบูรณ์ (UI + Mock Stats)
-- [x] **User Management**: เสร็จสมบูรณ์ (Connect API 100%)
-
-**👨‍🏫 Project Manager Pages**
-- [x] **Projects List**: เสร็จสมบูรณ์ (ดึงข้อมูลจริง)
-- [x] **Project Detail Page**: เสร็จสมบูรณ์ (แสดง Detail, List Tasks, Team)
-    - *Pending*: ปุ่ม Manage Team (ยังเป็น Mock), Edit Project
-- [ ] **Kanban Board Page**: ยังไม่ได้ทำ
-- [ ] **Task Detail Page**: ยังไม่ได้ทำ (มีแค่ Modal สร้างงาน)
-
-**👤 Member Pages**
-- [ ] **Overview**: ยังไม่ได้ทำ
-- [ ] **My Tasks Page**: ยังไม่ได้ทำ
+> **Summary**: ในส่วน **Member Pages** และ **Kanban Board** คือส่วนที่ "Must Have" แต่ยังไม่ได้ทำ
 
 ---
 
-## 🔶 PART 3 — Folder Structure Check
+## 🔶 PART 2 — Database Schema Verification
 
-โครงสร้างไฟล์ปัจจุบัน (`src/`) ตรงตามแผนที่วางไว้ 95%:
+เปรียบเทียบ Schema ที่ออกแบบไว้ (SQL) กับที่ Implement จริง
 
-```
-src/
-├── components/
-│   ├── layout/       ✅ AdminLayout, Sidebar, Topbar
-│   ├── dashboard/    ✅ StatCard, ProjectCard
-│   ├── project/      ✅ CreateTaskModal, TaskItem (เพิ่มเข้ามาตามหน้างานจริง)
-├── pages/
-│   ├── Admin/        ✅ UserManagement, AdminDashboard
-│   ├── ProjectManager/ ✅ ProjectList, ProjectDetails
-├── context/          ✅ AuthContext
-```
+### 1. Users Table
+*   **Plan**: `user_id`, `fullname`, `email`, `password`, `role`, `avatar`, `status`, `created_at`
+*   **Actual**: ✅ ตรงตามแผน (มีครบทุก Column)
+*   **Status**: ใช้งานได้สมบูรณ์
 
-**ข้อสังเกต:**
-- เรามีการแยก Component ย่อยออกมาได้ดี (เช่น `TaskItem`, `CreateTaskModal`) ทำให้โค้ดดูแลง่าย
-- โฟลเดอร์ `kanban/` ยังว่างอยู่ รอการ Implement ใน Step ถัดไป
+### 2. Projects Table
+*   **Schema**: `project_id`, `project_name`, `project_description`, `project_status`, `start_date`, `end_date`, `created_by`
+*   **Status**: ✅ **Correct & Verified** (ตรงกับ Code และ Database จริง)
+*   **Note**: ใช้ Naming Convention แบบมี Prefix (`project_`) เฉพาะ field string หลัก ส่วน date ไม่ได้ใช้
+
+### 3. Tasks Table
+*   **Schema**: `task_id`, `project_id`, `assignee_id`, `title`, `description`, `status`, `priority`, `due_date`, `tags`
+*   **Status**: 🟡 **Partial Match** (ขาด `tags` ใน Backend แต่ยังไม่ Critical)
+
+### 4. ProjectMembers Table
+*   **Schema Required**: `pm_id`, `project_id`, `user_id`, `joined_at`
+*   **Status**: 🔴 **Missing Table** (ยังไม่มีใน Database)
+*   **Actions**: ต้องสร้างตารางนี้ด่วนเพื่อทำฟีเจอร์ "Add Team Member"
 
 ---
 
-## 🎯 สรุปภาพรวม & คำแนะนำ
-ระบบเดินหน้าไปได้ตามแผนประมาณ **60%** ของ Core Features:
-1.  **Foundation (โครงสร้างแกนหลัก)**: แข็งแรงแล้ว (Auth Setup, DB Connection, Routing Layout).
-2.  **Admin Module**: เสร็จสมบูรณ์เกือบ 100%.
-3.  **Project Manager Module**: ได้ประมาณ 50% (เหลือจัดการคน และ Kanban).
+## 🔶 PART 3 — Phase Tracking
 
-### 🚀 Immediate Next Steps (สิ่งที่ควรทำต่อทันที)
-1.  **Add Member Modal Backend Integration**: เพื่อให้ PM จัดการทีมได้จริง (ตอนนี้ Frontend มี Modal แล้วแต่ยัง Mock และ Backend ยังติดเรื่อง Table `project_members`)
-2.  **Fix Pending Backend Issue**: ตรวจสอบและสร้างตาราง `project_members` ให้พร้อมใช้งาน
-3.  **Kanban Board**: เริ่มทำหน้ากระดานงาน ซึ่งเป็นหัวใจสำคัญของ Task Management
+สถานะการพัฒนาเทียบกับ Phase ที่วางไว้:
+
+*   **Phase 1: Public Pages (Home, Login)**
+    *   Status: ✅ **Completed** 100%
+*   **Phase 2: Admin Pages (Dashboard, User Mgmt)**
+    *   Status: ✅ **Completed** 95% (เหลือตกแต่งเล็กน้อย)
+*   **Phase 3: Project Manager Pages**
+    *   Status: 🟡 **In Progress** (50%)
+    *   *Done*: Projects List, Project Detail, Task Creation
+    *   *Pending*: **Kanban Board**, Manage Members, Task Detail View
+*   **Phase 4: Member Pages (Overview, My Tasks)**
+    *   Status: 🔴 **Not Started** (0%)
+*   **Phase 5: Shared & Polish (Profile, Analytics)**
+    *   Status: ⚪ **Planned**
+
+---
+
+## 🎯 Final Assessment & Recommendation
+
+จากการตรวจสอบพบว่าเรามาถูกทางและโครงสร้างพื้นฐาน (Architecture, Database, Auth) แข็งแรงตรงตาม Design Document
+แต่จุดที่ต้องเร่งทำเพื่อให้จบ **Phase 3** (Project Manager Workflow) คือ:
+
+1.  **ProjectMembers Implementation**: สร้าง Table และเชื่อมต่อ API เพื่อให้ PM จัดทีมได้จริง (ตอนนี้ติด Blocker เรื่อง Table นี้อยู่)
+2.  **Kanban Board**: ฟีเจอร์ "Must Have" ที่ยังหายไป
+
+👉 **Recommendation**: ลุย **"Step: Add Member Integration"** ต่อทันที เพื่อแก้ปัญหา Database Table ที่ขาดหายไป แล้วค่อยไปทำ Kanban ครับ

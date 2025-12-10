@@ -116,43 +116,44 @@ src/
 
 ---
 
-### 🗄️ Database Schema (ER Diagram)
+### 🗄️ Database Schema (ER Diagram Reference)
 
-Based on the design, here is the schema structure:
+โครงสร้างฐานข้อมูลล่าสุด (Based on User Requirement):
 
-#### 1. Users Table (`User`)
-- `user_id` (PK)
+#### 1. Users Table (`users`)
+- `user_id` (PK, Auto Increment)
 - `fullname`
-- `email`
+- `email` (Unique)
 - `password`
 - `role` (Admin / PM / Member)
-- `status` (Active / Inactive / On Leave) <!-- Added from UI -->
-- `avatar` (Fixed typo from 'avata')
+- `avatar`
+- `status` (Active / Inactive / On Leave)
+- `created_at`
 
-#### 2. Projects Table (`Project`)
-- `project_id` (PK)
-- `created_by` (FK -> User.user_id)
+#### 2. Projects Table (`projects`)
+- `project_id` (PK, Auto Increment)
 - `project_name`
-- `project_description` (Fixed typo from 'decription')
-- `project_status` (Fixed casing from 'Status')
+- `project_description`
+- `project_status` (Planning / In Progress / Completed)
 - `start_date`
 - `end_date`
-- `created_at`
-- `updated_at`
+- `created_by` (FK -> Users)
+- `created_at`, `updated_at`
 
-#### 3. Project Members Table (`ProjectMember`)
-- `pm_id` (PK)
-- `project_id` (FK -> Project.project_id)
-- `user_id` (FK -> User.user_id)
+#### 3. Project Members Table (`project_members`)
+- `pm_id` (PK, Auto Increment)
+- `project_id` (FK -> Projects)
+- `user_id` (FK -> Users)
+- `joined_at`
 
-#### 4. Tasks Table (`Task`)
-- `task_id` (PK)
-- `project_id` (FK -> Project.project_id)
-- `assignee_id` (FK -> User.user_id)
+#### 4. Tasks Table (`tasks`)
+- `task_id` (PK, Auto Increment)
+- `project_id` (FK -> Projects)
+- `assignee_id` (FK -> Users)
 - `title`
-- `description` (Fixed typo from 'decription')
-- `status`
-- `priority`
+- `description`
+- `status` (To Do / In Progress / Done)
+- `priority` (Low / Medium / High)
 - `due_date`
-- `created_at`
-- `updated_at`
+- `tags` (JSON)
+- `created_at`, `updated_at`
