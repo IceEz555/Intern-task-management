@@ -1,11 +1,20 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../components/layout/Pagelayout';
 import { ChevronLeft, Calendar, Clock, Plus, UserPlus } from 'lucide-react';
 import '../../assets/styles/ProjectDetails.css';
+// Components
+import TaskItem from '../../components/project/TaskItem';
+import TeamMembers from '../../components/project/TeamMembers';
+import CreateTaskModal from '../../components/project/CreateTaskModal';
+import AddMemberModal from '../../components/project/AddMemberModal';
 
 const ProjectDetails = () => {
-    // const { projectId } = useParams();
     const navigate = useNavigate();
+
+    // Modal States
+    const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
+    const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
 
     // Mock Data
     const project = {
@@ -21,17 +30,6 @@ const ProjectDetails = () => {
             { id: "T-103", title: "User Testing Session", date: "2024-12-25", assignee: "John Intern", status: "TO DO" },
             { id: "T-105", title: "Fix Navigation Bug", date: "2023-11-26", assignee: "John Intern", status: "TO DO" }
         ]
-    };
-
-    // Helper to get status class
-    const getStatusClass = (status) => {
-        const s = status.toLowerCase().replace(' ', '');
-        return `task-status-badge ${s}`; // e.g., 'todo', 'inprogress'
-    };
-
-    // Helper to get status dot color
-    const getStatusDotColor = (status) => {
-        return status === 'TO DO' ? '#f87171' : '#34d399';
     };
 
     return (
@@ -67,7 +65,7 @@ const ProjectDetails = () => {
                     </div>
 
                     <div className="header-actions">
-                        <button className="btn-secondary">
+                        <button className="btn-secondary" onClick={() => setIsAddMemberOpen(true)}>
                             <UserPlus size={18} />
                             Manage Team
                         </button>
@@ -79,12 +77,14 @@ const ProjectDetails = () => {
 
                 {/* 3. Grid Layout */}
                 <div className="project-grid-layout">
-
                     {/* Left Column: Tasks */}
                     <div className="tasks-section">
                         <div className="section-header">
                             <h2 className="section-header-title">Project Tasks</h2>
-                            <button className="btn-sm-primary text-sm-btn">
+                            <button
+                                className="btn-sm-primary text-sm-btn"
+                                onClick={() => setIsCreateTaskOpen(true)}
+                            >
                                 <Plus size={16} /> Create Task
                             </button>
                         </div>
@@ -92,29 +92,11 @@ const ProjectDetails = () => {
                         <div className="task-list-container">
                             {project.tasks.length > 0 ? (
                                 project.tasks.map((task) => (
-                                    <div key={task.id} className="task-item">
-                                        <div className="task-left">
-                                            <div
-                                                className="status-dot"
-                                                style={{ backgroundColor: getStatusDotColor(task.status) }}
-                                            ></div>
-                                            <div>
-                                                <h3 className="task-title">{task.title}</h3>
-                                                <p className="task-meta">{task.id} • {task.date}</p>
-                                            </div>
-                                        </div>
-                                        <div className="task-right">
-                                            <div className="assignee-info">
-                                                <div className="assignee-avatar">
-                                                    {task.assignee.split(' ').map(n => n[0]).join('')}
-                                                </div>
-                                                <span className="assignee-name">{task.assignee}</span>
-                                            </div>
-                                            <span className={getStatusClass(task.status)}>
-                                                {task.status}
-                                            </span>
-                                        </div>
-                                    </div>
+                                    <TaskItem
+                                        key={task.id}
+                                        task={task}
+                                        onClick={() => console.log("Open Task Detail")}
+                                    />
                                 ))
                             ) : (
                                 <p style={{ padding: '1rem', color: '#6b7280' }}>No tasks found.</p>
@@ -122,32 +104,25 @@ const ProjectDetails = () => {
                         </div>
                     </div>
 
-                    {/* Right Column: Members 
-                         Moved "Team Members" header INSIDE to better align with card padding
-                    */}
+                    {/* Right Column: Members */}
                     <div className="members-section">
-                        <div className="members-box">
-                            <h2 className="members-header">Team Members</h2>
-                            <div className="members-list">
-                                {project.members.map((member, idx) => (
-                                    <div key={idx} className="member-card">
-                                        <div className="member-avatar-lg">
-                                            {member.avatar}
-                                        </div>
-                                        <div className="member-info">
-                                            <h4>{member.name}</h4>
-                                            <p>{member.role}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <button className="btn-add-member">
-                                <Plus size={16} /> Add Member
-                            </button>
-                        </div>
+                        <TeamMembers
+                            members={project.members}
+                            onManageClick={() => setIsAddMemberOpen(true)}
+                        />
                     </div>
-
                 </div>
+                {/* --- Modals --- */}
+                <CreateTaskModal
+                    isOpen={isCreateTaskOpen}
+                    onClose={() => setIsCreateTaskOpen(false)}
+                />
+                <AddMemberModal
+                    isOpen={isAddMemberOpen}
+                    onClose={() => setIsAddMemberOpen(false)}
+                    currentMembers={project.members}
+                />
+
             </div>
         </AdminLayout>
     );
