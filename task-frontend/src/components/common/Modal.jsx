@@ -1,10 +1,10 @@
 import { X } from 'lucide-react';
 import "../../assets/styles/Modal.css";
-const Modal = ({ open, onClose, title, children, size }) => {
+const Modal = ({ open, onClose, title, children, size, zIndex }) => {
     if (!open) return null;
     return (
         <div>
-            <div className="modal-overlay">
+            <div className="modal-overlay" style={{ zIndex: zIndex || 1000 }}>
                 <div className={`modal-content ${size || ''}`}>
                     <div className="modal-header">
                         <h2>{title}</h2>

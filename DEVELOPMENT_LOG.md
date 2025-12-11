@@ -99,3 +99,38 @@ We have enhanced the **Project Details** page, added **Edit Project** functional
 | **Edit Project** | Fixes issue where users couldn't update project status or deadlines. |
 | **Manage Team** | Clarified UI by moving the add button to the Team list card. |
 | **Sorting** | "Completed" projects now appear at the bottom of the Dashboard/List for better focus on active work. |
+
+---
+
+## 🗑️ Update: Delete Project & Task Features
+
+We have implemented robust **Delete** functionality for both Tasks and Projects, prioritizing data integrity and user experience.
+
+### 1. 💻 Code Explanation
+
+#### **Backend (`projectController.js` & `taskController.js`)**
+- **Cascading Delete (Project)**:
+  - When deleting a project, the system first deletes all **Tasks** and **Members** associated with it.
+  - This prevents "Foreign Key Violation" errors and keeps the database clean.
+  - Transaction-like logic: `DELETE Tasks` -> `DELETE Members` -> `DELETE Project`.
+- **Task Deletion**:
+  - Implemented `DELETE /api/tasks/:id` to remove individual tasks.
+
+#### **Frontend (`EditProjectModal.jsx` & `EditTaskModal.jsx`)**
+- **Nested Modals**:
+  - Implemented a "Modal within a Modal" strategy for confirmation.
+  - Used `zIndex: 1050` to ensure the Confirmation Modal appears *above* the Edit Modal.
+- **UX/UI**:
+  - Added "Delete Project" button (Red) for easy access.
+  - Added clear warning messages about data loss (e.g., "This will delete all tasks").
+  - Redirects user to `/ProjectManagement` after successful project deletion.
+
+### 2. 🏗️ Code Structure Review
+A full codebase review was conducted to ensure consistency:
+- **Architecture**: strongly consistent MVC (Backend) and Component-based (Frontend) patterns.
+- **Styling**: Mixed approach observed.
+  - Older modules (`UserManagement`) use **CSS Files**.
+  - Newer modules (`Project`, `Task`) use **Tailwind CSS**.
+  - *Recommendation*: Gradually migrate legacy CSS to Tailwind for long-term maintainability.
+
+---

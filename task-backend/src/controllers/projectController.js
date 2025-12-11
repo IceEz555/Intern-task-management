@@ -94,6 +94,29 @@ export const updateProject = async (req, res) => {
     }
 };
 
+export const deleteProject = async (req, res) => {
+    const { id } = req.params;
+    try {
+        // 1. Delete all tasks in the project
+        await pool.query('DELETE FROM tasks WHERE project_id = $1', [id]);
+
+        // 2. Delete all members in the project
+        await pool.query('DELETE FROM projectmembers WHERE project_id = $1', [id]);
+
+        // 3. Delete the project itself
+        const result = await pool.query('DELETE FROM projects WHERE project_id = $1 RETURNING *', [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+
+        res.status(200).json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
 // Get project details by ID with tasks and members
 // Get project details by ID with tasks and members
 export const getProjectById = async (req, res) => {
@@ -136,6 +159,7 @@ export const getProjectById = async (req, res) => {
                 t.status, 
                 t.priority,
                 t.due_date,
+                t.assignee_id,
                 u.fullname as assignee,
                 u.avatar as assignee_avatar
             FROM tasks t

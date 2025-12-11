@@ -9,6 +9,7 @@ import TeamMembers from '../../components/project/TeamMembers';
 import CreateTaskModal from '../../components/project/CreateTaskModal';
 import AddMemberModal from '../../components/project/AddMemberModal';
 import EditProjectModal from '../../components/project/EditProjectModal';
+import EditTaskModal from '../../components/project/EditTaskModal';
 import axios from 'axios';
 
 const ProjectDetails = () => {
@@ -19,9 +20,11 @@ const ProjectDetails = () => {
     const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
     const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
     const [isEditProjectOpen, setIsEditProjectOpen] = useState(false);
+    const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
 
     // Data States
     const [project, setProject] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -47,6 +50,11 @@ const ProjectDetails = () => {
             month: 'short',
             year: 'numeric'
         });
+    };
+
+    const handleTaskClick = (task) => {
+        setSelectedTask(task);
+        setIsEditTaskOpen(true);
     };
 
     useEffect(() => {
@@ -120,7 +128,7 @@ const ProjectDetails = () => {
                                     <TaskItem
                                         key={task.id}
                                         task={task}
-                                        onClick={() => console.log("Open Task Detail")}
+                                        onClick={() => handleTaskClick(task)}
                                     />
                                 ))
                             ) : (
@@ -161,6 +169,13 @@ const ProjectDetails = () => {
                     onProjectUpdated={fetchProject}
                 />
 
+                <EditTaskModal
+                    isOpen={isEditTaskOpen}
+                    onClose={() => setIsEditTaskOpen(false)}
+                    task={selectedTask}
+                    members={project.members}
+                    onTaskUpdated={fetchProject}
+                />
             </div>
         </AdminLayout>
     );

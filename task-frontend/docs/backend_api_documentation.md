@@ -162,6 +162,15 @@ task-backend/
   ```
 - **Response**: Project Object ที่อัปเดตแล้ว
 
+### 3. Delete Project
+ลบโปรเจกต์ออกจากระบบ (Cascading: ลบ Tasks และ Members ที่เกี่ยวข้องทั้งหมด)
+
+- **Endpoint**: `DELETE /api/projects/:id`
+- **Response**:
+  ```json
+  { "message": "Project deleted successfully" }
+  ```
+
 ---
 
 
@@ -205,6 +214,36 @@ task-backend/
   }
   ```
 - **Response**: Task Object ที่สร้างเสร็จ
+
+
+---
+
+### 2. Update Task
+แก้ไขรายละเอียดงาน
+
+- **Endpoint**: `PUT /api/tasks/:id`
+- **Request Body**:
+  ```json
+  {
+    "task_id": 101, // Optional: for redundancy check
+    "title": "Fix Login Bug Updated",
+    "description": "...",
+    "status": "In Progress",
+    "priority": "Low",
+    "assignee_id": 3,
+    "due_date": "2024-01-01"
+  }
+  ```
+- **Response**: Task Object ที่อัปเดตแล้ว
+
+### 3. Delete Task
+ลบงานออกจากระบบ (Hard Delete)
+
+- **Endpoint**: `DELETE /api/tasks/:id`
+- **Response**:
+  ```json
+  { "message": "Task deleted successfully" }
+  ```
 
 ---
 

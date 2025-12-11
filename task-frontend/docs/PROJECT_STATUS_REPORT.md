@@ -14,9 +14,9 @@
 | **Admin Dashboard** | Must | ✅ Done | แสดงสถิติและเมนูครบ |
 | **User Management** | Must | ✅ Done | CRUD (Create, Read, Update, Delete) ครบถ้วน |
 | **Projects List** | Must | ✅ Done | แสดงรายการโปรเจกต์ดึงจาก DB จริง |
-| **Project Detail** | Must | ✅ Done | ดูรายละเอียด, Tasks, Members ได้ |
+| **Project Detail** | Must | ✅ Done | ดูรายละเอียด, Tasks, Members, Edit Project, Manage Team ได้สมบูรณ์ |
 | **Kanban Board** | Must | 🔴 Pending | *Critical Next Step* |
-| **Task Detail** | Must | 🟡 Partial | มี Modal สร้างงาน แต่ยังไม่มีหน้า Detail แยก |
+| **Task Detail** | Must | ✅ Done | Create, Edit, Delete Task (Modal) พร้อม Confirmation |
 | **Overview (Member)** | Must | 🔴 Pending | ยังไม่ได้เริ่มหน้า Dashboard ของ Member |
 | **My Tasks** | Must | 🔴 Pending | ยังไม่ได้เริ่มหน้า List งานส่วนตัว |
 | **Profile Page** | Must | 🔴 Pending | มีหน้า UI เปล่าๆ ยังไม่เชื่อม API |
@@ -44,12 +44,13 @@
 
 ### 3. Tasks Table
 *   **Schema**: `task_id`, `project_id`, `assignee_id`, `title`, `description`, `status`, `priority`, `due_date`, `tags`
-*   **Status**: 🟡 **Partial Match** (ขาด `tags` ใน Backend แต่ยังไม่ Critical)
+*   **Status**: ✅ **Functionally Complete** (CRUD Works perfectly)
+*   **Note**: `tags` ยังไม่ได้ใช้ใน UI ปัจจุบัน
 
 ### 4. ProjectMembers Table
 *   **Schema Required**: `pm_id`, `project_id`, `user_id`, `joined_at`
-*   **Status**: 🔴 **Missing Table** (ยังไม่มีใน Database)
-*   **Actions**: ต้องสร้างตารางนี้ด่วนเพื่อทำฟีเจอร์ "Add Team Member"
+*   **Status**: ✅ **Implemented**
+*   **Actions**: ฟีเจอร์ "Manage Team" ใช้งานได้สมบูรณ์แล้ว (Add/Remove members with logic)
 
 ---
 
@@ -62,9 +63,9 @@
 *   **Phase 2: Admin Pages (Dashboard, User Mgmt)**
     *   Status: ✅ **Completed** 95% (เหลือตกแต่งเล็กน้อย)
 *   **Phase 3: Project Manager Pages**
-    *   Status: 🟡 **In Progress** (50%)
-    *   *Done*: Projects List, Project Detail, Task Creation
-    *   *Pending*: **Kanban Board**, Manage Members, Task Detail View
+    *   Status: 🟡 **In Progress** (80%)
+    *   *Done*: Projects List, Project Detail, Manage Team, Task Creation, Task Edit/Delete !!
+    *   *Pending*: **Kanban Board** (Last major piece for PM)
 *   **Phase 4: Member Pages (Overview, My Tasks)**
     *   Status: 🔴 **Not Started** (0%)
 *   **Phase 5: Shared & Polish (Profile, Analytics)**
@@ -74,10 +75,11 @@
 
 ## 🎯 Final Assessment & Recommendation
 
-จากการตรวจสอบพบว่าเรามาถูกทางและโครงสร้างพื้นฐาน (Architecture, Database, Auth) แข็งแรงตรงตาม Design Document
-แต่จุดที่ต้องเร่งทำเพื่อให้จบ **Phase 3** (Project Manager Workflow) คือ:
+จากการตรวจสอบพบว่า **Phase 3 (Project Manager)** ใกล้สมบูรณ์แล้ว เหลือเพียงฟีเจอร์ใหญ่สุดท้ายคือ **Kanban Board**
 
-1.  **ProjectMembers Implementation**: สร้าง Table และเชื่อมต่อ API เพื่อให้ PM จัดทีมได้จริง (ตอนนี้ติด Blocker เรื่อง Table นี้อยู่)
-2.  **Kanban Board**: ฟีเจอร์ "Must Have" ที่ยังหายไป
+### Progress Update (Recent):
+1.  **Project Members**: จัดการทีมได้สมบูรณ์แล้ว (Manage Team Modal)
+2.  **Task Management**: ระบบ Create, Edit, Delete Task ใช้งานได้จริง พร้อม UX ระดับ Pro (Nested Modals, Avatar Fallbacks)
 
-👉 **Recommendation**: ลุย **"Step: Add Member Integration"** ต่อทันที เพื่อแก้ปัญหา Database Table ที่ขาดหายไป แล้วค่อยไปทำ Kanban ครับ
+### Next Steps:
+👉 **Recommended Action**: เริ่มทำ **"Kanban Board"** เพื่อให้ครบ Flow การทำงานของ PM หรือจะเริ่ม **"Member Dashboard"** เพื่อให้ฝั่ง Member เริ่มใช้งานระบบได้ครับ

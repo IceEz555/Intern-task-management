@@ -36,3 +36,56 @@ export const createTask = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+// Update task
+export const updateTask = async (req, res) => {
+    const { task_id, title, description, status, priority, due_date, assignee_id } = req.body;
+    try {
+        const query = `
+            UPDATE tasks
+            SET title = $2,
+                description = $3,
+                status = $4,
+                priority = $5,
+                due_date = $6,
+                assignee_id = $7
+            WHERE task_id = $1
+            RETURNING *
+        `;
+        const values = [
+            task_id,
+            title,
+            description,
+            status,
+            priority,
+            due_date,
+            assignee_id
+        ];
+        const result = await pool.query(query, values);
+        res.status(200).json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
+// Delete task
+export const deleteTask = async (req, res) => {
+    const { id } = req.params; // Fixed: route uses :id
+    try {
+        const query = 'DELETE FROM tasks WHERE task_id = $1 RETURNING *';
+        const result = await pool.query(query, [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        res.status(200).json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
+
+

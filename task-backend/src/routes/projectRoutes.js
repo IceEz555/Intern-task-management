@@ -1,5 +1,5 @@
 import express from 'express';
-import { getProjects, createProject, getProjectById, addProjectMember, removeProjectMember, updateProject } from '../controllers/projectController.js';
+import { getProjects, createProject, getProjectById, addProjectMember, removeProjectMember, updateProject, deleteProject } from '../controllers/projectController.js';
 
 const router = express.Router();
 
@@ -14,6 +14,9 @@ router.get('/:id', getProjectById);
 
 // PUT /api/projects/:id - Update project details
 router.put('/:id', updateProject);
+
+// DELETE /api/projects/:id - Delete a project
+router.delete('/:id', deleteProject);
 
 // POST /api/projects/:id/members - Add member to project
 router.post('/:id/members', addProjectMember);
