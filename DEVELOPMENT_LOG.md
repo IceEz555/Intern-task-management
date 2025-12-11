@@ -55,3 +55,47 @@ During development, we encountered and resolved the following issues:
 | **SQL Syntax Error on Truncate** | `TRUNCATE TABLE users CASCADE RESTART IDENTITY` caused a syntax error in some PG versions. | Corrected the order to `TRUNCATE TABLE users RESTART IDENTITY CASCADE;`. |
 
 ---
+
+## 🚀 Update: Project Details Refactor & Features
+
+We have enhanced the **Project Details** page, added **Edit Project** functionality, and refined the UI/UX.
+
+### 1. 💻 Code Explanation
+
+#### **Frontend (`task-frontend`)**
+- **`ProjectDetails.jsx`**:
+  - **Refactor**: Replaced the "Manage Team" button in the header with **"Edit Project"**.
+  - **Integration**: Integrated `EditProjectModal` to allow editing project details.
+  - **Team Management**: Moved the "Manage Team" button to the `TeamMembers` section (using `UserPlus` icon).
+  - **State Management**: Connected `isEditProjectOpen` to control the modal visibility.
+- **`EditProjectModal.jsx`**:
+  - **Purpose**: A new modal component to edit Project Name, Description, Status, Start Date, and End Date.
+  - **Prefill**: Automatically populates fields with existing project data using `useEffect`.
+  - **API**: Calls `PUT /api/projects/:id` to save changes.
+- **`TeamMembers.jsx`**:
+  - **UI Update**: Renamed "Add Member" to "Manage Team".
+  - **Styling**: Increased spacing (`gap: 1.75rem`) and header margin (`margin-bottom: 1.5rem`) in `ProjectDetails.css` for better readability.
+- **Styling (`ProjectList.css`)**:
+  - **Status**: Added **Yellow** styling for `On Hold` status (`.status-badge.on-hold`).
+
+#### **Backend (`task-backend`)**
+- **Controller (`projectController.js`)**:
+  - **`updateProject`**: Added logic to update project fields (`name`, `description`, `status`, `dates`) in PostgreSQL.
+  - **Sorting**: Updated `getProjects` query to force **Completed** projects to the bottom of the list using `ORDER BY CASE...`.
+  - **Fallback**: Added fallback logic in `createProject` to handle `created_by` if `req.user` is missing.
+- **Routes (`projectRoutes.js`)**:
+  - Added `PUT /:id` endpoint mapped to `updateProject`.
+
+### 2. 📡 New API Endpoints
+
+| Method | Endpoint | Description | Body Parameters |
+| :--- | :--- | :--- | :--- |
+| **PUT** | `/api/projects/:id` | Update project details | `{ project_name, project_description, project_status, start_date, end_date }` |
+
+### 3. 🛠 Fixes & Adjustments
+
+| Feature | Change |
+| :--- | :--- |
+| **Edit Project** | Fixes issue where users couldn't update project status or deadlines. |
+| **Manage Team** | Clarified UI by moving the add button to the Team list card. |
+| **Sorting** | "Completed" projects now appear at the bottom of the Dashboard/List for better focus on active work. |

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../../components/layout/Pagelayout';
 import { ChevronLeft, Calendar, Clock, Plus, UserPlus, Edit } from 'lucide-react';
@@ -25,7 +25,7 @@ const ProjectDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const fetchProject = async () => {
+    const fetchProject = useCallback(async () => {
         try {
             const response = await axios.get(`http://localhost:5000/api/projects/${projectId}`);
             if (!response.data) throw new Error('Failed to fetch project');
@@ -37,7 +37,7 @@ const ProjectDetails = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [projectId]);
 
     const formatDueDate = (dateString) => {
         if (!dateString) return '';
@@ -51,7 +51,7 @@ const ProjectDetails = () => {
 
     useEffect(() => {
         if (projectId) fetchProject();
-    }, [projectId]);
+    }, [projectId, fetchProject]);
 
     if (loading) return <AdminLayout namepage="Project Detail"><div className="p-8">Loading...</div></AdminLayout>;
     if (error) return <AdminLayout namepage="Project Detail"><div className="p-8 text-red-500">Error: {error}</div></AdminLayout>;

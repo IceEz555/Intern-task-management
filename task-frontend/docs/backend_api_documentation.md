@@ -144,6 +144,24 @@ task-backend/
   }
   ```
 
+  ```
+
+### 3. Update Project (New)
+อัปเดตข้อมูลโปรเจกต์
+
+- **Endpoint**: `PUT /api/projects/:id`
+- **Request Body**:
+  ```json
+  {
+    "project_name": "Updated Name",
+    "project_description": "New Desc",
+    "project_status": "Completed", 
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31"
+  }
+  ```
+- **Response**: Project Object ที่อัปเดตแล้ว
+
 ---
 
 

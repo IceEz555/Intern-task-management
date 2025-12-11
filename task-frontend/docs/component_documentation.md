@@ -278,6 +278,84 @@ Component แสดงรายชื่อสมาชิกในทีม พ
 | Prop Name | Type | Description |
 | :--- | :--- | :--- |
 | `members` | Array | รายชื่อสมาชิก (User Object) |
+| `onManageClick` | Function | ฟังก์ชันเปิด Modal จัดการทีม |
+
+### Usage Example
+
+```jsx
+<TeamMembers
+    members={project.members}
+    onManageClick={() => setIsAddMemberOpen(true)}
+/>
+```
+
+---
+
+## 11. AddMemberModal (`src/components/project/AddMemberModal.jsx`)
+
+Modal สำหรับจัดการสมาชิกในทีม (เพิ่ม/ลบ) ในรูปแบบ Multi-Select Dashboard
+
+### Key Features
+- **Multi-Select**: เลือกสมาชิกหลายคนพร้อมกันได้
+- **Real-time Search**: ค้นหาผู้ใช้จากชื่อหรืออีเมล
+- **Smart Filtering**: กรอง Admin ออกจากรายชื่ออัตโนมัติ (แสดงเฉพาะ Member/PM)
+- **Smart Diffing**: ระบบคำนวณอัตโนมัติว่าต้อง Add ใครและ Remove ใครเมื่อกด Save
+- **Visual Feedback**: แสดง Avatar และเครื่องหมายถูก ✅ สำหรับคนที่ถูกเลือก
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `isOpen` | Boolean | ควบคุมการแสดงผล Modal |
+| `onClose` | Function | ฟังก์ชันเมื่อปิด Modal |
+| `projectId` | Number/String | ID ของโปรเจกต์ |
+| `projectName` | String | ชื่อโปรเจกต์ (แสดงบน Header) |
+| `currentMembers` | Array | รายชื่อสมาชิกปัจจุบัน (เพื่อแสดงสถานะที่เลือกไว้แล้ว) |
+| `onMemberAdded` | Function | Callback เมื่อบันทึกสำเร็จ (Refresh Parent) |
+
+### Usage Example
+
+```jsx
+<AddMemberModal
+    isOpen={isAddMemberOpen}
+    onClose={() => setIsAddMemberOpen(false)}
+    projectId={project.project_id}
+    projectName={project.name}
+    currentMembers={project.members}
+    onMemberAdded={fetchProject} // Refresh list on success
+/>
+```
+
+---
+
+## 12. EditProjectModal (`src/components/project/EditProjectModal.jsx`)
+
+Modal สำหรับแก้ไขรายละเอียดของโปรเจกต์ (Name, Description, Status, Dates)
+
+### Key Features (Refactor Update)
+- **Prefill Data**: ดึงข้อมูลเดิมของโปรเจกต์มาแสดงในฟอร์มอัตโนมัติ
+- **Validation**: ตรวจสอบว่าเป็นโปรเจกต์ที่มีอยู่จริง
+- **Status Management**: สามารถเปลี่ยนสถานะโปรเจกต์ (Active, On Hold, Completed) ได้
+
+### Props
+
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `isOpen` | Boolean | ควบคุมการแสดงผล Modal |
+| `onClose` | Function | ฟังก์ชันเมื่อปิด Modal |
+| `project` | Object | ข้อมูลโปรเจกต์เดิมที่จะแก้ไข |
+| `onProjectUpdated` | Function | Callback เมื่อบันทึกสำเร็จ |
+
+### Usage Example
+
+```jsx
+<EditProjectModal
+    isOpen={isEditProjectOpen}
+    onClose={() => setIsEditProjectOpen(false)}
+    project={project}
+    onProjectUpdated={fetchProject}
+/>
+```
 
 ---
 
