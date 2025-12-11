@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import '../../assets/styles/Modal.css';
+import axios from 'axios';
 
 const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMembers = [], onMemberAdded }) => {
     const [allUsers, setAllUsers] = useState([]);
@@ -20,10 +21,9 @@ const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMember
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/api/users');
-            if (response.ok) {
-                const data = await response.json();
-                setAllUsers(data);
+            const response = await axios.get('http://localhost:5000/api/users');
+            if (response.data) {
+                setAllUsers(response.data);
             }
         } catch (error) {
             console.error("Failed to fetch users:", error);
@@ -46,24 +46,18 @@ const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMember
 
         // Find users to Add (in selected but not in original)
         const toAdd = selectedIds.filter(id => !originalIds.includes(id));
-
         // Find users to Remove (in original but not in selected)
         const toRemove = originalIds.filter(id => !selectedIds.includes(id));
-
         try {
             // Execute all changes
-            const addPromises = toAdd.map(userId =>
-                fetch(`http://localhost:5000/api/projects/${projectId}/members`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: userId })
+            const addPromises = toAdd.map(async userId =>
+                await axios.post(`http://localhost:5000/api/projects/${projectId}/members`, {
+                    user_id: userId
                 })
             );
 
-            const removePromises = toRemove.map(userId =>
-                fetch(`http://localhost:5000/api/projects/${projectId}/members/${userId}`, {
-                    method: 'DELETE'
-                })
+            const removePromises = toRemove.map(async userId =>
+                await axios.delete(`http://localhost:5000/api/projects/${projectId}/members/${userId}`)
             );
 
             await Promise.all([...addPromises, ...removePromises]);

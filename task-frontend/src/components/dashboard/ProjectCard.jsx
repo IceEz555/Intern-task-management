@@ -7,7 +7,8 @@ const ProjectCard = ({ project, onClick }) => {
     const getStatusClass = (status) => {
         switch (status) {
             case 'In Progress': return 'status-badge in-progress';
-            case 'Planning': return 'status-badge planning';
+            case 'Planning': return 'status-badge planning'; // Keep if used, or remove if not
+            case 'On Hold': return 'status-badge on-hold';
             case 'Completed': return 'status-badge completed';
             default: return 'status-badge';
         }

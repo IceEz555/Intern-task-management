@@ -11,7 +11,9 @@ export const getProjects = async (req, res) => {
                 (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.project_id) as task_count,
                 (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.project_id AND t.status = 'Done') as done_task_count
             FROM projects p
-            ORDER BY p.updated_at DESC
+            ORDER BY 
+                CASE WHEN p.project_status = 'Completed' THEN 1 ELSE 0 END,
+                p.updated_at DESC
         `;
 
         const result = await pool.query(query);
@@ -41,8 +43,14 @@ export const getProjects = async (req, res) => {
 
 // Create a new project
 export const createProject = async (req, res) => {
-    const { project_name, project_description, project_status, project_start_date, project_end_date } = req.body;
-    const created_by = req.user.user_id;
+    const { project_name, project_description, project_status, project_start_date, project_end_date, created_by: bodyCreatedBy } = req.body;
+
+    // Fallback: try to get from req.user (if auth middleware exists), otherwise use body
+    const created_by = (req.user && req.user.user_id) || bodyCreatedBy;
+
+    if (!created_by) {
+        return res.status(400).json({ message: 'User ID (created_by) is required' });
+    }
 
     try {
         const query = `
@@ -56,6 +64,32 @@ export const createProject = async (req, res) => {
         res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error(err.message);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+// Update project details
+export const updateProject = async (req, res) => {
+    const { id } = req.params;
+    const { project_name, project_description, project_status, start_date, end_date } = req.body;
+
+    try {
+        const query = `
+            UPDATE projects 
+            SET project_name = $1, project_description = $2, project_status = $3, start_date = $4, end_date = $5, updated_at = CURRENT_TIMESTAMP
+            WHERE project_id = $6
+            RETURNING *
+        `;
+        const values = [project_name, project_description, project_status, start_date, end_date, id];
+        const result = await pool.query(query, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error("[ERROR] updateProject failed:", err);
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -165,7 +199,6 @@ export const addProjectMember = async (req, res) => {
             RETURNING *
         `;
         await pool.query(insertQuery, [id, user_id]);
-
         res.status(201).json({ message: "Member added successfully" });
     } catch (err) {
         console.error("[ERROR] addProjectMember failed:", err);

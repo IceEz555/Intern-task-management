@@ -8,8 +8,12 @@ import '../../assets/styles/ProjectList.css';
 import Modal from '../../components/common/Modal';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '../../context/AuthContext';
+// ... other imports
+
 const ProjectList = () => {
     const navigate = useNavigate();
+    const { user } = useAuth(); // Get user from context
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -37,7 +41,10 @@ const ProjectList = () => {
     const handleSubmitCreate = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/projects', newProject);
+            await axios.post('http://localhost:5000/api/projects', {
+                ...newProject,
+                created_by: user?.user_id // Send user ID
+            });
             fetchProjects();
             closeModal();
         } catch (error) {
@@ -212,6 +219,7 @@ const ProjectList = () => {
                             <option value="">Select Status</option>
                             <option value="Active">Active</option>
                             <option value="In Progress">In Progress</option>
+                            <option value="Planning">Planning</option>
                             <option value="Completed">Completed</option>
                             <option value="On Hold">On Hold</option>
                         </select>

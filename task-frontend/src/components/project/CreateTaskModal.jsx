@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '../common/Modal';
 import { X, Calendar, ClipboardList } from 'lucide-react';
+import axios from 'axios';
 
 const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreated }) => {
     // Local state for form
@@ -11,34 +12,39 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
     const [priority, setPriority] = useState('Medium');
     const [dueDate, setDueDate] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errors, setErrors] = useState({});
 
     if (!isOpen) return null;
 
     const handleSubmit = async () => {
+        // Validation
+        const newErrors = {};
         if (!title.trim()) {
-            alert('Please enter a task title');
+            newErrors.title = 'Task title is required';
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
             return;
         }
 
+        // Clear errors if valid
+        setErrors({});
+
         setIsSubmitting(true);
         try {
-            const response = await fetch('http://localhost:5000/api/tasks', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title,
-                    description,
-                    status,
-                    priority,
-                    due_date: dueDate || null,
-                    project_id: projectId,
-                    assignee_id: assigneeId || null
-                })
+            const response = await axios.post('http://localhost:5000/api/tasks', {
+                title,
+                description,
+                status,
+                priority,
+                due_date: dueDate || null,
+                project_id: projectId,
+                assignee_id: assigneeId || null
             });
 
-            if (!response.ok) throw new Error('Failed to create task');
+            if (response.status !== 200 && response.status !== 201) throw new Error('Failed to create task');
 
-            await response.json();
             if (onTaskCreated) onTaskCreated(); // Refresh parent
 
             // Reset form
@@ -65,6 +71,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
             >
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
+                <option value="In Review">In Review</option>
                 <option value="Done">Done</option>
             </select>
         </div>
@@ -81,10 +88,15 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
                     <input
                         type="text"
                         placeholder="Task Title"
-                        className="text-2xl font-bold text-gray-900 placeholder-gray-300 border-none outline-none w-full mb-4 focus:ring-0 px-0"
+                        className={`text-2xl font-bold text-gray-900 placeholder-gray-300 border-none outline-none w-full mb-1 focus:ring-0 px-0 ${errors.title ? 'border-b-2 border-red-500' : ''}`}
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                            // Clear error when user types
+                            if (errors.title) setErrors(prev => ({ ...prev, title: '' }));
+                        }}
                     />
+                    {errors.title && <p className="text-red-500 text-sm mb-4">{errors.title}</p>}
 
                     {/* Description */}
                     <div className="mb-6">
@@ -128,6 +140,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
                     <div>
                         <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Priority</label>
                         <select
+                            required
                             className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                             value={priority}
                             onChange={(e) => setPriority(e.target.value)}

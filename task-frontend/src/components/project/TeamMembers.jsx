@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 
 const TeamMembers = ({ members, onManageClick }) => {
     return (
@@ -18,7 +18,7 @@ const TeamMembers = ({ members, onManageClick }) => {
                 ))}
             </div>
             <button className="btn-add-member" onClick={onManageClick}>
-                <Plus size={16} /> Add Member
+                <UserPlus size={16} /> Manage Team
             </button>
         </div>
     );

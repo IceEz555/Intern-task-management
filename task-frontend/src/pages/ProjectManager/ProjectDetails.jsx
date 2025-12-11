@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../../components/layout/Pagelayout';
-import { ChevronLeft, Calendar, Clock, Plus, UserPlus } from 'lucide-react';
+import { ChevronLeft, Calendar, Clock, Plus, UserPlus, Edit } from 'lucide-react';
 import '../../assets/styles/ProjectDetails.css';
 // Components
 import TaskItem from '../../components/project/TaskItem';
 import TeamMembers from '../../components/project/TeamMembers';
 import CreateTaskModal from '../../components/project/CreateTaskModal';
 import AddMemberModal from '../../components/project/AddMemberModal';
+import EditProjectModal from '../../components/project/EditProjectModal';
+import axios from 'axios';
 
 const ProjectDetails = () => {
     const { projectId } = useParams();
@@ -16,6 +18,7 @@ const ProjectDetails = () => {
     // Modal States
     const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
     const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+    const [isEditProjectOpen, setIsEditProjectOpen] = useState(false);
 
     // Data States
     const [project, setProject] = useState(null);
@@ -24,17 +27,26 @@ const ProjectDetails = () => {
 
     const fetchProject = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/projects/${projectId}`);
-            if (!response.ok) throw new Error('Failed to fetch project');
-            const data = await response.json();
-            console.log(data); // Debug
-            setProject(data);
+            const response = await axios.get(`http://localhost:5000/api/projects/${projectId}`);
+            if (!response.data) throw new Error('Failed to fetch project');
+            console.log(response.data); // Debug
+            setProject(response.data);
         } catch (err) {
             console.error(err);
             setError(err.message);
         } finally {
             setLoading(false);
         }
+    };
+
+    const formatDueDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
     };
 
     useEffect(() => {
@@ -66,7 +78,7 @@ const ProjectDetails = () => {
                         <div className="meta-info">
                             <div className="meta-item">
                                 <Calendar size={18} />
-                                <span>Due: {project.dueDate}</span>
+                                <span>Due: {formatDueDate(project.dueDate)}</span>
                             </div>
                             <div className="meta-item">
                                 <Clock size={18} />
@@ -78,9 +90,9 @@ const ProjectDetails = () => {
                     </div>
 
                     <div className="header-actions">
-                        <button className="btn-secondary" onClick={() => setIsAddMemberOpen(true)}>
-                            <UserPlus size={18} />
-                            Manage Team
+                        <button className="btn-secondary" onClick={() => setIsEditProjectOpen(true)}>
+                            <Edit size={18} />
+                            Edit Project
                         </button>
                         <button className="btn-primary">
                             Open Kanban Board
@@ -129,17 +141,24 @@ const ProjectDetails = () => {
                 <CreateTaskModal
                     isOpen={isCreateTaskOpen}
                     onClose={() => setIsCreateTaskOpen(false)}
-                    projectId={project?.project_id}
+                    projectId={projectId}
                     members={project?.members}
                     onTaskCreated={fetchProject}
                 />
                 <AddMemberModal
                     isOpen={isAddMemberOpen}
                     onClose={() => setIsAddMemberOpen(false)}
-                    projectId={project.project_id}
+                    projectId={projectId}
                     projectName={project.name}
                     currentMembers={project.members}
                     onMemberAdded={fetchProject}
+                />
+
+                <EditProjectModal
+                    isOpen={isEditProjectOpen}
+                    onClose={() => setIsEditProjectOpen(false)}
+                    project={project}
+                    onProjectUpdated={fetchProject}
                 />
 
             </div>
