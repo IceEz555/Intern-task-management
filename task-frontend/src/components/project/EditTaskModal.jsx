@@ -43,12 +43,10 @@ const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated }) =
         if (!title.trim()) {
             newErrors.title = 'Task title is required';
         }
-
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
         }
-
         // Clear errors
         setErrors({});
         setIsSubmitting(true);

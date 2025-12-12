@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../../components/layout/Pagelayout';
@@ -70,7 +71,7 @@ const ProjectDetails = () => {
             <div className="project-details-container">
                 {/* 1. Navigation Back */}
                 <button
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate('/ProjectManagement')}
                     className="back-btn"
                 >
                     <ChevronLeft size={20} />
@@ -102,7 +103,7 @@ const ProjectDetails = () => {
                             <Edit size={18} />
                             Edit Project
                         </button>
-                        <button className="btn-primary">
+                        <button className="btn-primary" onClick={() => navigate(`/kanban-board/${projectId}`)}>
                             Open Kanban Board
                         </button>
                     </div>

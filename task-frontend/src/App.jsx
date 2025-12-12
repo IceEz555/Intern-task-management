@@ -7,6 +7,7 @@ import RoleRoute from './routes/RoleRoute';
 import UserManagement from './pages/Admin/UserManagement';
 import ProjectList from './pages/ProjectManager/ProjectList';
 import ProjectDetails from './pages/ProjectManager/ProjectDetails';
+import KanbanBoard from './components/kanban/KanbanBoardComponent';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
           {/* 4. หน้า Project Manager (Protected) */}
           <Route element={<RoleRoute allowedRoles={['PM']} />}>
             <Route path="/ProjectManagement" element={<ProjectList />} />
+            <Route path="/kanban-board/:projectId" element={<KanbanBoard />} />
             <Route path="/ProjectDetails/:projectId" element={<ProjectDetails />} />
           </Route>
         </Routes>
