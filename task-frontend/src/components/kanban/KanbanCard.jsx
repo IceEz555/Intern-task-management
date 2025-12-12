@@ -31,8 +31,7 @@ const KanbanCard = ({ id, task, onClick }) => {
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}
             onClick={() => onClick(task)}
-            className="group bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 cursor-grab active:cursor-grabbing">
-
+            className="group bg-white p-4 rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-200 cursor-grab active:cursor-grabbing">
             {/* Header: Priority Badge */}
             <div className="mb-3">
                 <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${getPriorityColor(task.priority)}`}>

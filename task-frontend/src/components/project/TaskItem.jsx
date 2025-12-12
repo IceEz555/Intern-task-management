@@ -11,8 +11,8 @@ const TaskItem = ({ task, onClick }) => {
     // Helper to get status dot color
     const getStatusDotColor = (status) => {
         if (status === 'To Do') return '#2563eb'; // Blue
-        if (status === 'In Progress') return '#ca8a04'; // Dark Yellow
-        if (status === 'In Review') return '#4f46e5'; // Indigo
+        if (status === 'In Progress') return '#ca8a04';  // Yellow
+        if (status === 'In Review') return '#6d28d9'; // Indigo
         if (status === 'Done') return '#16a34a'; // Green
         return '#9ca3af'; // Gray
     }

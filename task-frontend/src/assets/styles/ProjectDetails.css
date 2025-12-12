@@ -274,21 +274,26 @@
 .task-status-badge.to-do {
     background-color: #cedeff;
     color: #2563eb;
+    border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .task-status-badge.in-progress {
     background-color: #fef9c3;
     color: #ca8a04;
+    border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .task-status-badge.in-review {
-    background-color: #e0e7ff;
-    color: #4f46e5;
+    background-color: #ede9fe;
+    /* ม่วงลาเวนเดอร์อ่อน */
+    color: #7c3aed;
+    border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .task-status-badge.done {
     background-color: #dcfce7;
     color: #16a34a;
+    border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* --- Members Section --- */
