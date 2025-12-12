@@ -41,25 +41,26 @@ export const createTask = async (req, res) => {
 export const updateTask = async (req, res) => {
     const { task_id, title, description, status, priority, due_date, assignee_id } = req.body;
     try {
+        //  UPDATE ให้ใช้ฟังก์ชัน COALESCE ของ SQL ความหมายคือ: ให้ใช้ค่าใหม่ที่ส่งมา ($2) แต่ถ้าค่าใหม่ไม่มี (เป็น null) ให้กลับไปใช้ค่าเดิม (title) จากในฐานข้อมูล
         const query = `
-            UPDATE tasks
-            SET title = $2,
-                description = $3,
-                status = $4,
-                priority = $5,
-                due_date = $6,
-                assignee_id = $7
+            UPDATE tasks 
+            SET title = COALESCE($2, title),
+                description = COALESCE($3, description),
+                status = COALESCE($4, status),
+                priority = COALESCE($5, priority),
+                due_date = COALESCE($6, due_date),
+                assignee_id = COALESCE($7, assignee_id)
             WHERE task_id = $1
             RETURNING *
         `;
         const values = [
             task_id,
-            title,
-            description,
-            status,
-            priority,
-            due_date,
-            assignee_id
+            title || null,
+            description || null,
+            status || null,
+            priority || null,
+            due_date || null,
+            assignee_id || null
         ];
         const result = await pool.query(query, values);
         res.status(200).json(result.rows[0]);

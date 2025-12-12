@@ -1,18 +1,20 @@
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from '@dnd-kit/utilities'
 
-const KanbanCard = ({ id, task }) => {
+const KanbanCard = ({ id, task, onClick }) => {
     const {
         attributes,
         listeners,
         setNodeRef,
         transform,
         transition,
+        isDragging,
     } = useSortable({ id: id });
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        opacity: isDragging ? 0.3 : 1, // จางลงเมื่อถูกลาก
     }
 
     // Helper for Priority Colors
@@ -20,7 +22,7 @@ const KanbanCard = ({ id, task }) => {
         if (!priority) return 'bg-gray-100 text-gray-600';
         switch (priority.toLowerCase()) {
             case 'high': return 'bg-red-50 text-red-700 border border-red-100';
-            case 'medium': return 'bg-orange-50 text-orange-700 border border-orange-100';
+            case 'medium': return 'bg-yellow-50 text-yellow-700 border border-yellow-100';
             case 'low': return 'bg-green-50 text-green-700 border border-green-100';
             default: return 'bg-gray-100 text-gray-600';
         }
@@ -28,6 +30,7 @@ const KanbanCard = ({ id, task }) => {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}
+            onClick={() => onClick(task)}
             className="group bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 cursor-grab active:cursor-grabbing">
 
             {/* Header: Priority Badge */}
