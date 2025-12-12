@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     DndContext,
@@ -12,10 +12,11 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import axios from 'axios';
 import { ChevronLeft, Filter, Plus } from 'lucide-react';
-
+import EditTaskModal from '../project/EditTaskModal';
 import AdminLayout from '../../components/layout/Pagelayout';
 import KanbanColumn from './KanbanColumn';
 import KanbanCard from './KanbanCard';
+import CreateTaskModal from '../project/CreateTaskModal';
 
 const KanbanBoard = () => {
     const { projectId } = useParams();
@@ -30,45 +31,49 @@ const KanbanBoard = () => {
         'Done': []
     });
     const [activeId, setActiveId] = useState(null); // ตัวที่กำลังถูกลาก
+    const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false); // Modal State
+    const [isEditTaskOpen, setIsEditTaskOpen] = useState(false); // Modal State
+    const [selectedTask, setSelectedTask] = useState(null); // Task State
+    const [filterPriority, setFilterPriority] = useState('All');
+    const [showFilterMenu, setShowFilterMenu] = useState(false);
 
-    // Fetch Data
-    // Fetch Data
-    useEffect(() => {
-        const fetchProjectData = async () => {
-            try {
-                const res = await axios.get(`http://localhost:5000/api/projects/${projectId}`);
-                const tasks = res.data.tasks || [];
+    // Fetch Data Function
+    const fetchProjectData = useCallback(async () => {
+        try {
+            const res = await axios.get(`http://localhost:5000/api/projects/${projectId}`);
+            const tasks = res.data.tasks || [];
 
-                // Group Tasks by Status
-                const newColumns = {
-                    'To Do': [],
-                    'In Progress': [],
-                    'In Review': [],
-                    'Done': []
-                };
+            // Group Tasks by Status
+            const newColumns = {
+                'To Do': [],
+                'In Progress': [],
+                'In Review': [],
+                'Done': []
+            };
 
-                tasks.forEach(task => {
-                    // Map status to column keys (normalize text if needed)
-                    // Assuming backend status matches keys perfectly for now
-                    if (newColumns[task.status]) {
-                        newColumns[task.status].push(task);
-                    } else {
-                        // Default to 'To Do' if status not found
-                        newColumns['To Do'].push(task);
-                    }
-                });
+            tasks.forEach(task => {
+                // Map status to column keys
+                if (newColumns[task.status]) {
+                    newColumns[task.status].push(task);
+                } else {
+                    newColumns['To Do'].push(task);
+                }
+            });
 
-                setProject(res.data);
-                setColumns(newColumns);
-            } catch (err) {
-                console.error("Failed to fetch project:", err);
-            }
-        };
-
-        if (projectId) {
-            fetchProjectData();
+            setProject(res.data);
+            setColumns(newColumns);
+        } catch (err) {
+            console.error("Failed to fetch project:", err);
         }
     }, [projectId]);
+
+    // Initial Fetch
+    useEffect(() => {
+        if (projectId) {
+            // eslint-disable-next-line
+            fetchProjectData();
+        }
+    }, [projectId, fetchProjectData]);
 
     // Sensors
     const sensors = useSensors(
@@ -141,6 +146,16 @@ const KanbanBoard = () => {
         });
     };
 
+    const handleTaskClick = (task) => {
+        setSelectedTask(task);
+        setIsEditTaskOpen(true);
+    };
+
+    const getFilteredTasks = (tasks) => {
+        if (filterPriority === 'All') return tasks;
+        return tasks.filter(t => t.priority === filterPriority);
+    };
+
     const handleDragEnd = async (event) => {
         const { active, over } = event;
         const activeContainer = findContainer(active.id);
@@ -160,12 +175,19 @@ const KanbanBoard = () => {
                 [activeContainer]: arrayMove(prev[activeContainer], activeIndex, overIndex),
             }));
         }
-
         setActiveId(null);
-
-        // TODO: Call API Update Status Here
-        // const task = columns[overContainer].find(t => t.id === active.id);
-        // await axios.put(...)
+        // Call API Update Status
+        try {
+            const newStatus = activeContainer; // The container key is the status ('To Do', 'Done', etc.)
+            await axios.put(`http://localhost:5000/api/tasks/${active.id}`, {
+                task_id: active.id,
+                status: newStatus
+            });
+            console.log(`Task ${active.id} status updated to ${newStatus}`);
+        } catch (error) {
+            console.error("Failed to update task status:", error);
+            // Optional: Revert state if failed (would require more complex logic, skipping for now as per "Step 1" simplicity)
+        }
     };
 
     if (!project) return <div className="p-8">Loading...</div>;
@@ -177,18 +199,48 @@ const KanbanBoard = () => {
                 <div className="flex flex-col mb-6">
                     <button
                         onClick={() => navigate(`/ProjectDetails/${projectId}`)}
-                        className="flex items-center text-gray-500 hover:text-gray-700 mb-2 w-fit text-sm"
+                        className="flex items-center text-gray-500 hover:text-gray-900 mb-4 w-fit group transition-colors"
                     >
-                        <ChevronLeft size={16} className="mr-1" /> Back to Detail
+                        <ChevronLeft size={20} className="mr-1 group-hover:-translate-x-1 transition-transform" />
+                        <span className="font-medium">Back to Detail</span>
                     </button>
-                    <div className="flex justify-between items-end">
-                        <h1 className="text-2xl font-bold text-gray-800">{project.name} Board</h1>
-                        <div className="flex gap-2">
-                            <button className="flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-600 bg-white hover:bg-gray-50">
-                                <Filter size={16} className="mr-2" /> Filter
-                            </button>
-                            <button className="flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
-                                <Plus size={16} className="mr-2" /> Add Task
+
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{project.name} Board</h1>
+
+                        <div className="flex gap-3">
+
+                            {/* Filter Button Container */}
+                            <div className="relative">
+                                <button className="flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 
+                                bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
+                                    onClick={() => setShowFilterMenu(!showFilterMenu)}>
+                                    <Filter size={16} className="mr-2" />
+                                    {filterPriority === 'All' ? 'Filter' : filterPriority}
+                                </button>
+
+                                {/* Dropdown Menu */}
+                                {showFilterMenu && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200">
+                                        {['All', 'High', 'Medium', 'Low'].map((p) => (
+                                            <button
+                                                key={p}
+                                                onClick={() => {
+                                                    setFilterPriority(p);
+                                                    setShowFilterMenu(false);
+                                                }}
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                            >
+                                                {p}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <button
+                                onClick={() => setIsCreateTaskOpen(true)}
+                                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 shadow-sm shadow-blue-200 transition-all hover:shadow-md">
+                                <Plus size={18} className="mr-2" /> Add Task
                             </button>
                         </div>
                     </div>
@@ -207,8 +259,9 @@ const KanbanBoard = () => {
                             <KanbanColumn
                                 key={status}
                                 id={status}
-                                tasks={columns[status]}
+                                tasks={getFilteredTasks(columns[status])}
                                 title={status}
+                                onTaskClick={handleTaskClick}
                             />
                         ))}
                     </div>
@@ -227,6 +280,26 @@ const KanbanBoard = () => {
                         ) : null}
                     </DragOverlay>
                 </DndContext>
+
+                {/* Create Task Modal */}
+                <CreateTaskModal
+                    isOpen={isCreateTaskOpen}
+                    onClose={() => setIsCreateTaskOpen(false)}
+                    projectId={projectId}
+                    onTaskCreated={fetchProjectData}
+                    members={project.members || []}
+                />
+
+                {/* Edit Task Modal */}
+                <EditTaskModal
+                    isOpen={isEditTaskOpen}
+                    onClose={() => setIsEditTaskOpen(false)}
+                    task={selectedTask}
+                    projectId={projectId}
+                    onTaskUpdated={fetchProjectData}
+                />
+                {/* Dropdown Menu */}
+
             </div>
         </AdminLayout>
     );
