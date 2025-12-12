@@ -3,7 +3,7 @@ import Modal from '../common/Modal';
 import { Calendar, ClipboardList } from 'lucide-react';
 import axios from 'axios';
 
-const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated }) => {
+const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated, lockAssignee = false }) => {
     // Local state for form
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState('To Do');
@@ -142,20 +142,30 @@ const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated }) =
                 {/* Right Column: Properties Sidebar */}
                 <div className="w-full lg:w-72 space-y-6 lg:pl-6 lg:border-l border-gray-100">
                     {/* Assignee */}
+                    {/* Assignee */}
                     <div>
                         <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Assignee</label>
-                        <select
-                            className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                            value={assigneeId}
-                            onChange={(e) => setAssigneeId(e.target.value)}
-                        >
-                            <option value="">Unassigned</option>
-                            {members.map(member => (
-                                <option key={member.user_id} value={member.user_id}>
-                                    {member.name}
-                                </option>
-                            ))}
-                        </select>
+                        {lockAssignee && assigneeId ? (
+                            <div className="w-full bg-gray-100 border border-gray-200 text-gray-700 text-sm rounded-lg p-2.5 font-medium flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
+                                    {members.find(m => m.user_id === assigneeId)?.name?.charAt(0) || 'U'}
+                                </div>
+                                {members.find(m => m.user_id === assigneeId)?.name || 'Unknown User'}
+                            </div>
+                        ) : (
+                            <select
+                                className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                                value={assigneeId}
+                                onChange={(e) => setAssigneeId(e.target.value)}
+                            >
+                                <option value="">Unassigned</option>
+                                {members.map(member => (
+                                    <option key={member.user_id} value={member.user_id}>
+                                        {member.name}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
                     </div>
 
                     {/* Priority */}

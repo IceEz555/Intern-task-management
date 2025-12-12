@@ -128,7 +128,7 @@ export function Login() {
                                         onClick={() => {
                                             setSelectedRole("PM");
                                             setEmail("sarah@internflow.com");
-                                            setPassword("password123");
+                                            setPassword("Password@123");
                                         }}
                                     >
                                         PM

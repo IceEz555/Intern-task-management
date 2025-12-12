@@ -90,3 +90,20 @@ export const deleteTask = async (req, res) => {
 
 
 
+
+// Get tasks by User ID (For Personal Board)
+export const getTasksByUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const query = `
+            SELECT * FROM tasks 
+            WHERE assignee_id = $1
+            ORDER BY created_at DESC
+        `;
+        const result = await pool.query(query, [userId]);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};

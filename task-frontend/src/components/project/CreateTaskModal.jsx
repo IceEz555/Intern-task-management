@@ -1,14 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import { X, Calendar, ClipboardList } from 'lucide-react';
 import axios from 'axios';
 
-const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreated }) => {
+const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreated, defaultAssigneeId = '', lockAssignee = false }) => {
     // Local state for form
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState('To Do');
     const [description, setDescription] = useState('');
-    const [assigneeId, setAssigneeId] = useState('');
+    const [assigneeId, setAssigneeId] = useState(defaultAssigneeId);
+
+    // Sync assigneeId when defaultAssigneeId changes
+    useEffect(() => {
+        if (defaultAssigneeId) {
+            setAssigneeId(defaultAssigneeId);
+        }
+    }, [defaultAssigneeId]);
     const [priority, setPriority] = useState('Medium');
     const [dueDate, setDueDate] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,14 +84,12 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
         </div>
     );
 
-
-
     return (
         <Modal open={isOpen} onClose={onClose} title={customHeader} size="md-plus" >
             <div className="flex flex-col lg:flex-row gap-6">
-                {/* Left Column: Content */}
+                {/* ... (Left Column) */}
                 <div className="flex-1">
-                    {/* Title Input */}
+                    {/* ... (Inputs) */}
                     <input
                         type="text"
                         placeholder="Task Title"
@@ -92,7 +97,6 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
                         value={title}
                         onChange={(e) => {
                             setTitle(e.target.value);
-                            // Clear error when user types
                             if (errors.title) setErrors(prev => ({ ...prev, title: '' }));
                         }}
                     />
@@ -122,18 +126,27 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
                     {/* Assignee */}
                     <div>
                         <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Assignee</label>
-                        <select
-                            className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-                            value={assigneeId}
-                            onChange={(e) => setAssigneeId(e.target.value)}
-                        >
-                            <option value="">Unassigned</option>
-                            {members.map(member => (
-                                <option key={member.user_id} value={member.user_id}>
-                                    {member.name}
-                                </option>
-                            ))}
-                        </select>
+                        {lockAssignee && assigneeId ? (
+                            <div className="w-full bg-gray-100 border border-gray-200 text-gray-700 text-sm rounded-lg p-2.5 font-medium flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
+                                    {members.find(m => m.user_id === assigneeId)?.name?.charAt(0) || 'U'}
+                                </div>
+                                {members.find(m => m.user_id === assigneeId)?.name || 'Unknown User'}
+                            </div>
+                        ) : (
+                            <select
+                                className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                                value={assigneeId}
+                                onChange={(e) => setAssigneeId(e.target.value)}
+                            >
+                                <option value="">Unassigned</option>
+                                {members.map(member => (
+                                    <option key={member.user_id} value={member.user_id}>
+                                        {member.name}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
                     </div>
 
                     {/* Priority */}

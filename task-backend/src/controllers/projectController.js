@@ -1,22 +1,28 @@
 import pool from '../config/db.js';
-
-// Get all projects for the dashboard
-// Get all projects for the dashboard
+// Get projects for the dashboard
 export const getProjects = async (req, res) => {
     try {
-        // Query to get projects with task counts
+        const { userId } = req.query;
+
+        console.log(`[DEBUG] getProjects called with userId: ${userId}`);
+
+        // Query to get projects with task counts (Filtered by User)
+        // Using subquery as requested: fetch projects where created_by OR user is in members
         const query = `
             SELECT 
                 p.*,
                 (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.project_id) as task_count,
                 (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.project_id AND t.status = 'Done') as done_task_count
             FROM projects p
+            WHERE p.created_by = $1 
+            OR p.project_id IN (SELECT project_id FROM projectmembers WHERE user_id = $1)
             ORDER BY 
                 CASE WHEN p.project_status = 'Completed' THEN 1 ELSE 0 END,
                 p.updated_at DESC
         `;
 
-        const result = await pool.query(query);
+        const values = [userId];
+        const result = await pool.query(query, values);
 
         // Format data
         const projects = result.rows.map(project => ({

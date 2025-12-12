@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTask, updateTask, deleteTask } from '../controllers/taskController.js';
+import { createTask, updateTask, deleteTask, getTasksByUser } from '../controllers/taskController.js';
 
 const router = express.Router();
 
@@ -8,4 +8,6 @@ const router = express.Router();
 router.post('/', createTask);
 router.put('/:task_id', updateTask);
 router.delete('/:id', deleteTask);
+router.get('/user/:userId', getTasksByUser); // For Personal Board
+
 export default router;

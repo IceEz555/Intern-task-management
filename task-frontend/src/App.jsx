@@ -8,6 +8,7 @@ import UserManagement from './pages/Admin/UserManagement';
 import ProjectList from './pages/ProjectManager/ProjectList';
 import ProjectDetails from './pages/ProjectManager/ProjectDetails';
 import KanbanBoard from './components/kanban/KanbanBoardComponent';
+import PersonalKanbanBoard from './pages/PersonalKanbanBoard';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/ProjectManagement" element={<ProjectList />} />
             <Route path="/kanban-board/:projectId" element={<KanbanBoard />} />
             <Route path="/ProjectDetails/:projectId" element={<ProjectDetails />} />
+            <Route path="/pm/kanban" element={<PersonalKanbanBoard />} />
           </Route>
         </Routes>
       </div>

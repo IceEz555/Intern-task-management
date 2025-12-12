@@ -8,12 +8,12 @@ const AdminLayout = ({ children, namepage }) => {
     const role = user?.role || 'Guest';
 
     return (
-        <div className="min-h-screen bg-gray-50 flex">
+        <div className="min-h-screen bg-gray-50">
             {/* Sidebar (Fixed) */}
             <Sidebar />
 
             {/* Main Content Area */}
-            <div className="flex-1 ml-64 flex flex-col min-h-screen">
+            <div className="ml-64 flex flex-col min-h-screen">
                 {/* Topbar (Sticky) */}
                 <Topbar namepage={namepage} name={name} role={role} />
 

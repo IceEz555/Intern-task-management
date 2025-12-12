@@ -1,19 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { arrayMove } from '@dnd-kit/sortable';
 import axios from 'axios';
-import { ChevronLeft } from 'lucide-react';
-import EditTaskModal from '../project/EditTaskModal';
-import AdminLayout from '../../components/layout/Pagelayout';
-import CreateTaskModal from '../project/CreateTaskModal';
-import SharedKanbanBoard from './SharedKanbanBoard';
+import AdminLayout from '../components/layout/Pagelayout';
+import SharedKanbanBoard from '../components/kanban/SharedKanbanBoard';
+import EditTaskModal from '../components/project/EditTaskModal';
+import CreateTaskModal from '../components/project/CreateTaskModal';
+import { useAuth } from '../context/AuthContext';
 
-const KanbanBoard = () => {
-    const { projectId } = useParams();
-    const navigate = useNavigate();
+const PersonalKanbanBoard = () => {
+    const { user } = useAuth();
 
     // Data State
-    const [project, setProject] = useState(null);
     const [columns, setColumns] = useState({
         'To Do': [],
         'In Progress': [],
@@ -26,13 +23,19 @@ const KanbanBoard = () => {
     const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
 
-    // Fetch Data Function
-    const fetchProjectData = useCallback(async () => {
+    // Fetch Data
+    const fetchMyTasks = useCallback(async () => {
+        if (!user?.user_id) return;
         try {
-            const res = await axios.get(`http://localhost:5000/api/projects/${projectId}`);
-            const tasks = res.data.tasks || [];
+            const res = await axios.get(`http://localhost:5000/api/tasks/user/${user.user_id}`);
+            const tasksData = res.data || [];
 
-            // Group Tasks by Status
+            // Map task_id to id for dnd-kit
+            const tasks = tasksData.map(task => ({
+                ...task,
+                id: task.task_id.toString() // Ensure string for dnd-kit
+            }));
+
             const newColumns = {
                 'To Do': [],
                 'In Progress': [],
@@ -48,20 +51,16 @@ const KanbanBoard = () => {
                 }
             });
 
-            setProject(res.data);
             setColumns(newColumns);
         } catch (err) {
-            console.error("Failed to fetch project:", err);
+            console.error("Failed to fetch my tasks:", err);
         }
-    }, [projectId]);
+    }, [user]);
 
-    // Initial Fetch
     useEffect(() => {
-        if (projectId) {
-            // eslint-disable-next-line
-            fetchProjectData();
-        }
-    }, [projectId, fetchProjectData]);
+        // eslint-disable-next-line
+        fetchMyTasks();
+    }, [fetchMyTasks]);
 
     // Helper: Find Container
     const findContainer = (id) => {
@@ -71,20 +70,16 @@ const KanbanBoard = () => {
         );
     };
 
-    // --- Drag & Drop Logic (Passed to Shared Component) ---
-
+    // --- Drag & Drop Logic (Duplicated from ProjectBoard) ---
     const handleDragOver = (event) => {
         const { active, over } = event;
         const overId = over?.id;
-
         if (!overId || active.id === overId) return;
 
         const activeContainer = findContainer(active.id);
         const overContainer = findContainer(overId);
 
-        if (!activeContainer || !overContainer || activeContainer === overContainer) {
-            return;
-        }
+        if (!activeContainer || !overContainer || activeContainer === overContainer) return;
 
         setColumns((prev) => {
             const activeItems = prev[activeContainer];
@@ -100,7 +95,6 @@ const KanbanBoard = () => {
                     over &&
                     active.rect.current.translated &&
                     active.rect.current.translated.top > over.rect.top + over.rect.height;
-
                 const modifier = isBelowOverItem ? 1 : 0;
                 newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
             }
@@ -124,9 +118,7 @@ const KanbanBoard = () => {
         const activeContainer = findContainer(active.id);
         const overContainer = findContainer(over.id);
 
-        if (!activeContainer || !overContainer || activeContainer !== overContainer) {
-            return;
-        }
+        if (!activeContainer || !overContainer || activeContainer !== overContainer) return;
 
         const activeIndex = columns[activeContainer].findIndex((item) => item.id.toString() === active.id.toString());
         const overIndex = columns[overContainer].findIndex((item) => item.id.toString() === over.id.toString());
@@ -138,7 +130,7 @@ const KanbanBoard = () => {
             }));
         }
 
-        // Call API Update Status
+        // API Update
         try {
             const newStatus = activeContainer;
             await axios.put(`http://localhost:5000/api/tasks/${active.id}`, {
@@ -156,53 +148,40 @@ const KanbanBoard = () => {
         setIsEditTaskOpen(true);
     };
 
-    if (!project) return <div className="p-8">Loading...</div>;
-
     return (
-        <AdminLayout namepage="Project Kanban-Board">
+        <AdminLayout namepage="My Personal Board">
             <div className="flex flex-col h-full">
-                {/* Back Button */}
-                <div className="flex flex-col mb-2">
-                    <button
-                        onClick={() => navigate(`/ProjectDetails/${projectId}`)}
-                        className="flex items-center text-gray-500 hover:text-gray-900 mb-4 w-fit group transition-colors"
-                    >
-                        <ChevronLeft size={20} className="mr-1 group-hover:-translate-x-1 transition-transform" />
-                        <span className="font-medium">Back to Detail</span>
-                    </button>
-                </div>
-
-                {/* Shared Kanban Board */}
                 <SharedKanbanBoard
-                    title={`${project.name} Board`}
+                    title="My Personal Tasks"
                     columns={columns}
                     onDragOver={handleDragOver}
                     onDragEnd={handleDragEnd}
                     onTaskClick={handleTaskClick}
-                    onAddClick={() => setIsCreateTaskOpen(true)}
                     showAddButton={true}
+                    onAddClick={() => setIsCreateTaskOpen(true)}
                 />
 
-                {/* Modals */}
                 <CreateTaskModal
                     isOpen={isCreateTaskOpen}
                     onClose={() => setIsCreateTaskOpen(false)}
-                    projectId={projectId}
-                    onTaskCreated={fetchProjectData}
-                    members={project.members || []}
+                    projectId={null} // Personal Task has no project
+                    onTaskCreated={fetchMyTasks}
+                    members={[{ user_id: user?.user_id, name: user?.name || user?.email }]}
+                    defaultAssigneeId={user?.user_id}
+                    lockAssignee={true}
                 />
 
                 <EditTaskModal
                     isOpen={isEditTaskOpen}
                     onClose={() => setIsEditTaskOpen(false)}
                     task={selectedTask}
-                    projectId={projectId}
-                    onTaskUpdated={fetchProjectData}
-                    members={project.members || []}
+                    onTaskUpdated={fetchMyTasks}
+                    members={[{ user_id: user?.user_id, name: user?.name || user?.email }]}
+                    lockAssignee={true}
                 />
             </div>
         </AdminLayout>
     );
 };
 
-export default KanbanBoard;
+export default PersonalKanbanBoard;

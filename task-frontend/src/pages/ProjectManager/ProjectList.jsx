@@ -62,12 +62,16 @@ const ProjectList = () => {
     });
 
     useEffect(() => {
-        fetchProjects();
-    }, []);
+        if (user?.user_id) {
+            fetchProjects();
+        }
+    }, [user]);
 
     const fetchProjects = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/projects');
+            const response = await axios.get('http://localhost:5000/api/projects', {
+                params: { userId: user?.user_id }
+            });
             const projectData = response.data;
             setProjects(projectData);
 
