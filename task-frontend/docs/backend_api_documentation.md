@@ -286,3 +286,24 @@ API สำหรับจัดการสมาชิกในโปรเจ�
 
 - **Endpoint**: `DELETE /api/projects/:id/members/:userId`
 - **Response**: 200 OK
+
+---
+
+## 6. Personal Board APIs (New!)
+
+### 1. Get User Tasks
+ดึงงานทั้งหมดที่ User คนนั้นได้รับมอบหมาย (สำหรับหน้า My Kanban Board)
+
+- **Endpoint**: `GET /api/tasks/user/:userId`
+- **Response**: Array ของ Task Objects
+  ```json
+  [
+    {
+      "id": 105,
+      "title": "Design Logo",
+      "status": "In Progress",
+      "project_id": 12
+    }
+  ]
+  ```
+```

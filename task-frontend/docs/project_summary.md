@@ -23,6 +23,14 @@
 24:     - `getProjectById`: ดึงข้อมูล Project + Tasks + Members (พร้อม Error Handling)
 25:     - `createTask`: API สร้างงานใหม่ บันทึกลง Table `tasks`
 
+### 📋 Kanban Board & Personal Tasks (New!)
+- **Frontend**:
+    - **Drag & Drop**: ระบบ Kanban Board เต็มรูปแบบ (`@dnd-kit`) ย้ายงานข้าม Column ได้
+    - **Personal Board**: หน้า "My Kanban" แสดงเฉพาะงานที่ได้รับมอบหมาย
+- **Backend**:
+    - **Subquery Filtering**: ปรับปรุง Logic การดึง Project ให้แม่นยำ (แก้บั๊ก Sarah)
+    - **Personal Tasks API**: เพิ่ม Endpoint `GET /api/tasks/user/:userId`
+
 
 ### 👥 User Management Feature (Full CRUD)
 - **Frontend (`UserManagement.jsx`)**:

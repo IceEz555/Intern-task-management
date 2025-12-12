@@ -64,8 +64,9 @@
     *   Status: ✅ **Completed** 95% (เหลือตกแต่งเล็กน้อย)
 *   **Phase 3: Project Manager Pages**
     *   Status: 🟡 **In Progress** (80%)
-    *   *Done*: Projects List, Project Detail, Manage Team, Task Creation, Task Edit/Delete !!
-    *   *Pending*: **Kanban Board** (Last major piece for PM)
+    *   *Done*: Projects List (With Strict Visibility), Project Detail, Manage Team, Task Creation, Task Edit/Delete
+    *   *Done*: **Kanban Board** (Drag & Drop Implemented)
+    *   *Pending*: **Personal Kanban** (In Progress)
 *   **Phase 4: Member Pages (Overview, My Tasks)**
     *   Status: 🔴 **Not Started** (0%)
 *   **Phase 5: Shared & Polish (Profile, Analytics)**

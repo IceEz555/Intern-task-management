@@ -31,6 +31,12 @@ task-frontend/src/
 │   │   ├── AddMemberModal.jsx
 │   │   ├── TaskItem.jsx
 │   │   └── TeamMembers.jsx
+│   ├── kanban/               # Kanban Board System (New!)
+│   │   ├── KanbanBoardComponent.jsx (Project Board)
+│   │   ├── PersonalKanbanBoard.jsx  (Personal Board)
+│   │   ├── SharedKanbanBoard.jsx    (Presenter UI)
+│   │   ├── KanbanColumn.jsx
+│   │   └── KanbanCard.jsx
 ├── context/
 │   └── AuthContext.jsx       # Authentication Logic
 ├── pages/
