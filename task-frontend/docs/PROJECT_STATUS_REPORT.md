@@ -19,10 +19,10 @@
 | **Task Detail** | Must | ✅ Done | Create, Edit, Delete Task (Modal) พร้อม Confirmation |
 | **Overview (Member)** | Must | 🔴 Pending | ยังไม่ได้เริ่มหน้า Dashboard ของ Member |
 | **My Tasks** | Must | 🔴 Pending | ยังไม่ได้เริ่มหน้า List งานส่วนตัว |
-| **Profile Page** | Must | 🔴 Pending | มีหน้า UI เปล่าๆ ยังไม่เชื่อม API |
+| **Profile Page** | Must | ✅ Done | ดูข้อมูล, แก้ไขชื่อ/แผนก, อัปเดต Nav bar ทันที |
 | **Logout** | Must | ✅ Done | ใช้งานได้ (Clear Context/Token) |
 | **Filters/Sorting** | Should | 🟡 Partial | User Management มี Filter แล้ว, Project/Task ยังไม่มี |
-| **System Analytics** | Nice | 🟡 Partial | มี StatCard พื้นฐานใน Admin Dashboard |
+| **System Analytics** | Nice | ✅ Done | Admin Dashboard มีกราฟแสดง User Distribution และ Stats ครบถ้วน |
 
 > **Summary**: ในส่วน **Member Pages** และ **Kanban Board** คือส่วนที่ "Must Have" แต่ยังไม่ได้ทำ
 
@@ -81,6 +81,8 @@
 ### Progress Update (Recent):
 1.  **Project Members**: จัดการทีมได้สมบูรณ์แล้ว (Manage Team Modal)
 2.  **Task Management**: ระบบ Create, Edit, Delete Task ใช้งานได้จริง พร้อม UX ระดับ Pro (Nested Modals, Avatar Fallbacks)
+3.  **Admin Dashboard**: เชื่อมต่อ API Stats จริง และมีกราฟ Dynamic ที่สวยงาม
+4.  **Profile System**: ผู้ใช้สามารถแก้ไขข้อมูลส่วนตัวได้แล้ว
 
 ### Next Steps:
 👉 **Recommended Action**: เริ่มทำ **"Kanban Board"** เพื่อให้ครบ Flow การทำงานของ PM หรือจะเริ่ม **"Member Dashboard"** เพื่อให้ฝั่ง Member เริ่มใช้งานระบบได้ครับ

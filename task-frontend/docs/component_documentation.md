@@ -469,3 +469,35 @@ Modal สำหรับแก้ไขรายละเอียดงาน (
 1. Fetch Data (API)
 2. Group Data (into Columns)
 3. **Render `SharedKanbanBoard`** (pass data & handlers)
+
+---
+
+## 16. AdminDashboard (`src/pages/Admin/AdminDashboard.jsx`)
+หน้า Dashboard หลักสำหรับ Admin แสดงภาพรวมของระบบ
+
+### Key Features
+- **Real-time Stats**: แสดงจำนวนผู้ใช้, โปรเจกต์ที่ Active, และงานที่เสร็จสิ้น
+- **Dynamic Charts**:
+    - **Bar Chart**: แสดงกิจกรรมรายสัปดาห์ (Mockup ในปัจจุบัน)
+    - **Donut Chart**: แสดงสัดส่วนผู้ใช้ตาม Role ด้วย `conic-gradient` ตามสีที่กำหนด (Blue, Purple, Light Blue)
+- **API Integration**: ดึงข้อมูลจาก `GET /api/admin/stats`
+
+---
+
+## 17. ProfilePage (`src/pages/Shared/ProfilePage.jsx`)
+หน้าแก้ไขข้อมูลส่วนตัวสำหรับผู้ใช้ทุกคน
+
+### Key Features
+- **View Profile**: แสดงข้อมูลปัจจุบัน (Avatar, Name, Email, Role)
+- **Edit Profile**: ฟอร์มแก้ไขชื่อและเบอร์โทร/แผนก โดยเชื่อมต่อกับ API `PUT /api/users/profile`
+- **Real-time Context Update**: เมื่อบันทึกสำเร็จ ข้อมูลใน `AuthContext` (Topbar) จะถูกอัปเดตทันทีโดยไม่ต้อง Refresh
+
+---
+
+## 18. NotFound (`src/pages/Shared/NotFound.jsx`)
+หน้า 404 สำหรับจัดการกรณีผู้ใช้เข้าถึง Path ที่ไม่มีอยู่จริง
+
+### Features
+- แสดงข้อความแจ้งเตือน "404 - Page Not Found"
+- มีปุ่ม "Go Home" เพื่อกลับหน้าหลัก
+

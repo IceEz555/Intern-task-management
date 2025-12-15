@@ -99,6 +99,20 @@ task-backend/
   ```
 - **Response (200 OK)**: User Object ที่อัปเดตแล้ว
 
+### 4. Update Own Profile (New)
+ผู้ใช้ล็อกอินแก้ไขข้อมูลส่วนตัวของตนเอง
+
+- **Endpoint**: `PUT /api/users/profile`
+- **Request Body**:
+  ```json
+  {
+    "name": "Jane User",
+    "email": "jane@example.com",
+    "department": "Engineering"
+  }
+  ```
+- **Response (200 OK)**: User Object ที่อัปเดตแล้ว
+
 ### 4. Delete User
 ลบผู้ใช้อออกจากระบบ
 
@@ -247,7 +261,29 @@ task-backend/
 
 ---
 
-## 🗄️ Database Connection
+## 7. Admin Dashboard APIs (New!)
+
+### 1. Get Dashboard Stats
+ดึงข้อมูลสถิติรวมสำหรับหน้า Admin Dashboard
+
+- **Endpoint**: `GET /api/admin/stats`
+- **Response**:
+  ```json
+  {
+    "totalUsers": 10,
+    "activeProjects": 5,
+    "completedTasks": 120,
+    "userDistribution": [
+        { "role": "Admin", "count": 2 },
+        { "role": "PM", "count": 3 },
+        { "role": "Member", "count": 5 }
+    ]
+  }
+  ```
+
+---
+
+## 8. Database Connection
 ไฟล์ `src/config/db.js` ทำหน้าที่สร้าง Pool Connection ไปยัง PostgreSQL
 
 ```javascript

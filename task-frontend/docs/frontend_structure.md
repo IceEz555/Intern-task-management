@@ -12,7 +12,10 @@ task-frontend/src/
 │   │   ├── index.css
 │   │   ├── Modal.css
 │   │   ├── ProjectList.css
-│   │   └── ProjectDetails.css (New!)
+│   │   ├── ProjectDetails.css
+│   │   ├── ProfilePage.css   (New!)
+│   │   ├── AdminDashboard.css (New!)
+│   │   └── NotFound.css      (New!)
 ├── components/
 │   ├── common/               # Reusable Components
 │   │   ├── Button.jsx
@@ -43,6 +46,9 @@ task-frontend/src/
 │   │   └── UserManagement.jsx
 │   ├── Auth/
 │   │   └── Login.jsx
+│   ├── Shared/
+│   │   ├── ProfilePage.jsx   (New!)
+│   │   └── NotFound.jsx      (New!)
 │   ├── ProjectManager/       # PM Specific Pages
 │   │   ├── ProjectList.jsx
 │   │   ├── ProjectDetails.jsx

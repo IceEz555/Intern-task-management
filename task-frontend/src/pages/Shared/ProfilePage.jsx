@@ -102,7 +102,7 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="email">Email Addr   ess</label>
+                        <label htmlFor="email">Email Address</label>
                         <input
                             type="email"
                             id="email"
