@@ -1,47 +1,47 @@
 import { useEffect, useState } from "react";
+import axios from 'axios';
 import PageLayout from "../../components/layout/Pagelayout";
 import { Users, Folder, CheckSquare, BarChart3, PieChart } from 'lucide-react';
 import '../../assets/styles/AdminDashboard.css';
 
 const AdminDashboard = () => {
-    // State for data (Backend Ready)
+    // State for data
     const [stats, setStats] = useState([]);
+    const [userDist, setUserDist] = useState([]); // New state for chart
     const [loading, setLoading] = useState(true);
 
-    // Simulate API Fetch
     useEffect(() => {
-        // TODO: Replace with actual API call
         const fetchData = async () => {
             setLoading(true);
             try {
-                // await api.get('/dashboard/stats');
-                // Simulate network delay
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                const response = await axios.get('http://localhost:5000/api/admin/stats');
+                const data = response.data;
 
-                const mockStats = [
+                const realStats = [
                     {
                         title: "TOTAL USERS",
-                        value: "5",
-                        icon: "Users", // Store icon name or handle component mapping
+                        value: data.totalUsers,
+                        icon: "Users",
                         bg: "bg-blue-50",
                         color: "text-blue-600"
                     },
                     {
                         title: "ACTIVE PROJECTS",
-                        value: "12",
+                        value: data.activeProjects,
                         icon: "Folder",
                         bg: "bg-purple-50",
                         color: "text-purple-600"
                     },
                     {
                         title: "TASKS COMPLETED",
-                        value: "1,204",
+                        value: data.completedTasks.toLocaleString(),
                         icon: "CheckSquare",
                         bg: "bg-green-50",
                         color: "text-green-600"
                     }
                 ];
-                setStats(mockStats);
+                setStats(realStats);
+                setUserDist(data.userDistribution);
             } catch (error) {
                 console.error("Failed to fetch dashboard data", error);
             } finally {
@@ -137,30 +137,40 @@ const AdminDashboard = () => {
                             <h3 className="font-bold text-gray-900">User Distribution</h3>
                         </div>
                         <div className="pie-chart-container">
-                            {/* CSS Donut Chart */}
-                            <div className="donut-chart">
-                                <div className="donut-segment-1"></div>
-                                <div className="donut-segment-2"></div>
+                            {/* Dynamic Conic Gradient Donut Chart */}
+                            <div
+                                className="donut-chart"
+                                style={{
+                                    background: `conic-gradient(
+                                            ${userDist.map((item, index) => {
+                                        const total = userDist.reduce((acc, curr) => acc + curr.count, 0);
+                                        const prevCount = userDist.slice(0, index).reduce((acc, curr) => acc + curr.count, 0);
+                                        const startPct = (prevCount / total) * 100;
+                                        const endPct = startPct + ((item.count / total) * 100);
+                                        // Palette: Blue, Purple, Light Blue (matches image)
+                                        const color = ['#3B82F6', '#A855F7', '#BFDBFE'][index % 3];
+                                        return `${color} ${startPct}% ${endPct}%`;
+                                    }).join(', ')}
+                                        )`
+                                }}
+                            >
+                                <div className="donut-hole"></div>
                                 <div className="donut-center-text">
-                                    <div className="donut-value">5</div>
+                                    <div className="donut-value">
+                                        {userDist.reduce((acc, curr) => acc + curr.count, 0)}
+                                    </div>
                                     <div className="donut-label">Users</div>
                                 </div>
                             </div>
 
                             {/* Legend */}
                             <div className="chart-legend">
-                                <div className="legend-item">
-                                    <div className="legend-dot bg-blue-500"></div>
-                                    <div className="legend-text">Admins <span className="font-bold ml-2">1</span></div>
-                                </div>
-                                <div className="legend-item">
-                                    <div className="legend-dot bg-purple-500"></div>
-                                    <div className="legend-text">Managers <span className="font-bold ml-2">1</span></div>
-                                </div>
-                                <div className="legend-item">
-                                    <div className="legend-dot bg-blue-100"></div>
-                                    <div className="legend-text">Members <span className="font-bold ml-2">3</span></div>
-                                </div>
+                                {userDist.map((item, index) => (
+                                    <div key={index} className="legend-item">
+                                        <div className={`legend-dot ${['bg-blue-500', 'bg-purple-500', 'bg-lightblue-custom'][index % 3]}`}></div>
+                                        <div className="legend-text">{item.role} <span className="font-bold ml-2">{item.count}</span></div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

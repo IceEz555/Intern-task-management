@@ -259,38 +259,28 @@
     position: relative;
 }
 
+/* Improved Donut Chart */
 .donut-chart {
-    width: 12rem;
-    height: 12rem;
-    border-radius: 9999px;
-    border: 16px solid #dbeafe;
-    /* border-blue-100 */
+    width: 13rem;
+    height: 13rem;
+    border-radius: 50%;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* Subtle shadow */
 }
 
-.donut-segment-1 {
+.donut-hole {
     position: absolute;
-    inset: 0;
-    border-radius: 9999px;
-    border: 16px solid #3b82f6;
-    border-top-color: transparent;
-    border-right-color: transparent;
-    transform: rotate(45deg);
-}
-
-.donut-segment-2 {
-    position: absolute;
-    inset: 0;
-    border-radius: 9999px;
-    border: 16px solid #a855f7;
-    /* border-purple-500 */
-    border-bottom-color: transparent;
-    border-left-color: transparent;
-    border-top-color: transparent;
-    transform: rotate(200deg);
+    width: 9.5rem;
+    height: 9.5rem;
+    background-color: white;
+    border-radius: 50%;
+    z-index: 1;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Inner shadow */
 }
 
 .donut-center-text {
@@ -333,6 +323,7 @@
     border-radius: 9999px;
 }
 
+/* Legend Colors */
 .bg-blue-500 {
     background-color: #3b82f6;
 }
@@ -341,8 +332,9 @@
     background-color: #a855f7;
 }
 
-.bg-blue-100 {
-    background-color: #dbeafe;
+/* Custom Light Blue for Member/3rd role */
+.bg-lightblue-custom {
+    background-color: #BFDBFE;
 }
 
 .legend-text {
