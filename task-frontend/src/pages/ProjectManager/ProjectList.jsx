@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import AdminLayout from '../../components/layout/Pagelayout';
+import PageLayout from '../../components/layout/Pagelayout';
 import { Plus, CheckSquare, Clock } from 'lucide-react';
 import StatCard from '../../components/dashboard/StatCard';
 import ProjectCard from '../../components/dashboard/ProjectCard';
@@ -105,7 +105,7 @@ const ProjectList = () => {
     };
 
     return (
-        <AdminLayout namepage="Projects">
+        <PageLayout namepage="Projects">
             <div className="project-list-container">
                 {/* Header Section */}
                 <div className="flex justify-between items-end mb-2">
@@ -149,7 +149,7 @@ const ProjectList = () => {
                                 <ProjectCard
                                     key={project.project_id}
                                     project={project}
-                                    onClick={() => navigate(`/ProjectDetails/${project.project_id}`)}
+                                    onClick={() => navigate(`/project-details/${project.project_id}`)}
                                 />
                             ))}
                             {/* New Project Placeholder */}
@@ -239,7 +239,7 @@ const ProjectList = () => {
                     </div>
                 </form>
             </Modal >
-        </AdminLayout >
+        </PageLayout >
     );
 };
 

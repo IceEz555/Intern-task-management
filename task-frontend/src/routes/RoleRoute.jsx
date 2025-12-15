@@ -17,9 +17,9 @@ const RoleRoute = ({ allowedRoles }) => {
         // Redirect to their specific dashboard based on role instead of generic home
         switch (user.role) {
             case 'Admin':
-                return <Navigate to="/AdminDashboard" replace />;
+                return <Navigate to="/admin-dashboard" replace />;
             case 'PM':
-                return <Navigate to="/ProjectManagement" replace />;
+                return <Navigate to="/project-management" replace />;
             default:
                 return <Navigate to="/" replace />;
         }

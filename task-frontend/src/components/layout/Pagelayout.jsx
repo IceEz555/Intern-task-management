@@ -2,7 +2,7 @@ import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import { useAuth } from '../../context/AuthContext';
 
-const AdminLayout = ({ children, namepage }) => {
+const PageLayout = ({ children, namepage }) => {
     const { user } = useAuth();
     const name = user?.name || 'Guest';
     const role = user?.role || 'Guest';
@@ -26,4 +26,4 @@ const AdminLayout = ({ children, namepage }) => {
     );
 };
 
-export default AdminLayout;
+export default PageLayout;

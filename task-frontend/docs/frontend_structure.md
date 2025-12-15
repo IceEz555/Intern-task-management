@@ -21,9 +21,9 @@ task-frontend/src/
 │   │   └── ...
 │   ├── dashboard/            # Dashboard specific components
 │   │   ├── StatCard.jsx
-│   │   └── ProjectCard.jsx
+│   │   ├── ProjectCard.jsx
 │   ├── layout/               # Layout wrappers
-│   │   ├── AdminLayout.jsx
+│   │   ├── PageLayout.jsx    (Renamed from AdminLayout)
 │   │   ├── Sidebar.jsx
 │   │   └── Topbar.jsx
 │   ├── project/              # Project specific components (New!)
@@ -32,9 +32,7 @@ task-frontend/src/
 │   │   ├── TaskItem.jsx
 │   │   └── TeamMembers.jsx
 │   ├── kanban/               # Kanban Board System (New!)
-│   │   ├── KanbanBoardComponent.jsx (Project Board)
-│   │   ├── PersonalKanbanBoard.jsx  (Personal Board)
-│   │   ├── SharedKanbanBoard.jsx    (Presenter UI)
+│   │   ├── SharedKanbanBoard.jsx    (Presenter UI - Reusable)
 │   │   ├── KanbanColumn.jsx
 │   │   └── KanbanCard.jsx
 ├── context/
@@ -47,7 +45,9 @@ task-frontend/src/
 │   │   └── Login.jsx
 │   ├── ProjectManager/       # PM Specific Pages
 │   │   ├── ProjectList.jsx
-│   │   └── ProjectDetails.jsx
+│   │   ├── ProjectDetails.jsx
+│   │   ├── ProjectKanbanBoard.jsx   (New!)
+│   │   └── PersonalKanbanBoard.jsx  (New!)
 ├── routes/
 │   └── RoleRoute.jsx         # Protected Routes
 ├── App.jsx
@@ -59,7 +59,7 @@ task-frontend/src/
 ### 1. Project Management Module
 
 **Page: `ProjectDetails.jsx`**
-*   **Layout**: `AdminLayout` (Wraps everything)
+*   **Layout**: `PageLayout` (Wraps everything)
 *   **Children Components**:
     *   `TaskItem`: แสดงรายการงาน (Loop render)
     *   `TeamMembers`: แสดงรูปสมาชิกทีม
@@ -67,7 +67,7 @@ task-frontend/src/
     *   `AddMemberModal`: ป๊อปอัพเพิ่มสมาชิก (Triggered by Manage Team)
 
 **Page: `ProjectList.jsx`**
-*   **Layout**: `AdminLayout`
+*   **Layout**: `PageLayout`
 *   **Children Components**:
     *   `StatCard`: แสดงสถิติด้านบน
     *   `ProjectCard`: แสดงการ์ดโปรเจกต์ (Loop render)

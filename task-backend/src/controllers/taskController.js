@@ -19,7 +19,7 @@ export const createTask = async (req, res) => {
             title,
             description,
             status || 'To Do',
-            priority || 'Medium',
+            priority || 'Low',
             due_date || null,
             project_id,
             assignee_id || null

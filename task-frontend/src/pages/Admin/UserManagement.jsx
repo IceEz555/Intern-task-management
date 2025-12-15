@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import AdminLayout from "../../components/layout/Pagelayout";
+import PageLayout from "../../components/layout/Pagelayout";
 import { Search, Filter, Plus } from 'lucide-react';
 import axios from 'axios';
 import "../../assets/styles/UserManagement.css";
@@ -190,7 +190,7 @@ const UserManagement = () => {
     }, []);
 
     return (
-        <AdminLayout namepage="User Management">
+        <PageLayout namepage="User Management">
             <div className="management-container">
                 {/* Header */}
                 <div className="user-management-header">
@@ -415,7 +415,7 @@ const UserManagement = () => {
                 </Modal>
 
             </div>
-        </AdminLayout>
+        </PageLayout>
     );
 };
 

@@ -26,11 +26,11 @@ export function Login() {
 
             // Redirect logic based on role from context result
             if (user.role === 'Admin') {
-                navigate('/AdminDashboard');
+                navigate('/admin-dashboard');
             } else if (user.role === 'PM') {
-                navigate('/ProjectManagement');
+                navigate('/project-management');
             } else {
-                navigate('/admin'); // Default fallback
+                navigate('/member-dashboard'); // Default fallback
             }
 
         } catch (err) {

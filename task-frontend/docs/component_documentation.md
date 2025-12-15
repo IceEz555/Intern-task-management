@@ -431,3 +431,41 @@ Modal สำหรับแก้ไขรายละเอียดงาน (
     onTaskUpdated={fetchProject}
 />
 ```
+
+---
+
+## 14. SharedKanbanBoard (`src/components/kanban/SharedKanbanBoard.jsx`)
+**"Presenter Component"** ที่รับผิดชอบเรื่อง UI ของ Kanban Board ทั้งหมด แต่ไม่มี Logic ในการดึงข้อมูลเอง
+
+### Key Features
+- **Stateless (mostly)**: รับข้อมูล Tasks และ functions จาก Parent Component
+- **Drag & Drop**: ใช้ `@dnd-kit` ในการจัดการลากวาง
+- **Filtering**: มี UI สำหรับกรองงานตาม Priority (High, Medium, Low)
+
+### Props
+| Prop Name | Type | Description |
+| :--- | :--- | :--- |
+| `title` | String | ชื่อหัวข้อบอร์ด (e.g., "Project A Board", "My Personal Tasks") |
+| `columns` | Object | ข้อมูล Tasks ที่จัดกลุ่มแล้ว `{'To Do': [], 'In Progress': []}` |
+| `onDragEnd` | Function | ฟังก์ชันเรียกเมื่อลากเสร็จ (สำหรับยิง API Save) |
+| `onTaskClick` | Function | ฟังก์ชันเมื่อคลิก Task (เปิด Edit Modal) |
+| `onAddClick` | Function | ฟังก์ชันเมื่อกดปุ่ม Add Task |
+| `showAddButton` | Boolean | ควบคุมการแสดงปุ่ม Add Task (เผื่อใช้ใน Read-only mode) |
+
+---
+
+## 15. ProjectKanbanBoard & PersonalKanbanBoard
+**"Container Components"** ที่ทำหน้าที่เป็น Controller คุม `SharedKanbanBoard`
+
+### ProjectKanbanBoard (`src/pages/ProjectManager/ProjectKanbanBoard.jsx`)
+- **Source**: ดึงข้อมูลจาก Project API (`/api/projects/:id`)
+- **Use Case**: ใช้สำหรับดูงานรวมของทั้งทีมในโปรเจกต์นั้นๆ
+
+### PersonalKanbanBoard (`src/pages/ProjectManager/PersonalKanbanBoard.jsx`)
+- **Source**: ดึงข้อมูลจาก Personal Tasks API (`/api/tasks/user/:userId`)
+- **Use Case**: ใช้สำหรับ User ดูงานที่ตัวเองได้รับมอบหมาย (ส่วนตัว)
+
+### Logic Flow
+1. Fetch Data (API)
+2. Group Data (into Columns)
+3. **Render `SharedKanbanBoard`** (pass data & handlers)

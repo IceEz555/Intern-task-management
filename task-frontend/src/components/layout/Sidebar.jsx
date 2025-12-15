@@ -22,16 +22,16 @@ const Sidebar = () => {
     // Define menus for each role
     const menus = {
         Admin: [
-            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/AdminDashboard' },
-            { icon: <Users size={20} />, label: 'User Management', path: '/Admin/UserManagement' },
+            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/admin-dashboard' },
+            { icon: <Users size={20} />, label: 'User Management', path: '/admin/user-management' },
         ],
         PM: [
-            { icon: <Folder size={20} />, label: 'Projects', path: '/ProjectManagement' },
-            { icon: <LayoutDashboard size={20} />, label: 'My Kanban Board', path: '/pm/kanban' },
+            { icon: <Folder size={20} />, label: 'Projects', path: '/project-management' },
+            { icon: <LayoutDashboard size={20} />, label: 'My Kanban Board', path: '/personal-kanban' },
         ],
         Member: [
-            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/admin' },
-            { icon: <CheckSquare size={20} />, label: 'My Tasks', path: '/admin/tasks' },
+            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/member-dashboard' }, // Placeholder for now
+            { icon: <CheckSquare size={20} />, label: 'My Tasks', path: '/personal-kanban' }, // Assuming members can see personal board too?
         ]
     };
 

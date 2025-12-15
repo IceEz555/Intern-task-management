@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import AdminLayout from '../../components/layout/Pagelayout';
+import PageLayout from '../../components/layout/Pagelayout';
 import { ChevronLeft, Calendar, Clock, Plus, UserPlus, Edit } from 'lucide-react';
 import '../../assets/styles/ProjectDetails.css';
 // Components
@@ -62,16 +62,16 @@ const ProjectDetails = () => {
         if (projectId) fetchProject();
     }, [projectId, fetchProject]);
 
-    if (loading) return <AdminLayout namepage="Project Detail"><div className="p-8">Loading...</div></AdminLayout>;
-    if (error) return <AdminLayout namepage="Project Detail"><div className="p-8 text-red-500">Error: {error}</div></AdminLayout>;
-    if (!project) return <AdminLayout namepage="Project Detail"><div className="p-8">Project not found</div></AdminLayout>;
+    if (loading) return <PageLayout namepage="Project Detail"><div className="p-8">Loading...</div></PageLayout>;
+    if (error) return <PageLayout namepage="Project Detail"><div className="p-8 text-red-500">Error: {error}</div></PageLayout>;
+    if (!project) return <PageLayout namepage="Project Detail"><div className="p-8">Project not found</div></PageLayout>;
 
     return (
-        <AdminLayout namepage="Project Detail">
+        <PageLayout namepage="Project Detail">
             <div className="project-details-container">
                 {/* 1. Navigation Back */}
                 <button
-                    onClick={() => navigate('/ProjectManagement')}
+                    onClick={() => navigate('/project-management')}
                     className="back-btn"
                 >
                     <ChevronLeft size={20} />
@@ -178,7 +178,7 @@ const ProjectDetails = () => {
                     onTaskUpdated={fetchProject}
                 />
             </div>
-        </AdminLayout>
+        </PageLayout>
     );
 };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "../../components/layout/Pagelayout";
+import PageLayout from "../../components/layout/Pagelayout";
 import { Users, Folder, CheckSquare, BarChart3, PieChart } from 'lucide-react';
 import '../../assets/styles/AdminDashboard.css';
 
@@ -63,7 +63,7 @@ const AdminDashboard = () => {
     };
 
     return (
-        <AdminLayout namepage="Admin Dashboard">
+        <PageLayout namepage="Admin Dashboard">
             <div className="dashboard-container">
                 {/* Header Section */}
                 <div className="dashboard-header">
@@ -167,7 +167,7 @@ const AdminDashboard = () => {
 
                 </div>
             </div>
-        </AdminLayout>
+        </PageLayout>
     );
 };
 
