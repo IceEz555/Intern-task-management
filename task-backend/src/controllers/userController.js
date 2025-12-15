@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export const getUsers = async (req, res) => {
     try {
-        const result = await pool.query('SELECT user_id, fullname as name, email, role, status FROM Users ORDER BY user_id ASC');
+        const result = await pool.query('SELECT user_id, fullname as name, email, role, status, department FROM Users ORDER BY user_id ASC');
         res.json(result.rows);
     } catch (err) {
         console.error(err);
@@ -25,8 +25,8 @@ export const createUser = async (req, res) => {
         try {
             // RETURNING fullname as name -> เพื่อให้ Frontend เอาไปแสดงผลต่อได้เลยโดยไม่ต้อง Refresh
             const result = await pool.query(
-                'INSERT INTO users (fullname, email, role, status, password) VALUES ($1, $2, $3, $4, $5) RETURNING user_id, fullname as name, email, role, status',
-                [name, email, role, status, hashPassword]
+                'INSERT INTO users (fullname, email, role, status, password, department) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id, fullname as name, email, role, status, department',
+                [name, email, role, status, hashPassword, '']
             );
             res.status(201).json(result.rows[0]);
         }
@@ -65,6 +65,37 @@ export const updateUser = async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        // Unique violation
+        if (err.code === '23505') {
+            return res.status(409).json({ message: "Email already exists" });
+        }
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { id, name, department, jobTitle } = req.body; // Accept jobTitle for backward compatibility if needed, but prioritize department
+
+        // Use department or jobTitle (if department not provided)
+        const finalDepartment = department || jobTitle || '';
+
+        if (!id) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const query = 'UPDATE Users SET fullname = $1, department = $2 WHERE user_id = $3 RETURNING user_id, fullname as name, email, role, status, department';
+        const values = [name, finalDepartment, id];
+
+        const result = await pool.query(query, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         res.json(result.rows[0]);
     } catch (err) {
         console.error(err);

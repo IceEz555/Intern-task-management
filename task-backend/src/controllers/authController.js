@@ -29,6 +29,7 @@ export const login = async (req, res) => {
         const responseUser = {
             ...userWithoutPassword,
             name: user.fullname,
+            department: user.department || ''
         };
 
         res.json({ user: responseUser });
