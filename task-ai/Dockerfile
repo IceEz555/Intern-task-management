@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 8000 8001
 
 # Default command (overridden in docker-compose)
-CMD ["uvicorn", "server:app", "--reload",]
+CMD ["uvicorn", "server:app",  "--reload"]

@@ -8,9 +8,9 @@ services:
     image: postgres:15
     container_name: task_postgres_db
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password123
-      POSTGRES_DB: intern_task_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: '081081'
+      POSTGRES_DB: task-management
     ports:
       - "5432:5432"
     volumes:
@@ -29,7 +29,7 @@ services:
       - "5001:5001"
     environment:
       - PORT=5001
-      - DATABASE_URL=postgres://admin:password123@postgres-db:5432/intern_task_db
+      - DATABASE_URL=postgres://postgres:081081@postgres-db:5432/task-management
     depends_on:
       - postgres-db
     networks:
@@ -65,6 +65,16 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY} # Pass from .env
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - ./task-ai/.env
     networks:
       - task_network
+
+# Define the network and volume that are used by services above
+networks:
+  task_network:
+    driver: bridge
+
+volumes:
+  pgdata:

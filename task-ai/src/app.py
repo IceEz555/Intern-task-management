@@ -14,7 +14,14 @@ from dotenv import load_dotenv
 
 # Load environment variables and initialize model and vector store
 load_dotenv() # Load environment variables from .env file
+# Try finding .env in parent dir if not found (for Docker)
+if not os.getenv("GOOGLE_API_KEY"):
+    load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
+
 api_key = os.getenv("GOOGLE_API_KEY")
+if not api_key:
+    raise ValueError("GOOGLE_API_KEY not found in environment")
+    
 os.environ["GOOGLE_API_KEY"] = api_key
 model = init_chat_model("google_genai:gemini-2.5-flash-lite")
 embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
