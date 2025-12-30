@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PageLayout from "../../components/layout/Pagelayout";
 import { Search, Filter, Plus } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../../utils/api';
 import "../../assets/styles/UserManagement.css";
 import Modal from '../../components/common/Modal';
 
@@ -77,7 +78,7 @@ const UserManagement = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/users', formData);
+            const response = await axios.post(`${API_URL}/api/users`, formData);
 
             // Optimistic Update
             const newUser = {
@@ -121,7 +122,7 @@ const UserManagement = () => {
                 password: formData.password
             };
 
-            const response = await axios.put(`http://localhost:5000/api/users/${currentUser.user_id}`, payload);
+            const response = await axios.put(`${API_URL}/api/users/${currentUser.user_id}`, payload);
 
             const updatedUser = {
                 ...response.data,
@@ -145,7 +146,7 @@ const UserManagement = () => {
 
     const handleSubmitDelete = async () => {
         try {
-            await axios.delete(`http://localhost:5000/api/users/${currentUser.user_id}`);
+            await axios.delete(`${API_URL}/api/users/${currentUser.user_id}`);
             setUsers(prev => prev.filter(u => u.user_id !== currentUser.user_id));
             closeModals();
             alert("User deleted successfully.");
@@ -171,7 +172,7 @@ const UserManagement = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/users');
+                const response = await axios.get(`${API_URL}/api/users`);
                 const formattedUsers = response.data.map(user => ({
                     ...user,
                     initials: user.name

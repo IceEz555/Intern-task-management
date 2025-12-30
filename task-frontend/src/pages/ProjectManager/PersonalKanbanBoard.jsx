@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import axios from 'axios';
+import { API_URL } from '../../utils/api';
 import PageLayout from '../../components/layout/Pagelayout';
 import SharedKanbanBoard from '../../components/kanban/SharedKanbanBoard';
 import EditTaskModal from '../../components/project/EditTaskModal';
@@ -27,7 +28,7 @@ const PersonalKanbanBoard = () => {
     const fetchMyTasks = useCallback(async () => {
         if (!user?.user_id) return;
         try {
-            const res = await axios.get(`http://localhost:5000/api/tasks/user/${user.user_id}`);
+            const res = await axios.get(`${API_URL}/api/tasks/user/${user.user_id}`);
             const tasksData = res.data || [];
 
             // Map task_id to id for dnd-kit
@@ -133,7 +134,7 @@ const PersonalKanbanBoard = () => {
         // API Update
         try {
             const newStatus = activeContainer;
-            await axios.put(`http://localhost:5000/api/tasks/${active.id}`, {
+            await axios.put(`${API_URL}/api/tasks/${active.id}`, {
                 task_id: active.id,
                 status: newStatus
             });

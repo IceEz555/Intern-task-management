@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { arrayMove } from '@dnd-kit/sortable';
 import axios from 'axios';
+import { API_URL } from '../../utils/api';
 import { ChevronLeft } from 'lucide-react';
 import EditTaskModal from '../project/EditTaskModal';
 import AdminLayout from '../../components/layout/Pagelayout';
@@ -29,7 +30,7 @@ const KanbanBoard = () => {
     // Fetch Data Function
     const fetchProjectData = useCallback(async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/projects/${projectId}`);
+            const res = await axios.get(`${API_URL}/api/projects/${projectId}`);
             const tasks = res.data.tasks || [];
 
             // Group Tasks by Status
@@ -141,7 +142,7 @@ const KanbanBoard = () => {
         // Call API Update Status
         try {
             const newStatus = activeContainer;
-            await axios.put(`http://localhost:5000/api/tasks/${active.id}`, {
+            await axios.put(`${API_URL}/api/tasks/${active.id}`, {
                 task_id: active.id,
                 status: newStatus
             });

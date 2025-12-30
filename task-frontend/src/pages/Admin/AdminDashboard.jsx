@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import PageLayout from "../../components/layout/Pagelayout";
 import { Users, Folder, CheckSquare, BarChart3, PieChart } from 'lucide-react';
+import { API_URL } from "../../utils/api";
 import '../../assets/styles/AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -14,7 +15,7 @@ const AdminDashboard = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:5000/api/admin/stats');
+                const response = await axios.get(`${API_URL}/api/admin/stats`);
                 const data = response.data;
 
                 const realStats = [

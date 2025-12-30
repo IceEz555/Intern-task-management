@@ -3,6 +3,7 @@ import PageLayout from '../../components/layout/Pagelayout';
 import { useAuth } from '../../context/AuthContext';
 import '../../assets/styles/ProfilePage.css';
 import axios from 'axios';
+import { API_URL } from '../../utils/api';
 
 export default function ProfilePage() {
     const { user, updateUser } = useAuth();
@@ -47,7 +48,7 @@ export default function ProfilePage() {
     const handleSubmit = async () => {
         setIsSaving(true);
         try {
-            const response = await axios.put('http://localhost:5000/api/users/profile', {
+            const response = await axios.put(`${API_URL}/api/users/profile`, {
                 id: user.user_id || user.id, // Support different ID formats
                 name: formData.fullName,
                 department: formData.department

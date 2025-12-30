@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import { X, Calendar, ClipboardList } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../../utils/api';
 
 const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreated, defaultAssigneeId = '', lockAssignee = false }) => {
     // Local state for form
@@ -40,7 +41,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
 
         setIsSubmitting(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/tasks', {
+            const response = await axios.post(`${API_URL}/api/tasks`, {
                 title,
                 description,
                 status,

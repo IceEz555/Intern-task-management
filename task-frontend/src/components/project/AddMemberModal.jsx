@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import '../../assets/styles/Modal.css';
 import axios from 'axios';
+import { API_URL } from '../../utils/api';
 
 const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMembers = [], onMemberAdded }) => {
     const [allUsers, setAllUsers] = useState([]);
@@ -21,7 +22,7 @@ const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMember
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:5000/api/users');
+            const response = await axios.get(`${API_URL}/api/users`);
             if (response.data) {
                 setAllUsers(response.data);
             }
@@ -51,13 +52,13 @@ const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMember
         try {
             // Execute all changes
             const addPromises = toAdd.map(async userId =>
-                await axios.post(`http://localhost:5000/api/projects/${projectId}/members`, {
+                await axios.post(`${API_URL}/api/projects/${projectId}/members`, {
                     user_id: userId
                 })
             );
 
             const removePromises = toRemove.map(async userId =>
-                await axios.delete(`http://localhost:5000/api/projects/${projectId}/members/${userId}`)
+                await axios.delete(`${API_URL}/api/projects/${projectId}/members/${userId}`)
             );
 
             await Promise.all([...addPromises, ...removePromises]);

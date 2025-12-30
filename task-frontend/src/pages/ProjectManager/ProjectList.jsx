@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../utils/api';
 import PageLayout from '../../components/layout/Pagelayout';
 import { Plus, CheckSquare, Clock } from 'lucide-react';
 import StatCard from '../../components/dashboard/StatCard';
@@ -41,7 +42,7 @@ const ProjectList = () => {
     const handleSubmitCreate = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/projects', {
+            await axios.post(`${API_URL}/api/projects`, {
                 ...newProject,
                 created_by: user?.user_id // Send user ID
             });
@@ -69,7 +70,7 @@ const ProjectList = () => {
 
     const fetchProjects = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/projects', {
+            const response = await axios.get(`${API_URL}/api/projects`, {
                 params: { userId: user?.user_id }
             });
             const projectData = response.data;
