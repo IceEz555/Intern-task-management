@@ -54,7 +54,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onProjectUpdated }) => {
         try {
             await axios.delete(`${API_URL}/api/projects/${project.project_id}`);
             // Redirect to project list
-            navigate('/ProjectManagement');
+            navigate('/project-management');
         } catch (err) {
             console.error(err);
             alert('Failed to delete project');

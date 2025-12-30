@@ -39,3 +39,14 @@ export const login = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+export const logout = async (req, res) => {
+    try {
+        // In a stateless JWT system, we don't invalidate tokens on the server (unless using a blacklist).
+        // Since we are using localStorage, we just acknowledge the request for logging purposes.
+        res.status(200).json({ message: "Logout successful" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

@@ -27,9 +27,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('user');
+    const logout = async () => {
+        try {
+            await axios.post(`${API_URL}/api/logout`);
+        } catch (error) {
+            console.error("Logout failed:", error);
+        } finally {
+            setUser(null);
+            localStorage.removeItem('user');
+        }
     };
 
     const updateUser = (userData) => {

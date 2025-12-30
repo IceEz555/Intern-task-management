@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../utils/api';
 import PageLayout from '../../components/layout/Pagelayout';
@@ -62,13 +62,7 @@ const ProjectList = () => {
         upcomingDeadlines: 0
     });
 
-    useEffect(() => {
-        if (user?.user_id) {
-            fetchProjects();
-        }
-    }, [user]);
-
-    const fetchProjects = async () => {
+    const fetchProjects = useCallback(async () => {
         try {
             const response = await axios.get(`${API_URL}/api/projects`, {
                 params: { userId: user?.user_id }
@@ -103,7 +97,13 @@ const ProjectList = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user]);
+
+    useEffect(() => {
+        if (user?.user_id) {
+            fetchProjects();
+        }
+    }, [user, fetchProjects]);
 
     return (
         <PageLayout namepage="Projects">
