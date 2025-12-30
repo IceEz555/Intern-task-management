@@ -3,11 +3,16 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
-const PORT = process.env.GATEWAY_PORT || 5000;
+const PORT = process.env.GATEWAY_PORT;
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -15,14 +20,14 @@ app.use(cors());
 const services = [
     {
         path: '/api/ai',
-        target: process.env.AI_SERVICE_URL || 'http://localhost:8001',
+        target: process.env.AI_SERVICE_URL,
         pathRewrite: {
             '^/api/ai': '', // Strip /api/ai prefix when forwarding to FastAPI (e.g. /api/ai/query -> /query)
         }
     },
     {
         path: '/api',
-        target: process.env.NODE_SERVICE_URL || 'http://localhost:5001',
+        target: process.env.NODE_SERVICE_URL,
         pathRewrite: {
             '^/': '/api/', // Add /api prefix back because Node backend expects it (e.g. /login -> /api/login)
         }

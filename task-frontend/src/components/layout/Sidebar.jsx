@@ -1,4 +1,4 @@
-import { CheckSquare, Folder, LayoutDashboard, LogOut, User, Users, LaptopMinimalCheck } from 'lucide-react';
+import { CheckSquare, Folder, LayoutDashboard, LogOut, User, Users, LaptopMinimalCheck, BotMessageSquare } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -83,7 +83,19 @@ const Sidebar = () => {
                             Profile
                         </Link>
                     </div>
+                    <div className='space-y-1'>
+                        <a
+                            href="http://localhost:8501/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
+                        >
+                            <BotMessageSquare size={20} />
+                            AI Chat
+                        </a>
+                    </div>
                 </div>
+
             </div>
 
             {/* Sign Out Footer */}
