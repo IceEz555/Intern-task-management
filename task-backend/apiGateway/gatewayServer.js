@@ -22,8 +22,10 @@ const services = [
         path: '/api/ai',
         target: process.env.AI_SERVICE_URL,
         pathRewrite: {
-            '^/api/ai': '', // Strip /api/ai prefix when forwarding to FastAPI (e.g. /api/ai/query -> /query)
+            '^/api/ai': '', // Strip /api/ai prefix
         }
+        // Note: Currently unused by Streamlit (which talks directly to FastAPI on Port 8000).
+        // Reserved for future React-based Chat Widget.
     },
     {
         path: '/api',
