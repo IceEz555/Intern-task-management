@@ -47,15 +47,49 @@ npm start # Start Backend Service (Port 5001)
 - **Gateway**: `http://localhost:5000` (Main Entry Point)
 - **Backend Service**: `http://localhost:5001`
 
-### 3. AI Service Setup (Optional)
-```bash
-# Assuming Python environment
-streamlit run src/cook-test.py # or your entry file
-```
-- **AI Chat**: `http://localhost:8501`
+### 3. AI Service Setup
+The AI Service consists of a FastAPI backend (for RAG logic) and a Streamlit UI.
 
-### 3. Frontend Setup
-```bash
+1. **Install Dependencies**
+   ```bash
+   cd task-ai
+   # Create virtual env (Recommended)
+   python -m venv venv
+   # Activate: .\venv\Scripts\activate (Windows) or source venv/bin/activate (Mac/Linux)
+   pip install -r requirements.txt
+   ```
+
+2. **Run AI Services**
+   - **Option A: Full AI System (API + UI)**
+     ```bash
+     # Terminal 1: Run FastAPI (Logic Layer)
+     # Runs on http://localhost:8000
+     fastapi dev src/server.py
+     
+     # Terminal 2: Run Streamlit (Chat UI)
+     # Runs on http://localhost:8501
+     streamlit run src/streamlit.py
+     ```
+
+
+3. **Run with Docker (Recommended) 🐳**
+   This runs all services (Frontend, Backend, Gateway, AI, DB) automatically.
+   ```bash
+   # Build and Start
+   docker-compose up --build
+   ```
+   - **Frontend**: `http://localhost:5173`
+   - **Gateway**: `http://localhost:5000`
+   - **Streamlit**: `http://localhost:8501`
+   - **Backend**: `http://localhost:5001`
+   - **DB**: `localhost:5432`
+
+### 4. Manual Setup (Without Docker)
+   **Backend:**
+   ```bash
+   cd task-backend
+   npm install
+   # ... (rest of manual setup)
 cd task-frontend
 npm install
 npm run dev

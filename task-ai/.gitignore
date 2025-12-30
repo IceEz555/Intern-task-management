@@ -1,0 +1,8 @@
+
+# Python / AI
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.streamlit/

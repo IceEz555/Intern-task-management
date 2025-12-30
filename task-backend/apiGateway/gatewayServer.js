@@ -19,7 +19,7 @@ app.use(cors());
 
 const services = [
     {
-        path: '/api/ai',
+        path: '/api/ai', // ถ้าขึ้นต้นด้วยนี้
         target: process.env.AI_SERVICE_URL,
         pathRewrite: {
             '^/api/ai': '', // Strip /api/ai prefix

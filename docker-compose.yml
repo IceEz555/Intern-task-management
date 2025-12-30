@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # -----------------------------
+  # 1. Database (PostgreSQL)
+  # -----------------------------
+  postgres-db:
+    image: postgres:15
+    container_name: task_postgres_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: intern_task_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - task_network
+
+  # -----------------------------
+  # 2. Node Backend Service (Logic)
+  # -----------------------------
+  backend-service:
+    build: ./task-backend
+    container_name: task_backend_service
+    command: npm run dev # Runs 'nodemon server.js'
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - DATABASE_URL=postgres://admin:password123@postgres-db:5432/intern_task_db
+    depends_on:
+      - postgres-db
+    networks:
+      - task_network
+
+  # -----------------------------
+  # 3. API Gateway (Entry Point)
+  # -----------------------------
+  api-gateway:
+    build: ./task-backend/apiGateway # Use dedicated Dockerfile
+    container_name: task_api_gateway
+    command: npm run dev # Runs 'nodemon gatewayServer.js'
+    ports:
+      - "5000:5000"
+    environment:
+      - GATEWAY_PORT=5000
+      - NODE_SERVICE_URL=http://backend-service:5001
+      - AI_SERVICE_URL=http://ai-service:8000
+    depends_on:
+      - backend-service
+      - ai-service
+    networks:
+      - task_network
+
+  # -----------------------------
+  # 4. AI Service (FastAPI)
+  # -----------------------------
+  ai-service:
+    build: ./task-ai
+    container_name: task_ai_service
+    working_dir: /app/src # Important: Run from src folder
+    command: uvicorn server:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY} # Pass from .env
+    networks:
+      - task_network
