@@ -118,6 +118,12 @@ export const deleteUser = async (req, res) => {
         res.json({ message: "User deleted successfully", id });
     } catch (err) {
         console.error(err);
+        // 23503 = Foreign Key Violation (มีข้อมูลลูก เช่น Tasks/Projects ผูกอยู่)
+        if (err.code === '23503') {
+            return res.status(409).json({
+                message: "Cannot delete user. This user has assigned tasks or projects."
+            });
+        }
         res.status(500).json({ message: 'Server error' });
     }
 };

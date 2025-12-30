@@ -1,0 +1,14 @@
+{
+  "name": "apigateway",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "gatewayServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node gatewayServer.js",
+    "dev": "nodemon gatewayServer.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

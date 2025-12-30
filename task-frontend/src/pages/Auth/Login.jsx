@@ -117,7 +117,7 @@ export function Login() {
                                         onClick={() => {
                                             setSelectedRole("Admin");
                                             setEmail("admin@internflow.com");
-                                            setPassword("password123");
+                                            setPassword("Pass1234");
                                         }}
                                     >
                                         Admin
