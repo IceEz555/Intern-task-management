@@ -23,6 +23,8 @@ A web-based Task Management System built for managing projects, tasks, and users
   - Edit user details (Admin only) - *Backend Implemented, Frontend Integrated*
   - Delete users (Admin only) - *Backend Implemented, Frontend Integrated*
 - **Dashboard**: Role-based redirection and dashboard views.
+- **AI Integration**:
+  - AI Assistant for project queries (Streamlit integration).
 
 ## 🔧 Setup & Installation
 
@@ -38,10 +40,19 @@ Import the schema (tables: `Users`, etc.) if available.
 ```bash
 cd task-backend
 npm install
-# Configure .env with DB credentials
-npm run dev
+# Configure .env: PORT=5001, GATEWAY_PORT=5000
+npm start --prefix apiGateway # Start Gateway (Port 5000)
+npm start # Start Backend Service (Port 5001)
 ```
-Backend runs on `http://localhost:5000`.
+- **Gateway**: `http://localhost:5000` (Main Entry Point)
+- **Backend Service**: `http://localhost:5001`
+
+### 3. AI Service Setup (Optional)
+```bash
+# Assuming Python environment
+streamlit run src/cook-test.py # or your entry file
+```
+- **AI Chat**: `http://localhost:8501`
 
 ### 3. Frontend Setup
 ```bash

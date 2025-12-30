@@ -88,11 +88,22 @@ const payload = {
 ```
 
 ### Step 3: Action (ส่งของ) 🚚
-ใช้ `axios` ยิงไปตามวิธีที่ Backend บอก
-*   **GET** (ขอดู): `axios.get('/api/users')`
-*   **POST** (สร้าง): `axios.post('/api/users', payload)`
-*   **PUT** (แก้ไข): `axios.put('/api/users/1', payload)`
-*   **DELETE** (ลบ): `axios.delete('/api/users/1')`
+ใช้ `axios` ยิงไปที่ Backend (ผ่าน Gateway)
+*   **Tip**: ควรใช้ `VITE_API_URL` หรือไฟล์ `api.js` ที่ตั้งค่าไว้แล้ว
+    
+```javascript
+import api from '../utils/api'; // ตัวอย่างการ import instance
+
+// ...
+await api.get('/users'); 
+// หรือถ้าใช้ axios ตรงๆ:
+// await axios.get(`${import.meta.env.VITE_API_URL}/api/users`);
+```
+
+*   **GET** (ขอดู): `api.get('/users')`
+*   **POST** (สร้าง): `api.post('/users', payload)`
+*   **PUT** (แก้ไข): `api.put('/users/1', payload)`
+*   **DELETE** (ลบ): `api.delete('/users/1')`
 
 **อย่าลืม!** ต้องมีคำว่า `await` เสมอ เพราะเน็ตอาจจะช้า เราต้องรอ
 ```javascript

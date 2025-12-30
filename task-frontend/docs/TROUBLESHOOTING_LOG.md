@@ -166,3 +166,34 @@
 ### ✅ วิธีแก้ไข (Solution)
 - **Manual Restart**: กด `Ctrl + C` แล้วรัน `npm start` ใหม่ที่ Terminal ฝั่ง Backend เพื่อให้ Express register route ใหม่ทั้งหมดให้ชัวร์
 
+
+---
+
+## 10. 🌉 Gateway Crash: "Missing target" error
+
+### ❌ อาการ (Symptoms)
+- `gatewayServer.js` Crash ทันทีที่รัน
+- Error: `[HPM] Missing "target" option. Example: {target: "http://www.example.org"}`
+
+### 🔍 สาเหตุ (Root Cause)
+- **Environment Path Resolution**: ไฟล์ `gatewayServer.js` อยู่ในโฟลเดอร์ลูก (`apiGateway/`) แต่เรียก `dotenv.config()` เฉยๆ
+- library `dotenv` จะหาไฟล์ `.env` ที่ Current Working Directory ซึ่งไม่มีไฟล์นั้น ทำให้ตัวแปร `AI_SERVICE_URL` เป็น `undefined`
+
+### ✅ วิธีแก้ไข (Solution)
+- ระบุ Path ให้ชัดเจน: `dotenv.config({ path: path.join(__dirname, '../.env') });`
+
+---
+
+## 11. 🔌 Port Conflict Warning
+
+### ❌ อาการ (Symptoms)
+- รัน Backend (`npm start`) แล้ว Gateway (`node gatewayServer.js`) จะรันไม่ได้ (หรือสลับกัน)
+- Error: `EADDRINUSE: address already in use :::5000`
+
+### 🔍 สาเหตุ (Root Cause)
+- ทั้ง 2 Service (Backend Main App & API Gateway) ถูก config ให้ใช้ Port `5000` เหมือนกันในไฟล์ `.env`
+
+### ✅ วิธีแก้ไข (Solution)
+- แยก Port ให้ชัดเจน:
+    - **API Gateway**: 5000 (หน้าด่าน)
+    - **Backend App**: 5001 (Microservice)

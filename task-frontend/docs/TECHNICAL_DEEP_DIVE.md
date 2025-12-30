@@ -7,11 +7,13 @@
 
 ระบบทำงานแบบ **Client-Server** โดยมีการแลกเปลี่ยนข้อมูลผ่าน **RESTful API** ด้วย Format **JSON**
 
-| Layer | Technology | หน้าที่หลัก |
-| :--- | :--- | :--- |
-| **Frontend** | React (Vite) | แสดงผล, รับค่าจาก User, เรียก API |
-| **Backend** | Node.js (Express) | รับ Request, ประมวลผล Logic, คุยกับ Database |
-| **Database** | PostgreSQL | จัดเก็บข้อมูลถาวร (Projects, Tasks, Users) |
+| Layer | Technology | Port | หน้าที่หลัก |
+| :--- | :--- | :--- | :--- |
+| **Frontend** | React (Vite) | `5173` | แสดงผล, รับค่าจาก User, เรียก API |
+| **API Gateway** | Node.js (Express proxy) | `5000` | จุดรับ Request เดียว (Single Entry Point), กระจายงานไป Service อื่น |
+| **Backend Service** | Node.js (Express) | `5001` | รับ Request จาก Gateway, ประมวลผล Logic, คุยกับ Database |
+| **AI Service** | Python (Streamlit/FastAPI) | `8501`/`8001` | ประมวลผล AI/RAG (Optional) |
+| **Database** | PostgreSQL | `5432` | จัดเก็บข้อมูลถาวร (Projects, Tasks, Users) |
 
 ---
 
@@ -25,8 +27,9 @@
 *   **Step 1: Get ID**: ใช้ `useParams()` ดึงเลข `6` จาก URL มาเก็บในตัวแปร `projectId`
 *   **Step 2: Fetch API**: เมื่อ Component เริ่มทำงาน (`useEffect`) จะยิง Request ไปที่ Backend
     ```javascript
-    fetch(`http://localhost:5000/api/projects/6`)
+    fetch(`http://localhost:5000/api/projects/6`) // ยิงไปที่ Gateway (Port 5000)
     ```
+    *Note: Gateway จะส่งต่อ (Proxy) ไปยัง Backend Service (Port 5001) โดยอัตโนมัติ*
 
 ### 2.2 Backend Processing (`projectController.js`)
 *   **Route**: `GET /api/projects/:id`

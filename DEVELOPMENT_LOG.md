@@ -134,3 +134,18 @@ A full codebase review was conducted to ensure consistency:
   - *Recommendation*: Gradually migrate legacy CSS to Tailwind for long-term maintainability.
 
 ---
+
+---
+
+## 🔧 Update: Infrastructure & Gateway Stabilization
+
+We resolved critical infrastructure issues to ensure stable communication between Frontend, Backend, and AI Services.
+
+### 1. 🛠 Fixes & Adjustments
+
+| Issue | Cause | Solution |
+| :--- | :--- | :--- |
+| **Gateway Crash** | `dotenv` failed to load `.env` from parent directory in `gatewayServer.js`. | Updated `dotenv.config()` to use `path.join(__dirname, '../.env')`. |
+| **Port Conflict** | Backend and Gateway both tried to use Port 5000. | Moved **Backend Service** to `5001`. Kept **Gateway** on `5000`. |
+| **UI Navigation** | Sidebar disappeared when clicking "AI Chat". | Changed link to open in **New Tab** (`target="_blank"`). |
+| **404 Page** | User stuck on 404 page without easy exit. | Added "Go Back" button. |

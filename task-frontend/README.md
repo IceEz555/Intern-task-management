@@ -49,6 +49,8 @@ src/
   - Browse users with filtering.
   - Add, Edit, and Delete users via Modal popups.
   - *Note: Currently connects to a local backend API.*
+- **AI Integration**:
+  - Accessible via Sidebar (opens in new tab) for project assistance.
 
 ## 🔧 Configuration
 

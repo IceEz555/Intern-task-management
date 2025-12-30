@@ -18,14 +18,14 @@
 ### 📌 Phase 1: Project Management (ProjectDetails Page)
 *เป้าหมาย: เพื่อให้หน้า Project Details แสดงข้อมูลจริงได้*
 
-- [ ] **GET Project Detail** (`GET /api/projects/:id`)
+- [x] **GET Project Detail** (`GET /api/projects/:id`)
     - ดึงข้อมูล Project ตาม ID
     - **สิ่งที่ต้องทำเพิ่ม**: เขียน Query Join เพื่อดึงจำนวน Task และสมาชิกในทีมมาแสดงด้วย
 
-- [ ] **Update Project** (`PUT /api/projects/:id`)
+- [x] **Update Project** (`PUT /api/projects/:id`)
     - แก้ไขชื่อ, รายละเอียด, สถานะโปรเจกต์
 
-- [ ] **Get Project Members** (`GET /api/projects/:id/members`)
+- [x] **Get Project Members** (`GET /api/projects/:id/members`)
     - ดึงรายชื่อคนในโปรเจกต์นั้นๆ
 
 ### 📌 Phase 2: Task Management (Tasks & Kanban)
@@ -45,11 +45,11 @@
 ### 📌 Phase 3: Team Management
 *เป้าหมาย: เพิ่มคนเข้าโปรเจกต์ได้*
 
-- [ ] **Add Member** (`POST /api/projects/:id/members`)
+- [x] **Add Member** (`POST /api/projects/:id/members`)
     - รับค่า: project_id, user_id
     - บันทึกลงตาราง `project_members`
 
-- [ ] **Remove Member** (`DELETE /api/projects/:id/members/:userId`)
+- [x] **Remove Member** (`DELETE /api/projects/:id/members/:userId`)
 
 ---
 
