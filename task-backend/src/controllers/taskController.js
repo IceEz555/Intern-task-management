@@ -96,9 +96,11 @@ export const getTasksByUser = async (req, res) => {
     const { userId } = req.params;
     try {
         const query = `
-            SELECT * FROM tasks 
-            WHERE assignee_id = $1
-            ORDER BY created_at DESC
+            SELECT t.*, p.project_name as project_name 
+            FROM tasks t
+            LEFT JOIN projects p ON t.project_id = p.project_id
+            WHERE t.assignee_id = $1
+            ORDER BY t.created_at DESC
         `;
         const result = await pool.query(query, [userId]);
         res.status(200).json(result.rows);

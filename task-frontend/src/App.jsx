@@ -11,6 +11,8 @@ import ProjectKanbanBoard from './pages/ProjectManager/ProjectKanbanBoard';
 import PersonalKanbanBoard from './pages/ProjectManager/PersonalKanbanBoard';
 import ProfilePage from './pages/Shared/ProfilePage';
 import NotFound from './pages/Shared/NotFound';
+import MemberDashboard from './pages/Member/MemberDashboard';
+import MemberTask from './pages/Member/MemberTask'
 
 function App() {
 
@@ -38,12 +40,18 @@ function App() {
             <Route path="/personal-kanban" element={<PersonalKanbanBoard />} />
           </Route>
 
-          {/* 5. Share Page */}
+          {/* 5. หน้า Member Dashboard (Protected) */}
+          <Route element={<RoleRoute allowedRoles={['Member']} />}>
+            <Route path="/member-dashboard" element={<MemberDashboard />} />
+            <Route path="/member-task" element={<MemberTask />} />
+          </Route>
+
+          {/* 6. Share Page */}
           <Route element={<RoleRoute allowedRoles={['PM', 'Admin', 'Member']} />}>
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
-          {/* 6. 404 Not Found */}
+          {/* 7. 404 Not Found */}
           <Route path="*" element={<NotFound />} />
 
         </Routes>

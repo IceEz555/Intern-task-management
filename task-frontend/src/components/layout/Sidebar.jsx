@@ -30,8 +30,8 @@ const Sidebar = () => {
             { icon: <LayoutDashboard size={20} />, label: 'My Kanban Board', path: '/personal-kanban' },
         ],
         Member: [
-            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/member-dashboard' }, // Placeholder for now
-            { icon: <CheckSquare size={20} />, label: 'My Tasks', path: '/personal-kanban' }, // Assuming members can see personal board too?
+            { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/member-dashboard' },
+            { icon: <CheckSquare size={20} />, label: 'My Tasks', path: '/member-task' },
         ]
     };
 
@@ -79,7 +79,7 @@ const Sidebar = () => {
                             to="/profile"
                             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive('/profile')}`}
                         >
-                            <User size={20} onClick={() => navigate('/profile')} />
+                            <User size={20} />
                             Profile
                         </Link>
                     </div>

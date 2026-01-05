@@ -1,0 +1,160 @@
+/* MemberDashboard.css */
+
+.stats-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    border-radius: 1rem;
+    backdrop-filter: blur(8px);
+}
+
+.stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Active Blue Card */
+.stats-card.active-card {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    padding: 1.5rem;
+    box-shadow:
+        0 10px 15px -3px rgba(37, 99, 235, 0.3),
+        0 4px 6px -2px rgba(37, 99, 235, 0.1);
+}
+
+.card-bg-icon {
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    opacity: 0.15;
+    transition: transform 0.3s ease;
+    transform: rotate(15deg);
+}
+
+.stats-card:hover .card-bg-icon {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* White Cards with improved Neumorphism feel */
+.stats-card.bg-white {
+    background-color: white;
+    padding: 1.5rem;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    /* gray-200 */
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.02),
+        0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* Yellow/Warning State */
+.stats-card.yellow-border {
+    position: relative;
+}
+
+.stats-card.yellow-border::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #facc15, #ca8a04);
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
+/* Green/Success State */
+.stats-card.green-border {
+    position: relative;
+}
+
+.stats-card.green-border::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #4ade80, #16a34a);
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
+/* Icon Wrapper Styling */
+.icon-wrapper {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.stats-card:hover .icon-wrapper {
+    transform: scale(1.1);
+}
+
+.yellow-border-icon {
+    background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+    color: #ca8a04;
+    box-shadow: 0 2px 4px rgba(234, 179, 8, 0.1);
+}
+
+.green-border-icon {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    color: #16a34a;
+    box-shadow: 0 2px 4px rgba(22, 163, 74, 0.1);
+}
+
+/* Typography Enhancements */
+.card-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.card-count {
+    font-family: 'Outfit', sans-serif;
+    /* Assuming font availability or fallback */
+    letter-spacing: -0.02em;
+}
+
+/* Urgent Tasks */
+.urgent-task-item {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.urgent-task-item:hover {
+    transform: translateX(4px);
+    border-color: #fee2e2;
+    /* red-100 */
+    background: #fef2f2;
+    /* red-50 */
+}
+
+/* Loading Spinner */
+.loading-container {
+    height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 3rem;
+    height: 3rem;
+    border-width: 4px;
+    border-color: #bfdbfe;
+    border-top-color: #2563eb;
+    border-radius: 9999px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

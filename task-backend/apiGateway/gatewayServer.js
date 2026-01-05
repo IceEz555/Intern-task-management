@@ -31,7 +31,7 @@ const services = [
         path: '/api',
         target: process.env.NODE_SERVICE_URL,
         pathRewrite: {
-            '^/': '/api/', // Add /api prefix back because Node backend expects it (e.g. /login -> /api/login)
+            '^/': '/api/', // Revert: Add /api prefix back because Node backend expects it (e.g. /login -> /api/login)
         }
     }
 ];

@@ -11,7 +11,7 @@ export default function ProfilePage() {
         fullName: user?.name || '',
         email: user?.email || '',
         role: user?.role || '',
-        department: ''
+        department: user?.department || ''
     });
 
     useEffect(() => {
