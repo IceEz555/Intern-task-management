@@ -5,6 +5,7 @@ import PageLayout from '../../components/layout/Pagelayout';
 import { Plus, CheckSquare, Clock, Folder } from 'lucide-react';
 import StatsCard from '../../components/dashboard/StatsCard'; // New Component
 import ProjectCard from '../../components/dashboard/ProjectCard';
+import EmptyState from '../../components/common/EmptyState'; // New Component
 import '../../assets/styles/ProjectList.css';
 import '../../assets/styles/StatsCard.css'; // Shared Styles
 import Modal from '../../components/common/Modal';
@@ -162,10 +163,13 @@ const ProjectList = () => {
                 {/* Project Grid */}
                 <div className="project-grid">
                     {loading ? (
-                        <p className="text-gray-500">Loading projects...</p>
-                    ) : (
+                        // Skeleton Loading for Projects
+                        [1, 2, 3, 4].map((i) => (
+                            <div key={i} className="bg-white h-48 rounded-2xl shadow-sm animate-pulse border border-gray-100"></div>
+                        ))
+                    ) : projects.length > 0 ? (
                         <>
-                            {projects.map(project => (
+                            {projects.map((project) => (
                                 <ProjectCard
                                     key={project.project_id}
                                     project={project}
@@ -180,6 +184,15 @@ const ProjectList = () => {
                                 <span className="font-medium text-gray-500">Create New Project</span>
                             </div>
                         </>
+                    ) : (
+                        <div className="col-span-full">
+                            <EmptyState
+                                title="No Projects Found"
+                                description="Get started by creating your first project."
+                                actionLabel="Create Project"
+                                onAction={createModal}
+                            />
+                        </div>
                     )}
                 </div>
             </div>

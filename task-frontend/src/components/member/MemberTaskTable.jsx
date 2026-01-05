@@ -1,5 +1,6 @@
 import React from 'react';
 import { Clock } from 'lucide-react';
+import EmptyState from '../common/EmptyState';
 
 const MemberTaskTable = ({ tasks, loading, onEditClick }) => {
 
@@ -111,8 +112,11 @@ const MemberTaskTable = ({ tasks, loading, onEditClick }) => {
                         })
                     ) : (
                         <tr>
-                            <td colSpan="6" className="text-center py-12 text-gray-500">
-                                No tasks found.
+                            <td colSpan="6" className="p-4">
+                                <EmptyState
+                                    title="No tasks assigned"
+                                    description="You don't have any tasks assigned yet."
+                                />
                             </td>
                         </tr>
                     )}

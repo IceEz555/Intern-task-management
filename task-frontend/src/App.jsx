@@ -37,7 +37,6 @@ function App() {
             <Route path="/project-management" element={<ProjectList />} />
             <Route path="/kanban-board/:projectId" element={<ProjectKanbanBoard />} />
             <Route path="/project-details/:projectId" element={<ProjectDetails />} />
-            <Route path="/personal-kanban" element={<PersonalKanbanBoard />} />
           </Route>
 
           {/* 5. หน้า Member Dashboard (Protected) */}
