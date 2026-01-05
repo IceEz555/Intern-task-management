@@ -8,7 +8,7 @@ import UserManagement from './pages/Admin/UserManagement';
 import ProjectList from './pages/ProjectManager/ProjectList';
 import ProjectDetails from './pages/ProjectManager/ProjectDetails';
 import ProjectKanbanBoard from './pages/ProjectManager/ProjectKanbanBoard';
-import PersonalKanbanBoard from './pages/ProjectManager/PersonalKanbanBoard';
+import PersonalKanbanBoard from './pages/Shared/PersonalKanbanBoard';
 import ProfilePage from './pages/Shared/ProfilePage';
 import NotFound from './pages/Shared/NotFound';
 import MemberDashboard from './pages/Member/MemberDashboard';
@@ -49,6 +49,7 @@ function App() {
           {/* 6. Share Page */}
           <Route element={<RoleRoute allowedRoles={['PM', 'Admin', 'Member']} />}>
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/personal-kanban" element={<PersonalKanbanBoard />} />
           </Route>
 
           {/* 7. 404 Not Found */}

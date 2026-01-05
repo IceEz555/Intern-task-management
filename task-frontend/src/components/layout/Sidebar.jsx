@@ -27,11 +27,12 @@ const Sidebar = () => {
         ],
         PM: [
             { icon: <Folder size={20} />, label: 'Projects', path: '/project-management' },
-            { icon: <LayoutDashboard size={20} />, label: 'My Kanban Board', path: '/personal-kanban' },
+            { icon: <LayoutDashboard size={20} />, label: 'My Board', path: '/personal-kanban' },
         ],
         Member: [
             { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/member-dashboard' },
             { icon: <CheckSquare size={20} />, label: 'My Tasks', path: '/member-task' },
+            { icon: <LayoutDashboard size={20} />, label: 'My Board', path: '/personal-kanban' },
         ]
     };
 
