@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../utils/api';
 import PageLayout from '../../components/layout/Pagelayout';
-import { Plus, CheckSquare, Clock } from 'lucide-react';
-import StatCard from '../../components/dashboard/StatCard';
+import { Plus, CheckSquare, Clock, Folder } from 'lucide-react';
+import StatsCard from '../../components/dashboard/StatsCard'; // New Component
 import ProjectCard from '../../components/dashboard/ProjectCard';
 import '../../assets/styles/ProjectList.css';
+import '../../assets/styles/StatsCard.css'; // Shared Styles
 import Modal from '../../components/common/Modal';
 import { useNavigate } from 'react-router-dom';
 
@@ -87,7 +88,7 @@ const ProjectList = () => {
 
             setStats({
                 totalActive: activeCount,
-                activeGrowth: '', // Hardcoded for now
+                activeGrowth: 'Projects currently active',
                 pendingTasks: pendingTasksCount,
                 upcomingDeadlines: deadlineCount
             });
@@ -120,24 +121,42 @@ const ProjectList = () => {
                     </button>
                 </div>
 
-                {/* Statistics Row - Using Components */}
+                {/* Statistics Row - Using Unified Components */}
                 <div className="stats-row">
-                    <StatCard
-                        title="Total Active"
-                        value={`${stats.totalActive} Projects`}
-                        desc={stats.activeGrowth}
-                        isPrimary={true}
-                    />
-                    <StatCard
-                        title="Tasks Pending"
-                        value={stats.pendingTasks}
-                        icon={<CheckSquare size={24} color="#9ca3af" />}
-                    />
-                    <StatCard
-                        title="Upcoming Deadlines"
-                        value={stats.upcomingDeadlines}
-                        icon={<Clock size={24} color="#9ca3af" />}
-                    />
+                    {loading ? (
+                        // Skeleton Loading State
+                        [1, 2, 3].map((i) => (
+                            <div key={i} className="skeleton-card">
+                                <div className="skeleton-icon"></div>
+                                <div className="skeleton-text"></div>
+                                <div className="skeleton-value"></div>
+                            </div>
+                        ))
+                    ) : (
+                        <>
+                            <StatsCard
+                                title="TOTAL PROJECTS"
+                                count={`${stats.totalActive} Projects`}
+                                icon={Folder}
+                                colorClass="active-card"
+                                isActive={true}
+                            />
+                            <StatsCard
+                                title="TASKS PENDING"
+                                count={stats.pendingTasks}
+                                icon={CheckSquare}
+                                colorClass="bg-white yellow-border"
+                                subText="Across all active projects"
+                            />
+                            <StatsCard
+                                title="UPCOMING DEADLINES"
+                                count={stats.upcomingDeadlines}
+                                icon={Clock}
+                                colorClass="bg-white green-border"
+                                subText="Due within 7 days" // Mock label
+                            />
+                        </>
+                    )}
                 </div>
 
                 {/* Project Grid */}

@@ -3,7 +3,9 @@ import axios from 'axios';
 import PageLayout from "../../components/layout/Pagelayout";
 import { Users, Folder, CheckSquare, BarChart3, PieChart } from 'lucide-react';
 import { API_URL } from "../../utils/api";
+import StatsCard from "../../components/dashboard/StatsCard";
 import '../../assets/styles/AdminDashboard.css';
+import '../../assets/styles/StatsCard.css'; // Ensure CSS is available for skeletons
 
 const AdminDashboard = () => {
     // State for data
@@ -53,15 +55,7 @@ const AdminDashboard = () => {
         fetchData();
     }, []);
 
-    // Helper to render icon dynamically
-    const renderIcon = (iconName, className) => {
-        switch (iconName) {
-            case 'Users': return <Users className={className} size={24} />;
-            case 'Folder': return <Folder className={className} size={24} />;
-            case 'CheckSquare': return <CheckSquare className={className} size={24} />;
-            default: return null;
-        }
-    };
+
 
     return (
         <PageLayout namepage="Admin Dashboard">
@@ -84,19 +78,29 @@ const AdminDashboard = () => {
                             </div>
                         ))
                     ) : (
-                        stats.map((stat, index) => (
-                            <div key={index} className="stat-card">
-                                <div className={`stat-icon-wrapper ${stat.bg}`}>
-                                    {renderIcon(stat.icon, stat.color)}
-                                </div>
-                                <h3 className="stat-title">
-                                    {stat.title}
-                                </h3>
-                                <p className="stat-value">
-                                    {stat.value}
-                                </p>
-                            </div>
-                        ))
+                        <>
+                            <StatsCard
+                                title="TOTAL USERS"
+                                count={stats.find(s => s.title === "TOTAL USERS")?.value || 0}
+                                icon={Users}
+                                colorClass="active-card"
+                                isActive={true}
+                            />
+                            <StatsCard
+                                title="ACTIVE PROJECTS"
+                                count={stats.find(s => s.title === "ACTIVE PROJECTS")?.value || 0}
+                                icon={Folder}
+                                colorClass="bg-white purple-border"
+                                subText="Currently ongoing"
+                            />
+                            <StatsCard
+                                title="TASKS COMPLETED"
+                                count={stats.find(s => s.title === "TASKS COMPLETED")?.value || 0}
+                                icon={CheckSquare}
+                                colorClass="bg-white green-border"
+                                subText="All time completion"
+                            />
+                        </>
                     )}
                 </div>
 

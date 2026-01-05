@@ -1,9 +1,13 @@
 import { Activity } from 'lucide-react';
-import '../../assets/styles/MemberDashboard.css';
+import '../../assets/styles/StatsCard.css';
 
 const StatsCard = ({ title, count, icon: Icon, colorClass, subText, isActive = false }) => {
+    // Determine if it should have the left-border pseudo-element
+    const hasBorder = colorClass && (colorClass.includes('border') && !isActive);
+    const borderClass = hasBorder ? 'with-border' : '';
+
     return (
-        <div className={`stats-card ${colorClass} ${isActive ? 'active-card' : ''}`}>
+        <div className={`stats-card ${colorClass} ${borderClass} ${isActive ? 'active-card' : ''}`}>
             {isActive && (
                 <div className="card-bg-icon">
                     <Icon size={150} />
