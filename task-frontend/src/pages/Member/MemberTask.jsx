@@ -3,8 +3,10 @@ import axios from 'axios';
 import PageLayout from "../../components/layout/Pagelayout";
 import { useAuth } from "../../context/AuthContext";
 import { API_URL } from '../../utils/api';
-import { Search, Filter, Clock } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
 import '../../assets/styles/MemberTask.css';
+import EditTaskModal from '../../components/project/EditTaskModal';
+import MemberTaskTable from '../../components/member/MemberTaskTable';
 
 const MemberTask = () => {
     const { user } = useAuth();
@@ -12,6 +14,8 @@ const MemberTask = () => {
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -28,6 +32,29 @@ const MemberTask = () => {
         fetchTasks();
     }, [user]);
 
+    const handleEditClick = (task) => {
+        const taskForModal = {
+            ...task,
+            id: task.task_id
+        };
+        setSelectedTask(taskForModal);
+        setIsEditModalOpen(true);
+    };
+
+    const handleTaskUpdated = () => {
+        // Refresh tasks
+        const fetchTasks = async () => {
+            if (!user?.user_id) return;
+            try {
+                const res = await axios.get(`${API_URL}/api/tasks/user/${user.user_id}`);
+                setTasks(res.data || []);
+            } catch (err) {
+                console.error("Failed to fetch my tasks:", err);
+            }
+        };
+        fetchTasks();
+    };
+
     // Filtering Logic
     const filteredTasks = tasks.filter(task => {
         const matchesStatus = filter === 'All' || task.status === filter;
@@ -43,25 +70,6 @@ const MemberTask = () => {
         'In Progress': tasks.filter(t => t.status === 'In Progress').length,
         'In Review': tasks.filter(t => t.status === 'In Review').length,
         'Done': tasks.filter(t => t.status === 'Done').length
-    };
-
-    const getPriorityClass = (priority) => {
-        switch (priority) {
-            case 'High': return 'priority-high';
-            case 'Medium': return 'priority-medium';
-            case 'Low': return 'priority-low';
-            default: return 'priority-low';
-        }
-    };
-
-    const getStatusClass = (status) => {
-        switch (status) {
-            case 'Done': return 'status-done';
-            case 'In Progress': return 'status-in-progress';
-            case 'To Do': return 'status-to-do';
-            case 'In Review': return 'status-in-review';
-            default: return 'status-to-do';
-        }
     };
 
     return (
@@ -84,10 +92,6 @@ const MemberTask = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <button className="filter-btn-main">
-                            <Filter size={20} />
-                            Filter
-                        </button>
                     </div>
                 </div>
 
@@ -104,77 +108,26 @@ const MemberTask = () => {
                     ))}
                 </div>
 
-                {/* Task Table */}
-                <div className="task-table-container">
-                    <table className="task-table">
-                        <thead>
-                            <tr>
-                                <th>Task Name</th>
-                                <th>Project</th>
-                                <th>Priority</th>
-                                <th>Status</th>
-                                <th>Due Date</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {loading ? (
-                                <tr>
-                                    <td colSpan="6" className="text-center py-12 text-gray-500">Loading tasks...</td>
-                                </tr>
-                            ) : filteredTasks.length > 0 ? (
-                                filteredTasks.map(task => (
-                                    <tr key={task.task_id} className="task-row group">
-                                        <td>
-                                            <div>
-                                                <p className="font-semibold text-gray-800">{task.title}</p>
-                                                <span className="text-xs text-gray-400">T-{task.task_id}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {task.project_name ? (
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                                                    <span className="text-sm text-gray-600">{task.project_name}</span>
-                                                </div>
-                                            ) : (
-                                                <span className="text-sm text-gray-400 italic">Personal Task</span>
-                                            )}
-                                        </td>
-                                        <td>
-                                            <span className={`priority-badge ${getPriorityClass(task.priority)}`}>
-                                                {task.priority}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className={`status-badge ${getStatusClass(task.status)}`}>
-                                                {task.status.toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                                                <Clock size={16} className="text-gray-400" />
-                                                {task.due_date ? new Date(task.due_date).toLocaleDateString() : 'No date'}
-                                            </div>
-                                        </td>
-                                        <td className="text-right">
-                                            <button className="text-gray-400 hover:text-blue-600">
-                                                Edit
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="6" className="text-center py-12 text-gray-500">
-                                        No tasks found.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                {/* Task Table Component */}
+                <MemberTaskTable
+                    tasks={filteredTasks}
+                    loading={loading}
+                    onEditClick={handleEditClick}
+                />
+
             </div>
+
+            {/* Edit Task Modal */}
+            {selectedTask && (
+                <EditTaskModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                    task={selectedTask}
+                    members={user ? [{ user_id: user.user_id, name: user.name }] : []}
+                    onTaskUpdated={handleTaskUpdated}
+                    lockAssignee={true}
+                />
+            )}
         </PageLayout>
     );
 };

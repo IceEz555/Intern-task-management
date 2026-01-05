@@ -1,8 +1,11 @@
 import { AlertCircle, ChevronRight } from 'lucide-react';
 
-const UrgentTaskItem = ({ task, formatDate }) => {
+const UrgentTaskItem = ({ task, formatDate, onClick }) => {
     return (
-        <div className="urgent-task-item bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-red-200 transition-colors cursor-pointer group">
+        <div
+            className="urgent-task-item bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-red-200 transition-colors cursor-pointer group"
+            onClick={onClick}
+        >
             <div className="flex items-center gap-4">
                 <div className="icon-box w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors">
                     <AlertCircle size={20} />

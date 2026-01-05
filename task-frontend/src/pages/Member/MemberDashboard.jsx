@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PageLayout from "../../components/layout/Pagelayout";
 import { useAuth } from "../../context/AuthContext";
 import axios from 'axios';
@@ -13,6 +13,7 @@ import {
 import StatsCard from '../../components/dashboard/StatsCard';
 import UrgentTaskItem from '../../components/dashboard/UrgentTaskItem';
 import ActivityItem from '../../components/dashboard/ActivityItem';
+import EditTaskModal from '../../components/project/EditTaskModal';
 import '../../assets/styles/MemberDashboard.css';
 
 const MemberDashboard = () => {
@@ -24,35 +25,46 @@ const MemberDashboard = () => {
         inProgress: 0,
         completed: 0
     });
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
+
+    const fetchTasks = useCallback(async () => {
+        if (!user?.user_id) return;
+        try {
+            const res = await axios.get(`${API_URL}/api/tasks/user/${user.user_id}`);
+            const data = res.data || [];
+            setTasks(data);
+
+            // Calculate Stats
+            const assigned = data.filter(t => t.status !== 'Done').length;
+            const inProgress = data.filter(t => t.status === 'In Progress').length;
+            const completed = data.filter(t => t.status === 'Done').length;
+
+            setStats({ assigned, inProgress, completed });
+        } catch (err) {
+            console.error("Failed to fetch dashboard data:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, [user]);
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            if (!user?.user_id) return;
-            try {
-                const res = await axios.get(`${API_URL}/api/tasks/user/${user.user_id}`);
-                const data = res.data || [];
-                setTasks(data);
-
-                // Calculate Stats
-                const assigned = data.filter(t => t.status !== 'Done').length;
-                const inProgress = data.filter(t => t.status === 'In Progress').length;
-                const completed = data.filter(t => t.status === 'Done').length;
-
-                setStats({ assigned, inProgress, completed });
-            } catch (err) {
-                console.error("Failed to fetch dashboard data:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchTasks();
-    }, [user]);
+    }, [fetchTasks]);
+
+    const handleTaskClick = (task) => {
+        const taskForModal = {
+            ...task,
+            id: task.task_id
+        };
+        setSelectedTask(taskForModal);
+        setIsEditModalOpen(true);
+    };
 
     // Derived Data
     const urgentTasks = tasks
-        .filter(t => t.priority === 'High' && t.status !== 'Done')
-        .slice(0, 3);
+        .filter(t => (t.priority === 'High' || t.priority === 'Medium') && t.status !== 'Done')
+        .slice(0, 5);
 
     const recentActivity = [...tasks]
         .sort((a, b) => new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at))
@@ -81,10 +93,60 @@ const MemberDashboard = () => {
     if (loading) {
         return (
             <PageLayout namepage="Member Dashboard">
-                <div className="loading-container">
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="spinner"></div>
-                        <p className="text-gray-500 font-medium">Loading dashboard...</p>
+                <div className="space-y-8">
+                    {/* Header Skeleton */}
+                    <div className="flex justify-between items-end">
+                        <div className="space-y-2">
+                            <div className="h-8 w-48 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="h-4 w-64 bg-gray-200 rounded animate-pulse"></div>
+                        </div>
+                        <div className="h-10 w-40 bg-gray-200 rounded-full animate-pulse"></div>
+                    </div>
+
+                    {/* Stats Cards Skeleton */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="skeleton-card">
+                                <div className="skeleton-icon"></div>
+                                <div className="skeleton-text"></div>
+                                <div className="skeleton-value"></div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Bottom Section Skeleton */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Urgent Tasks Skeleton */}
+                        <div className="space-y-4">
+                            <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
+                            <div className="space-y-3">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className="bg-white p-4 rounded-xl border border-gray-100 flex gap-4 animate-pulse">
+                                        <div className="w-1 bg-gray-200 rounded-l-xl"></div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 w-3/4 bg-gray-200 rounded"></div>
+                                            <div className="h-3 w-1/2 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Recent Activity Skeleton */}
+                        <div className="space-y-4">
+                            <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-6">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className="flex gap-4 animate-pulse">
+                                        <div className="w-2 h-2 rounded-full bg-gray-200 mt-2"></div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 w-full bg-gray-200 rounded"></div>
+                                            <div className="h-3 w-24 bg-gray-200 rounded"></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </PageLayout>
@@ -147,6 +209,7 @@ const MemberDashboard = () => {
                                         key={task.task_id}
                                         task={task}
                                         formatDate={formatDate}
+                                        onClick={() => handleTaskClick(task)}
                                     />
                                 ))
                             ) : (
@@ -183,6 +246,18 @@ const MemberDashboard = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Edit Task Modal */}
+            {selectedTask && (
+                <EditTaskModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                    task={selectedTask}
+                    members={user ? [{ user_id: user.user_id, name: user.name }] : []}
+                    onTaskUpdated={fetchTasks}
+                    lockAssignee={true}
+                />
+            )}
         </PageLayout>
     );
 }

@@ -21,12 +21,22 @@ const TaskItem = ({ task, onClick }) => {
     const formatDueDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', {
-            day: 'numeric',
+        return date.toLocaleDateString('en-US', {
             month: 'short',
+            day: 'numeric',
             year: 'numeric'
         });
     };
+
+    const isOverdue = (dateString, status) => {
+        if (!dateString || status === 'Done') return false;
+        const due = new Date(dateString);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return due < today;
+    };
+
+    const overdue = isOverdue(task.due_date, task.status);
 
     return (
         <div className="task-item" onClick={onClick}>
@@ -37,12 +47,20 @@ const TaskItem = ({ task, onClick }) => {
                 ></div>
                 <div>
                     <h3 className="task-title">{task.title}</h3>
-                    <p className="task-meta">
-                        {task.description}
-                        {task.description && task.due_date ? ' • ' : ''}
-                        {formatDueDate(task.due_date)}
-                    </p>
+                    <p className="task-meta flex items-center gap-1">
+                        {task.description && (
+                            <span className="mr-1">{task.description}</span>
+                        )}
+                        {task.due_date && <span className="text-gray-300 mx-1">•</span>}
 
+                        {task.due_date && (
+                            <span className={`flex items-center gap-1 ${overdue ? 'text-red-600 font-bold' : ''}`}>
+                                {overdue && <Clock size={12} className="text-red-500" />}
+                                {formatDueDate(task.due_date)}
+                                {overdue && <span className="text-xs bg-red-100 text-red-600 px-1 rounded ml-1">Overdue</span>}
+                            </span>
+                        )}
+                    </p>
                 </div>
             </div>
             <div className="task-right flex items-center gap-4">
