@@ -12,17 +12,26 @@ export const getStatusClass = (status) => {
 };
 
 // Password Validation
+// Password Validation
 export const validatePassword = (password, confirmPassword, isCreateMode = true) => {
+    console.log(`[DEBUG VALIDATE] Mode=${isCreateMode}, Pwd=${password}, Confirm=${confirmPassword}`);
+
     if (!isCreateMode && (!password || password.trim() === "")){
         return null;
     }
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+    
+    // Relaxed Regex: Allow any special character (including . - _ etc.)
+    // (?=.*[\W_]) checks for any non-word char OR underscore
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    
     if (!passwordRegex.test(password)){
-        return 'Password must be at least 8 characters, including uppercase, lowercase, numbers, and special characters (!@#$%^&*).';
+        return 'Password must be at least 8 characters, including uppercase, lowercase, numbers, and special characters.';
     }
-    if (isCreateMode && password !== confirmPassword){
+
+    if (isCreateMode && password.trim() !== confirmPassword.trim()) {
         return 'Password and confirmation do not match.';
     }
+
     return null;
 };
 

@@ -50,9 +50,9 @@ FOR EACH ROW
 EXECUTE FUNCTION update_projects_updated_at();
 
 -- ===============================
--- 3. project_members
+-- 3. projectmember
 -- ===============================
-CREATE TABLE IF NOT EXISTS project_members (
+CREATE TABLE IF NOT EXISTS projectmembers (
     pm_id SERIAL PRIMARY KEY,
     project_id INTEGER NOT NULL REFERENCES projects (project_id) ON DELETE CASCADE,
     user_id INTEGER NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
@@ -92,45 +92,23 @@ BEFORE UPDATE ON tasks
 FOR EACH ROW
 EXECUTE FUNCTION update_tasks_updated_at();
 
--- ===============================
+-- ============================
 -- Seed Data (DEV)
--- ===============================
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
+-- ============================
 INSERT INTO
     users (
-        fullname,
         email,
         password,
+        fullname,
         role,
+        department,
         status
     )
 VALUES (
+        'admin@internflow.com',
+        '$2b$10$A0EjRcpc2JbfsUZKx7aYv.nuE1y.SrnibNii8D0hpEgdJiAgsdQ1q',
         'Admin User',
-        'admin@taskflow.com',
-        crypt ('Pass1234', gen_salt ('bf')),
         'Admin',
+        'IT',
         'Active'
-    ),
-    (
-        'Jhon PM',
-        'sarah@internflow.com',
-        crypt ('P@ss123456', gen_salt ('bf')),
-        'PM',
-        'Active'
-    ),
-    (
-        'Mike Dev',
-        'mike@internflow.com',
-        crypt (
-            'password123',
-            gen_salt ('bf')
-        ),
-        'Member',
-        'Active'
-    )
-ON CONFLICT (email) DO NOTHING;
-
--- ===============================
--- END
--- ===============================
+    );

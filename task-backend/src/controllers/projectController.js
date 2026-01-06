@@ -6,18 +6,17 @@ export const getProjects = async (req, res) => {
 
         console.log(`[DEBUG] getProjects called with userId: ${userId}`);
 
-        // Query to get projects with task counts (Filtered by User)
-        // Using subquery as requested: fetch projects where created_by OR user is in members
+        // Query to get projects with task counts (Filtered by Project Membership only)
+        // Single Source of Truth: JOIN projectmembers
         const query = `
-            SELECT 
+            SELECT DISTINCT
                 p.*,
                 (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.project_id) as task_count,
                 (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.project_id AND t.status = 'Done') as done_task_count
             FROM projects p
-            WHERE p.created_by = $1 
-            OR p.project_id IN (SELECT project_id FROM projectmembers WHERE user_id = $1)
-            ORDER BY 
-                CASE WHEN p.project_status = 'Completed' THEN 1 ELSE 0 END,
+            JOIN projectmembers pm ON p.project_id = pm.project_id
+            WHERE pm.user_id = $1
+            ORDER BY
                 p.updated_at DESC
         `;
 
@@ -37,7 +36,7 @@ export const getProjects = async (req, res) => {
             progress: project.task_count > 0
                 ? Math.round((parseInt(project.done_task_count) / parseInt(project.task_count)) * 100)
                 : 0,
-            members: [] // Placeholder for members, to be implemented with ProjectMembers table
+            members: [] // Placeholder
         }));
 
         res.json(projects);
@@ -47,7 +46,7 @@ export const getProjects = async (req, res) => {
     }
 };
 
-// Create a new project
+// Create a new project (With Transaction)
 export const createProject = async (req, res) => {
     const { project_name, project_description, project_status, project_start_date, project_end_date, created_by: bodyCreatedBy } = req.body;
 
@@ -58,19 +57,37 @@ export const createProject = async (req, res) => {
         return res.status(400).json({ message: 'User ID (created_by) is required' });
     }
 
+    const client = await pool.connect();
+
     try {
+        await client.query('BEGIN');
+
+        // 1. Create project
         const query = `
             INSERT INTO projects (project_name, project_description, project_status, start_date, end_date, created_by)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *
         `;
         const values = [project_name, project_description, project_status || 'Planning', project_start_date, project_end_date, created_by];
-        const result = await pool.query(query, values);
+        const result = await client.query(query, values);
+        const newProject = result.rows[0];
 
-        res.status(201).json(result.rows[0]);
+        // 2. Add creator as member (Single Source of Truth)
+        const addMemberQuery = `
+            INSERT INTO projectmembers (project_id, user_id)
+            VALUES ($1, $2)
+        `;
+        await client.query(addMemberQuery, [newProject.project_id, created_by]);
+
+        await client.query('COMMIT');
+
+        res.status(201).json(newProject);
     } catch (err) {
+        await client.query('ROLLBACK');
         console.error(err.message);
         res.status(500).json({ message: "Server error" });
+    } finally {
+        client.release();
     }
 };
 
@@ -123,7 +140,6 @@ export const deleteProject = async (req, res) => {
     }
 };
 
-// Get project details by ID with tasks and members
 // Get project details by ID with tasks and members
 export const getProjectById = async (req, res) => {
     const { id } = req.params;

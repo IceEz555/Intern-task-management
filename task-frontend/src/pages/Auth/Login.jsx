@@ -139,7 +139,7 @@ export function Login() {
                                         onClick={() => {
                                             setSelectedRole("Member");
                                             setEmail("mike@internflow.com");
-                                            setPassword("password123");
+                                            setPassword("P@ss123456");
                                         }}
                                     >
                                         Member
