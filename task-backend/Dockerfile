@@ -1,4 +1,5 @@
 
+# Dockerfile for Node.js Backend & API Gateway
 # Use official Node.js image
 FROM node:20-alpine
 

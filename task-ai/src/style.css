@@ -76,6 +76,15 @@ section[data-testid='stSidebar'] {
         display: none;
     }
 
+    /* Hide standard widgets when sidebar is collapsed (not hovered) */
+    section[data-testid='stSidebar'] .stCheckbox {
+        display: none;
+    }
+
+    section[data-testid='stSidebar']:hover .stCheckbox {
+        display: block;
+    }
+
 }
 
 @media(hover: hover) and (min-width: 769px) {

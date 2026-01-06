@@ -26,6 +26,28 @@ const Sidebar = () => {
         navigate('/login');
     };
 
+    const [isAiErrorModalOpen, setIsAiErrorModalOpen] = useState(false);
+
+    const handleAIChatClick = async (e) => {
+        e.preventDefault();
+        try {
+            // Ping the service with a short timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+            await fetch("http://localhost:8501", {
+                mode: 'no-cors',
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+            window.open("http://localhost:8501", "_blank");
+        } catch (error) {
+            console.error("AI Service Unavailable", error);
+            setIsAiErrorModalOpen(true);
+        }
+    };
+
     // Define menus for each role
     const menus = {
         Admin: [
@@ -93,15 +115,13 @@ const Sidebar = () => {
                             </Link>
                         </div>
                         <div className='space-y-1'>
-                            <a
-                                href="http://localhost:8501/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
+                            <button
+                                onClick={handleAIChatClick}
+                                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
                             >
                                 <BotMessageSquare size={20} />
                                 AI Chat
-                            </a>
+                            </button>
                         </div>
                     </div>
 
@@ -142,6 +162,34 @@ const Sidebar = () => {
                             className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
                         >
                             Yes, Logout
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* AI Service Error Modal */}
+            <Modal
+                open={isAiErrorModalOpen}
+                onClose={() => setIsAiErrorModalOpen(false)}
+                title="Service Unavailable"
+                size="sm"
+            >
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-3 mb-4 text-amber-600 bg-amber-50 p-3 rounded-lg">
+                        <BotMessageSquare size={24} />
+                        <span className="font-semibold">AI Assistant is currently offline</span>
+                    </div>
+                    <p className="text-gray-600 mb-6">
+                        The AI Chat service is not responding. This usually means the local server is not running.
+                        <br /><br />
+                        Please check valid url or contact support.
+                    </p>
+                    <div className="flex justify-end">
+                        <button
+                            onClick={() => setIsAiErrorModalOpen(false)}
+                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                        >
+                            Understood
                         </button>
                     </div>
                 </div>

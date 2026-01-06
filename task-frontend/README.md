@@ -49,8 +49,11 @@ src/
   - Browse users with filtering.
   - Add, Edit, and Delete users via Modal popups.
   - *Note: Currently connects to a local backend API.*
+
+- **Deployment**: Fully verified to run in Docker environment (`npm run dev` with host networking).
 - **AI Integration**:
   - Accessible via Sidebar (opens in new tab) for project assistance.
+
 
 ## 🔧 Configuration
 

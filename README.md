@@ -108,8 +108,10 @@ Frontend runs on `http://localhost:5173`.
 - `DELETE /api/users/:id`: Delete a user.
 
 ## 📝 Status
-- **Frontend**: UI for Login, Dashboard, and User Management is ready. Tailwind CSS is configured.
-- **Backend**: Basic Auth (Login) and User Management (CRUD) APIs are implemented.
+- **Frontend**: UI is polished. Navigation and Logout issues resolved. Running smoothly on Docker.
+- **Backend**: Fully Dockerized. API Gateway correctly routing to Node.js and Python Services.
+- **Infrastructure**: `docker-compose` is now the primary way to run the stack.
+
 
 ---
 *Created by Antigravity*

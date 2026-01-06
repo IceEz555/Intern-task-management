@@ -48,7 +48,7 @@ with st.sidebar:
         iconName=['chat', 'info'],
         default_choice=0
     )
-    show_sources = st.toggle("Show Retrieved Sources", value=False)
+    show_sources = st.toggle("Sources", value=False)
 
 # -----------------------------
 # Chat Bot Page

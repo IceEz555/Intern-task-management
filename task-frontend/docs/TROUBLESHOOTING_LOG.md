@@ -197,3 +197,20 @@
 - แยก Port ให้ชัดเจน:
     - **API Gateway**: 5000 (หน้าด่าน)
     - **Backend App**: 5001 (Microservice)
+
+---
+
+## 12. 🐳 Docker Network Connection Refused
+### ❌ อาการ (Symptoms)
+- Frontend (ใน Container) เรียก API ไม่ได้ (Connection Refused)
+- Backend (ใน Container) หา Python AI Service ไม่เจอ
+
+### 🔍 สาเหตุ (Root Cause)
+- **Localhost confusion**: ใน Docker, `localhost` หมายถึง "ตัว Container เอง" ไม่ใช่เครื่องของเรา
+- ถ้า Frontend เรียก `localhost:5000` มันจะหา Port 5000 ใน Container Frontend เอง ซึ่งไม่มี
+
+### ✅ วิธีแก้ไข (Solution)
+- ใช้ **Service Name** แทน IP:
+    - Frontend เรียก Backend (ผ่าน Browser) -> ยังใช้ `localhost` ได้ (เพราะ Browser รันบนเครื่อง Host)
+    - Gateway เรียก Backend -> ต้องใช้ `http://backend:5001` (Service Name defined in docker-compose)
+    - Gateway เรียก AI Service -> ต้องใช้ `http://ai_service:8000`

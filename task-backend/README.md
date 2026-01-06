@@ -35,10 +35,10 @@ src/
     - Create a `.env` file in this directory (or update the existing one).
     - Add your DB credentials:
       ```env
-      DB_USER=your_user
+      DB_USER=postgres
       DB_HOST=localhost
       DB_DATABASE=intern_task_db
-      DB_PASSWORD=your_password
+      DB_PASSWORD=postgres
       DB_PORT=5432
       PORT=5000
       ```
