@@ -14,7 +14,7 @@ export const getStatusClass = (status) => {
 // Password Validation
 // Password Validation
 export const validatePassword = (password, confirmPassword, isCreateMode = true) => {
-    console.log(`[DEBUG VALIDATE] Mode=${isCreateMode}, Pwd=${password}, Confirm=${confirmPassword}`);
+
 
     if (!isCreateMode && (!password || password.trim() === "")){
         return null;

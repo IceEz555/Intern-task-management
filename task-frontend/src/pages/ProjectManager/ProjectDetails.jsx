@@ -11,8 +11,7 @@ import CreateTaskModal from '../../components/project/CreateTaskModal';
 import AddMemberModal from '../../components/project/AddMemberModal';
 import EditProjectModal from '../../components/project/EditProjectModal';
 import EditTaskModal from '../../components/project/EditTaskModal';
-import axios from 'axios';
-import { API_URL } from '../../utils/api';
+import api from '../../utils/api';
 
 const ProjectDetails = () => {
     const { projectId } = useParams();
@@ -32,9 +31,9 @@ const ProjectDetails = () => {
 
     const fetchProject = useCallback(async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/projects/${projectId}`);
+            const response = await api.get(`/api/projects/${projectId}`);
             if (!response.data) throw new Error('Failed to fetch project');
-            console.log(response.data); // Debug
+
             setProject(response.data);
         } catch (err) {
             console.error(err);

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import { Calendar, ClipboardList } from 'lucide-react';
-import axios from 'axios';
-import { API_URL } from '../../utils/api';
+import api from '../../utils/api';
 
 const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated, lockAssignee = false }) => {
     // Local state for form
@@ -53,7 +52,7 @@ const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated, loc
         setIsSubmitting(true);
 
         try {
-            const response = await axios.put(`${API_URL}/api/tasks/${task.id}`, {
+            const response = await api.put(`/api/tasks/${task.id}`, {
                 task_id: task.id,
                 title,
                 description,
@@ -78,7 +77,7 @@ const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated, loc
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`${API_URL}/api/tasks/${task.id}`);
+            await api.delete(`/api/tasks/${task.id}`);
             if (onTaskUpdated) onTaskUpdated();
             setIsDeleteConfirmOpen(false); // Close confirm modal
             onClose(); // Close edit modal

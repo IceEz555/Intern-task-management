@@ -8,7 +8,14 @@ export const AuthProvider = ({ children }) => {
     // Lazy initialization to check localStorage on mount (Fixes useEffect warning)
     const [user, setUser] = useState(() => {
         const savedUser = localStorage.getItem('user');
-        return savedUser ? JSON.parse(savedUser) : null;
+        if (!savedUser || savedUser === 'undefined') return null;
+        try {
+            return JSON.parse(savedUser);
+        } catch (error) {
+            console.error("Failed to parse user from localStorage:", error);
+            localStorage.removeItem('user');
+            return null;
+        }
     });
     const [loading] = useState(false); // No need to load if we read sync from localStorage
 
@@ -18,10 +25,11 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             });
-            const userData = response.data.user;
-            setUser(userData);
-            localStorage.setItem('user', JSON.stringify(userData));
-            return userData;
+            const { token, user } = response.data;
+            localStorage.setItem('token', token);
+            setUser(user);
+            localStorage.setItem('user', JSON.stringify(user));
+            return user;
         } catch (error) {
             throw new Error(error.response?.data?.message || 'Login failed');
         }

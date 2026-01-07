@@ -1,7 +1,9 @@
 import express from 'express';
 import { getProjects, createProject, getProjectById, addProjectMember, removeProjectMember, updateProject, deleteProject } from '../controllers/projectController.js';
+import { checkAuth } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+router.use(checkAuth); // Protect all project routes
 
 // GET /api/projects - Get all projects
 router.get('/', getProjects);

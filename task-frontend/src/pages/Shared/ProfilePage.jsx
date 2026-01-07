@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PageLayout from '../../components/layout/Pagelayout';
 import { useAuth } from '../../context/AuthContext';
 import '../../assets/styles/ProfilePage.css';
-import axios from 'axios';
-import { API_URL } from '../../utils/api';
+import api from '../../utils/api';
 import { User, Mail, Briefcase, Building, Save, Shield } from 'lucide-react';
 
 export default function ProfilePage() {
@@ -51,7 +50,7 @@ export default function ProfilePage() {
         setIsSaving(true);
         setMessage(null);
         try {
-            const response = await axios.put(`${API_URL}/api/users/profile`, {
+            const response = await api.put('/api/users/profile', {
                 id: user.user_id || user.id, // Support different ID formats
                 name: formData.fullName,
                 department: formData.department

@@ -146,7 +146,7 @@ const KanbanBoard = () => {
                 task_id: active.id,
                 status: newStatus
             });
-            console.log(`Task ${active.id} status updated to ${newStatus}`);
+
         } catch (error) {
             console.error("Failed to update task status:", error);
         }

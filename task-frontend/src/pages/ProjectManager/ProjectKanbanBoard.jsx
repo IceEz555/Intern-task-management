@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { arrayMove } from '@dnd-kit/sortable';
-import axios from 'axios';
-import { API_URL } from '../../utils/api';
+import api from '../../utils/api';
 import { ChevronLeft } from 'lucide-react';
 import EditTaskModal from '../../components/project/EditTaskModal';
 import PageLayout from '../../components/layout/Pagelayout';
@@ -30,7 +29,7 @@ const ProjectKanbanBoard = () => {
     // Fetch Data Function
     const fetchProjectData = useCallback(async () => {
         try {
-            const res = await axios.get(`${API_URL}/api/projects/${projectId}`);
+            const res = await api.get(`/api/projects/${projectId}`);
             const tasks = res.data.tasks || [];
 
             // Group Tasks by Status
@@ -142,11 +141,11 @@ const ProjectKanbanBoard = () => {
         // Call API Update Status
         try {
             const newStatus = activeContainer;
-            await axios.put(`${API_URL}/api/tasks/${active.id}`, {
+            await api.put(`/api/tasks/${active.id}`, {
                 task_id: active.id,
                 status: newStatus
             });
-            console.log(`Task ${active.id} status updated to ${newStatus}`);
+
         } catch (error) {
             console.error("Failed to update task status:", error);
         }

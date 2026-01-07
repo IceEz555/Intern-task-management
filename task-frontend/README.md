@@ -31,8 +31,12 @@ src/
 ## 🚀 Getting Started
 
 1.  **Install Dependencies**
+
     ```bash
     npm install
+
+    # Configure Environment
+    cp .env.example .env
     ```
 
 2.  **Run Development Server**
@@ -46,14 +50,14 @@ src/
 - **Authentication**: Login page with role-based simulation.
 - **Admin Dashboard**: Overview of system stats.
 - **User Management**:
+
   - Browse users with filtering.
   - Add, Edit, and Delete users via Modal popups.
-  - *Note: Currently connects to a local backend API.*
+  - _Note: Currently connects to a local backend API._
 
 - **Deployment**: Fully verified to run in Docker environment (`npm run dev` with host networking).
 - **AI Integration**:
   - Accessible via Sidebar (opens in new tab) for project assistance.
-
 
 ## 🔧 Configuration
 
@@ -61,4 +65,5 @@ src/
 - **Vite**: Configured in `vite.config.js`.
 
 ---
-*Part of the Intern Task Management Project*
+
+_Part of the Intern Task Management Project_

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { API_URL } from "../../utils/api"; // ตรวจสอบ path ให้ถูกต้อง
+import api from "../../utils/api";
 // Import Logic ที่เราทำไว้ใน Step 1
 import { getInitials, validatePassword, filterUsersList } from "./UserManagement.logic";
 export const useUserManagement = () => { // แก้ชื่อให้ถูก (Management)
@@ -70,7 +69,7 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
     // --- API Calls ---
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/users`);
+            const response = await api.get('/api/users');
             const formattedUsers = response.data.map(user => ({
                 ...user,
                 initials: getInitials(user.name), // ใช้ Logic helper
@@ -91,7 +90,7 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
             return;
         }
         try {
-            const response = await axios.post(`${API_URL}/api/users`, formData);
+            const response = await api.post('/api/users', formData);
             const newUser = {
                 ...response.data,
                 initials: getInitials(response.data.name), // ใช้ Logic helper
@@ -125,7 +124,7 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
                 password: formData.password // Backend ควร handle ว่าถ้าส่งว่างไปจะไม่แก้นะ
             };
 
-            const response = await axios.put(`${API_URL}/api/users/${currentUser.user_id}`, payload);
+            const response = await api.put(`/api/users/${currentUser.user_id}`, payload);
             const updatedUser = {
                 ...response.data,
                 initials: getInitials(response.data.name)
@@ -145,7 +144,7 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
 
     const handleSubmitDelete = async () => {
         try {
-            await axios.delete(`${API_URL}/api/users/${currentUser.user_id}`);
+            await api.delete(`/api/users/${currentUser.user_id}`);
             setUsers(prev => prev.filter(u => u.user_id !== currentUser.user_id));
             closeModal();
             alert("User deleted successfully.");

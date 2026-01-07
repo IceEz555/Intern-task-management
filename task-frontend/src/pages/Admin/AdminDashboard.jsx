@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from 'axios';
+import api from "../../utils/api";
 import PageLayout from "../../components/layout/Pagelayout";
 import { Users, Folder, CheckSquare, BarChart3, PieChart } from 'lucide-react';
-import { API_URL } from "../../utils/api";
 import StatsCard from "../../components/dashboard/StatsCard";
 import '../../assets/styles/AdminDashboard.css';
 import '../../assets/styles/StatsCard.css'; // Ensure CSS is available for skeletons
@@ -17,7 +16,7 @@ const AdminDashboard = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${API_URL}/api/admin/stats`);
+                const response = await api.get('/api/admin/stats');
                 const data = response.data;
 
                 const realStats = [

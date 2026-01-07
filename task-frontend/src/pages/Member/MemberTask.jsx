@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 import PageLayout from "../../components/layout/Pagelayout";
 import { useAuth } from "../../context/AuthContext";
-import { API_URL } from '../../utils/api';
+
 import { Search, Filter } from 'lucide-react';
 import '../../assets/styles/MemberTask.css';
 import EditTaskModal from '../../components/project/EditTaskModal';
@@ -21,7 +21,7 @@ const MemberTask = () => {
         const fetchTasks = async () => {
             if (!user?.user_id) return;
             try {
-                const res = await axios.get(`${API_URL}/api/tasks/user/${user.user_id}`);
+                const res = await api.get(`/api/tasks/user/${user.user_id}`);
                 setTasks(res.data || []);
             } catch (err) {
                 console.error("Failed to fetch my tasks:", err);
@@ -46,7 +46,7 @@ const MemberTask = () => {
         const fetchTasks = async () => {
             if (!user?.user_id) return;
             try {
-                const res = await axios.get(`${API_URL}/api/tasks/user/${user.user_id}`);
+                const res = await api.get(`/api/tasks/user/${user.user_id}`);
                 setTasks(res.data || []);
             } catch (err) {
                 console.error("Failed to fetch my tasks:", err);

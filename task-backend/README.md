@@ -23,16 +23,20 @@ src/
 ## 🚀 Getting Started
 
 1.  **Prerequisites**
+
     - Ensure PostgreSQL is installed and running.
     - Create a database (e.g., `intern_task_db`).
 
 2.  **Install Dependencies**
+
     ```bash
     npm install
     ```
 
 3.  **Configure Environment**
+
     - Create a `.env` file in this directory (or update the existing one).
+    - You can copy the example file: `cp .env.example .env`
     - Add your DB credentials:
       ```env
       DB_USER=postgres
@@ -52,13 +56,16 @@ src/
 ## 📡 API Endpoints
 
 ### Authentication
+
 - `POST /api/login`: Authenticate users (Admin/PM/Member).
 
 ### User Management
+
 - `GET /api/users`: List all users.
 - `POST /api/users`: Create a new user (Planned).
 - `PUT /api/users/:id`: Update a user (Planned).
 - `DELETE /api/users/:id`: Delete a user (Planned).
 
 ---
-*Part of the Intern Task Management Project*
+
+_Part of the Intern Task Management Project_

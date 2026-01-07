@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import PageLayout from "../../components/layout/Pagelayout";
 import { useAuth } from "../../context/AuthContext";
-import axios from 'axios';
-import { API_URL } from '../../utils/api';
+import api from '../../utils/api';
 import {
     CheckCircle2,
     Clock,
@@ -31,7 +30,7 @@ const MemberDashboard = () => {
     const fetchTasks = useCallback(async () => {
         if (!user?.user_id) return;
         try {
-            const res = await axios.get(`${API_URL}/api/tasks/user/${user.user_id}`);
+            const res = await api.get(`/api/tasks/user/${user.user_id}`);
             const data = res.data || [];
             setTasks(data);
 

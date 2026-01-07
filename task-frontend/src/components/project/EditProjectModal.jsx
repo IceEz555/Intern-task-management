@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
-import axios from 'axios';
-import { API_URL } from '../../utils/api';
+import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 
 const EditProjectModal = ({ isOpen, onClose, project, onProjectUpdated }) => {
@@ -30,7 +29,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onProjectUpdated }) => {
     const handleSubmit = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.put(`${API_URL}/api/projects/${project.project_id}`, {
+            const response = await api.put(`/api/projects/${project.project_id}`, {
                 project_name: projectName,
                 project_description: projectDescription,
                 project_status: projectStatus,
@@ -52,7 +51,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onProjectUpdated }) => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`${API_URL}/api/projects/${project.project_id}`);
+            await api.delete(`/api/projects/${project.project_id}`);
             // Redirect to project list
             navigate('/project-management');
         } catch (err) {

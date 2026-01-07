@@ -1,5 +1,6 @@
 import pool from '../config/db.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
@@ -32,7 +33,13 @@ export const login = async (req, res) => {
             department: user.department || ''
         };
 
-        res.json({ user: responseUser });
+        // Generate JWT token
+       const token = jwt.sign(
+      { userId: user.user_id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+        res.json({ user: responseUser, token });
 
     } catch (err) {
         console.error(err);

@@ -1,6 +1,9 @@
 import express from 'express';
 import { getUsers, createUser, updateUser, deleteUser, updateProfile } from '../controllers/userController.js';
+import { checkAuth } from '../middleware/authMiddleware.js';
 const router = express.Router();
+
+router.use(checkAuth); // Apply to all user routes
 
 router.get('/users', getUsers);
 router.post('/users', createUser);
