@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Modal from '../common/Modal';
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +44,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onProjectUpdated }) => {
             }
         } catch (err) {
             console.error(err);
-            alert('Error updating project');
+            toast.error('Error updating project');
         } finally {
             setIsSubmitting(false);
         }
@@ -56,7 +57,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onProjectUpdated }) => {
             navigate('/project-management');
         } catch (err) {
             console.error(err);
-            alert('Failed to delete project');
+            toast.error('Failed to delete project');
         }
     };
 

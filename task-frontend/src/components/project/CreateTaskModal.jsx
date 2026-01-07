@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Modal from '../common/Modal';
 import { X, Calendar, ClipboardList } from 'lucide-react';
 import api from '../../utils/api';
@@ -61,7 +62,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, members = [], onTaskCreat
             onClose();
         } catch (err) {
             console.error(err);
-            alert('Error creating task');
+            toast.error('Error creating task');
         } finally {
             setIsSubmitting(false);
         }

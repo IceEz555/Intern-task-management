@@ -47,17 +47,31 @@ src/
 
 ## 🎨 Key Features
 
-- **Authentication**: Login page with role-based simulation.
-- **Admin Dashboard**: Overview of system stats.
-- **User Management**:
-
-  - Browse users with filtering.
-  - Add, Edit, and Delete users via Modal popups.
-  - _Note: Currently connects to a local backend API._
-
-- **Deployment**: Fully verified to run in Docker environment (`npm run dev` with host networking).
+- **Authentication**:
+  - Full **JWT Authentication** (Access Token + Refresh Token).
+  - Role-based Access Control (Admin, PM, Member).
+  - Secure Login/Logout with `AuthContext`.
+- **Project Management (PM)**:
+  - **Kanban Board**: Drag & Drop tasks with `@dnd-kit`.
+  - **Project Details**: Manage members (`AddMemberModal` Multi-select), create/edit tasks.
+  - **Personal Board**: "My Tasks" view for individual users.
+- **Admin Dashboard**:
+  - Real-time system stats & charts.
+  - **User Management**: Full CRUD with **Toast Notifications** (`react-hot-toast`).
+- **Member Features**:
+  - Profile Management.
+  - Task Status Updates.
 - **AI Integration**:
   - Accessible via Sidebar (opens in new tab) for project assistance.
+
+## 📚 Documentation
+
+Detailed documentation is available in the `docs/frontend/` directory:
+
+- [Frontend Structure](../docs/frontend/frontend_structure.md) - Component hierarchy.
+- [Component Documentation](../docs/frontend/component_documentation.md) - Props & Usage.
+- [Code Explanation](../docs/frontend/CODE_EXPLANATION.md) - Deep dive into logic.
+- [Technical Deep Dive](../docs/frontend/TECHNICAL_DEEP_DIVE.md) - Architecture & Flows.
 
 ## 🔧 Configuration
 

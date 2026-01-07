@@ -1,0 +1,1215 @@
+{
+	"info": {
+		"_postman_id": "d1e3155d-702c-432f-a507-b29e11c0c469",
+		"name": "Task Management API",
+		"description": "Collection for testing Task Management System APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47273385",
+		"_collection_link": "https://iceez555-5336354.postman.co/workspace/Apivit-Y.'s-Workspace~0b229608-93e7-45c2-8cfa-be653c1d79d1/collection/47273385-d1e3155d-702c-432f-a507-b29e11c0c469?action=share&source=collection_link&creator=47273385"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@internflow.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "Authenticate user and return user details."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"    console.log(\"Token saved to collection variable\");",
+									"}",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"response": []
+				},
+				{
+					"name": "Login (PM)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"sarah@internflow.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "Authenticate user and return user details."
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Request completes without server error', function () {",
+									"    pm.expect(pm.response.code).to.be.below(500);",
+									"})",
+									"",
+									"pm.test('Response has valid status code', function () {",
+									"    pm.expect([",
+									"        200,",
+									"        201,",
+									"        204,",
+									"        400,",
+									"        401,",
+									"        403,",
+									"        404",
+									"    ]).to.include(pm.response.code);",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Users Management",
+					"item": [
+						{
+							"name": "Get All Users",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code is 200 OK', function () {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test('Response is JSON', function () {",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"pm.test('Response is an array of users', function () {",
+											"    const jsonData = pm.response.json();",
+											"    const users = jsonData.data || jsonData.users || jsonData;",
+											"    pm.expect(users).to.be.an('array');",
+											"})",
+											"",
+											"pm.test('Each user has required properties', function () {",
+											"    const jsonData = pm.response.json();",
+											"    const users = jsonData.data || jsonData.users || jsonData;",
+											"    if (users.length > 0) {",
+											"        users.forEach(function (user) {",
+											"            pm.expect(user).to.have.property('id');",
+											"        });",
+											"    }",
+											"})"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code is 201 Created', function () {",
+											"    pm.response.to.have.status(201);",
+											"})",
+											"",
+											"pm.test('Response is JSON', function () {",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"pm.test('Response contains created user data', function () {",
+											"    const jsonData = pm.response.json();",
+											"    const user = jsonData.data || jsonData.user || jsonData;",
+											"    pm.expect(user).to.have.property('id');",
+											"})",
+											"",
+											"pm.test('Created user has expected properties', function () {",
+											"    const jsonData = pm.response.json();",
+											"    const user = jsonData.data || jsonData.user || jsonData;",
+											"    pm.expect(user.id).to.not.be.undefined;",
+											"})",
+											"",
+											"pm.test('Password is not returned in response', function () {",
+											"    const jsonData = pm.response.json();",
+											"    const user = jsonData.data || jsonData.user || jsonData;",
+											"    pm.expect(user.password).to.be.undefined;",
+											"})"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"New User\",\n    \"email\": \"newuser@example.com\",\n    \"password\": \"StrongPass1!\",\n    \"role\": \"Member\",\n    \"status\": \"Active\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User (Admin)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code is 200 OK', function () {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test('Response is JSON', function () {",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"pm.test('Response contains updated user data', function () {",
+											"    const jsonData = pm.response.json();",
+											"    const user = jsonData.data || jsonData.user || jsonData;",
+											"    pm.expect(user).to.have.property('id');",
+											"})",
+											"",
+											"pm.test('Admin authorization required', function () {",
+											"    if (pm.response.code === 401 || pm.response.code === 403) {",
+											"        pm.expect([",
+											"            401,",
+											"            403",
+											"        ]).to.include(pm.response.code);",
+											"    } else {",
+											"        pm.expect(pm.response.code).to.equal(200);",
+											"    }",
+											"})"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Updated Name\",\n    \"email\": \"updated@example.com\",\n    \"role\": \"PM\",\n    \"status\": \"OnLeave\",\n    \"password\": \"\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/users/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code is 200 or 204 for successful deletion', function () {",
+											"    pm.expect([",
+											"        200,",
+											"        204",
+											"    ]).to.include(pm.response.code);",
+											"})",
+											"",
+											"pm.test('Response confirms deletion', function () {",
+											"    if (pm.response.code === 200) {",
+											"        const jsonData = pm.response.json();",
+											"        pm.expect(jsonData.message || jsonData.success || jsonData.deleted).to.not.be.undefined;",
+											"    }",
+											"})",
+											"",
+											"pm.test('Authorization required for deletion', function () {",
+											"    if (pm.response.code === 401 || pm.response.code === 403) {",
+											"        pm.expect([",
+											"            401,",
+											"            403",
+											"        ]).to.include(pm.response.code);",
+											"    } else {",
+											"        pm.expect([",
+											"            200,",
+											"            204",
+											"        ]).to.include(pm.response.code);",
+											"    }",
+											"})"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/users/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Profile (Self)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code is 200 OK', function () {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test('Response is JSON', function () {",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"pm.test('Response contains updated profile data', function () {",
+											"    const jsonData = pm.response.json();",
+											"    const user = jsonData.data || jsonData.user || jsonData;",
+											"    pm.expect(user).to.be.an('object');",
+											"})",
+											"",
+											"pm.test('Authentication required', function () {",
+											"    if (pm.response.code === 401) {",
+											"        pm.expect(pm.response.code).to.equal(401);",
+											"    } else {",
+											"        pm.expect(pm.response.code).to.equal(200);",
+											"    }",
+											"})"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 1,\n    \"name\": \"Jane User\",\n    \"department\": \"Engineering\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/users/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Dashboard Stats",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response contains dashboard statistics', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"})",
+									"",
+									"pm.test('Stats contain expected metrics', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const data = jsonData.data || jsonData;",
+									"    const hasStats = data.totalUsers !== undefined || data.totalProjects !== undefined || data.totalTasks !== undefined || data.users !== undefined || data.projects !== undefined || data.tasks !== undefined;",
+									"    pm.expect(hasStats || Object.keys(data).length > 0).to.be.true;",
+									"})",
+									"",
+									"pm.test('Requires admin authorization', function () {",
+									"    if (pm.response.code === 401 || pm.response.code === 403) {",
+									"        pm.expect([",
+									"            401,",
+									"            403",
+									"        ]).to.include(pm.response.code);",
+									"    } else {",
+									"        pm.expect(pm.response.code).to.equal(200);",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects Manager",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response is an array of projects', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const projects = jsonData.data || jsonData.projects || jsonData;",
+									"    pm.expect(projects).to.be.an('array');",
+									"})",
+									"",
+									"pm.test('Each project has required properties', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const projects = jsonData.data || jsonData.projects || jsonData;",
+									"    if (projects.length > 0) {",
+									"        projects.forEach(function (project) {",
+									"            pm.expect(project).to.have.property('id');",
+									"        });",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response contains project details', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const project = jsonData.data || jsonData.project || jsonData;",
+									"    pm.expect(project).to.have.property('id');",
+									"})",
+									"",
+									"pm.test('Project has expected properties', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const project = jsonData.data || jsonData.project || jsonData;",
+									"    pm.expect(project.name || project.title).to.not.be.undefined;",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 201 Created', function () {",
+									"    pm.response.to.have.status(201);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response contains created project data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const project = jsonData.data || jsonData.project || jsonData;",
+									"    pm.expect(project).to.have.property('id');",
+									"})",
+									"",
+									"pm.test('Created project has name', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const project = jsonData.data || jsonData.project || jsonData;",
+									"    pm.expect(project.name || project.title).to.not.be.undefined;",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"project_name\": \"New Project\",\n    \"project_description\": \"Description\",\n    \"project_status\": \"Planning\",\n    \"start_date\": \"2023-01-01\",\n    \"end_date\": \"2023-12-31\",\n    \"created_by\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/projects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response contains updated project data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const project = jsonData.data || jsonData.project || jsonData;",
+									"    pm.expect(project).to.have.property('id');",
+									"})",
+									"",
+									"pm.test('Authorization required for update', function () {",
+									"    if (pm.response.code === 401 || pm.response.code === 403) {",
+									"        pm.expect([",
+									"            401,",
+									"            403",
+									"        ]).to.include(pm.response.code);",
+									"    } else {",
+									"        pm.expect(pm.response.code).to.equal(200);",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"project_name\": \"Updated Project\",\n    \"project_description\": \"Updated Description\",\n    \"project_status\": \"In Progress\",\n    \"start_date\": \"2023-01-01\",\n    \"end_date\": \"2023-12-31\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 or 204 for successful deletion', function () {",
+									"    pm.expect([",
+									"        200,",
+									"        204",
+									"    ]).to.include(pm.response.code);",
+									"})",
+									"",
+									"pm.test('Response confirms deletion', function () {",
+									"    if (pm.response.code === 200) {",
+									"        const jsonData = pm.response.json();",
+									"        pm.expect(jsonData.message || jsonData.success || jsonData.deleted).to.not.be.undefined;",
+									"    }",
+									"})",
+									"",
+									"pm.test('Authorization required for deletion', function () {",
+									"    if (pm.response.code === 401 || pm.response.code === 403) {",
+									"        pm.expect([",
+									"            401,",
+									"            403",
+									"        ]).to.include(pm.response.code);",
+									"    } else {",
+									"        pm.expect([",
+									"            200,",
+									"            204",
+									"        ]).to.include(pm.response.code);",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Project Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 or 201 for successful addition', function () {",
+									"    pm.expect([",
+									"        200,",
+									"        201",
+									"    ]).to.include(pm.response.code);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response confirms member addition', function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message || jsonData.success || jsonData.member || jsonData.data).to.not.be.undefined;",
+									"})",
+									"",
+									"pm.test('Authorization required', function () {",
+									"    if (pm.response.code === 401 || pm.response.code === 403) {",
+									"        pm.expect([",
+									"            401,",
+									"            403",
+									"        ]).to.include(pm.response.code);",
+									"    } else {",
+									"        pm.expect([",
+									"            200,",
+									"            201",
+									"        ]).to.include(pm.response.code);",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id/members",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id",
+								"members"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Project Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 or 204 for successful removal', function () {",
+									"    pm.expect([",
+									"        200,",
+									"        204",
+									"    ]).to.include(pm.response.code);",
+									"})",
+									"",
+									"pm.test('Response confirms member removal', function () {",
+									"    if (pm.response.code === 200) {",
+									"        const jsonData = pm.response.json();",
+									"        pm.expect(jsonData.message || jsonData.success || jsonData.deleted).to.not.be.undefined;",
+									"    }",
+									"})",
+									"",
+									"pm.test('Authorization required for removal', function () {",
+									"    if (pm.response.code === 401 || pm.response.code === 403) {",
+									"        pm.expect([",
+									"            401,",
+									"            403",
+									"        ]).to.include(pm.response.code);",
+									"    } else {",
+									"        pm.expect([",
+									"            200,",
+									"            204",
+									"        ]).to.include(pm.response.code);",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id/members/:userId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id",
+								"members",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								},
+								{
+									"key": "userId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get User Tasks (Personal Board)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response is an array of tasks', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const tasks = jsonData.data || jsonData.tasks || jsonData;",
+									"    pm.expect(tasks).to.be.an('array');",
+									"})",
+									"",
+									"pm.test('Each task has required properties', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const tasks = jsonData.data || jsonData.tasks || jsonData;",
+									"    if (tasks.length > 0) {",
+									"        tasks.forEach(function (task) {",
+									"            pm.expect(task).to.have.property('id');",
+									"        });",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/user/:userId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 201 Created', function () {",
+									"    pm.response.to.have.status(201);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response contains created task data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const task = jsonData.data || jsonData.task || jsonData;",
+									"    pm.expect(task).to.have.property('id');",
+									"})",
+									"",
+									"pm.test('Created task has title or name', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const task = jsonData.data || jsonData.task || jsonData;",
+									"    pm.expect(task.title || task.name).to.not.be.undefined;",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"New Task\",\n    \"description\": \"Task Details\",\n    \"status\": \"To Do\",\n    \"priority\": \"Medium\",\n    \"project_id\": 1,\n    \"assignee_id\": 2,\n    \"due_date\": \"2023-12-31\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('Response is JSON', function () {",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"pm.test('Response contains updated task data', function () {",
+									"    const jsonData = pm.response.json();",
+									"    const task = jsonData.data || jsonData.task || jsonData;",
+									"    pm.expect(task).to.have.property('id');",
+									"})",
+									"",
+									"pm.test('Authorization required for update', function () {",
+									"    if (pm.response.code === 401 || pm.response.code === 403) {",
+									"        pm.expect([",
+									"            401,",
+									"            403",
+									"        ]).to.include(pm.response.code);",
+									"    } else {",
+									"        pm.expect(pm.response.code).to.equal(200);",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Task\",\n    \"status\": \"In Progress\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code is 200 or 204 for successful deletion', function () {",
+									"    pm.expect([",
+									"        200,",
+									"        204",
+									"    ]).to.include(pm.response.code);",
+									"})",
+									"",
+									"pm.test('Response confirms deletion', function () {",
+									"    if (pm.response.code === 200) {",
+									"        const jsonData = pm.response.json();",
+									"        pm.expect(jsonData.message || jsonData.success || jsonData.deleted).to.not.be.undefined;",
+									"    }",
+									"})",
+									"",
+									"pm.test('Authorization required for deletion', function () {",
+									"    if (pm.response.code === 401 || pm.response.code === 403) {",
+									"        pm.expect([",
+									"            401,",
+									"            403",
+									"        ]).to.include(pm.response.code);",
+									"    } else {",
+									"        pm.expect([",
+									"            200,",
+									"            204",
+									"        ]).to.include(pm.response.code);",
+									"    }",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
+}

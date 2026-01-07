@@ -5,20 +5,32 @@
 ---
 
 ## 🛠️ Technology Stack
+
 - **Runtime**: Node.js
 - **Framework**: Express.js
 - **Database Driver**: `pg` (node-postgres)
-- **Middleware**: `cors` (Cross-Origin Resource Sharing)
+- **Middleware**: `cors` (Cross-Origin Resource Sharing), `checkAuth` (JWT)
+
+## 📂 Architecture & Ports
+
+- **API Gateway**: Port `5000` (Main Entry Point)
+- **Backend Service**: Port `5001` (Internal Service)
+- **AI Service**: Port `8001` (Internal Service)
 
 ## 📂 Folder Structure
+
 ```
 task-backend/
+├── apiGateway/         # Main Entry Point (Port 5000)
+│   ├── gatewayServer.js
+│   └── package.json
 ├── src/
 │   ├── config/         # Database configuration (db.js)
-│   ├── controllers/    # Business logic (authController.js, userController.js)
+│   ├── controllers/    # Business logic (auth, user, project, task)
+│   ├── middleware/     # Auth Middleware (checkAuth.js)
 │   ├── routes/         # API Route definitions
 │   └── app.js          # Express app setup
-├── server.js           # Server entry point
+├── server.js           # Backend Service Entry (Port 5001)
 └── .env                # Environment variables
 ```
 
@@ -27,6 +39,7 @@ task-backend/
 ## 🔐 Authentication APIs
 
 ### 1. Login
+
 ตรวจสอบอีเมลและรหัสผ่านเพื่อเข้าสู่ระบบ
 
 - **Endpoint**: `POST /api/login`
@@ -62,12 +75,14 @@ task-backend/
 ## 👥 User Management APIs
 
 ### 1. Get All Users
+
 ดึงรายชื่อผู้ใช้ทั้งหมดในระบบ (สำหรับหน้า Admin User Management)
 
 - **Endpoint**: `GET /api/users`
 - **Response**: Array ของ User Object
 
 ### 2. Create User
+
 สร้างผู้ใช้ใหม่ (Password จะถูก Hash อัตโนมัติ)
 
 - **Endpoint**: `POST /api/users`
@@ -84,6 +99,7 @@ task-backend/
 - **Response (201 Created)**: User Object ที่เพิ่งสร้าง
 
 ### 3. Update User
+
 แก้ไขข้อมูลผู้ใช้ (สามารถส่ง password เพื่อ reset ได้)
 
 - **Endpoint**: `PUT /api/users/:id`
@@ -100,6 +116,7 @@ task-backend/
 - **Response (200 OK)**: User Object ที่อัปเดตแล้ว
 
 ### 4. Update Own Profile (New)
+
 ผู้ใช้ล็อกอินแก้ไขข้อมูลส่วนตัวของตนเอง
 
 - **Endpoint**: `PUT /api/users/profile`
@@ -114,6 +131,7 @@ task-backend/
 - **Response (200 OK)**: User Object ที่อัปเดตแล้ว
 
 ### 4. Delete User
+
 ลบผู้ใช้อออกจากระบบ
 
 - **Endpoint**: `DELETE /api/users/:id`
@@ -123,9 +141,11 @@ task-backend/
   ```
 
 ---
+
 ## 📂 Project Management APIs
 
 ### 1. Get All Projects
+
 ดึงรายชื่อโปรเจกต์ทั้งหมดพร้อมสถิติ (Task Count, Progress) สำหรับหน้า Dashboard
 
 - **Endpoint**: `GET /api/projects`
@@ -144,10 +164,12 @@ task-backend/
   ```
 
 ### 2. Create Project
+
 สร้างโปรเจกต์ใหม่
 
 - **Endpoint**: `POST /api/projects`
 - **Request Body**:
+
   ```json
   {
     "project_name": "New Mobile App",
@@ -160,7 +182,10 @@ task-backend/
 
   ```
 
+  ```
+
 ### 3. Update Project (New)
+
 อัปเดตข้อมูลโปรเจกต์
 
 - **Endpoint**: `PUT /api/projects/:id`
@@ -169,7 +194,7 @@ task-backend/
   {
     "project_name": "Updated Name",
     "project_description": "New Desc",
-    "project_status": "Completed", 
+    "project_status": "Completed",
     "start_date": "2023-01-01",
     "end_date": "2023-12-31"
   }
@@ -177,6 +202,7 @@ task-backend/
 - **Response**: Project Object ที่อัปเดตแล้ว
 
 ### 3. Delete Project
+
 ลบโปรเจกต์ออกจากระบบ (Cascading: ลบ Tasks และ Members ที่เกี่ยวข้องทั้งหมด)
 
 - **Endpoint**: `DELETE /api/projects/:id`
@@ -187,8 +213,8 @@ task-backend/
 
 ---
 
-
 ### 3. Get Project Details
+
 ดึงรายละเอียดเจาะลึกของโปรเจกต์ รวมถึง Tasks และ Members
 
 - **Endpoint**: `GET /api/projects/:id`
@@ -199,11 +225,14 @@ task-backend/
     "name": "Mobile App",
     "description": "...",
     "tasks": [
-        { "id": 101, "title": "Design UI", "status": "To Do", "assignee": "Sarah" }
+      {
+        "id": 101,
+        "title": "Design UI",
+        "status": "To Do",
+        "assignee": "Sarah"
+      }
     ],
-    "members": [
-        { "user_id": 2, "name": "Sarah", "role": "PM" }
-    ]
+    "members": [{ "user_id": 2, "name": "Sarah", "role": "PM" }]
   }
   ```
 
@@ -212,6 +241,7 @@ task-backend/
 ## 📝 Task Management APIs
 
 ### 1. Create Task
+
 สร้างงานใหม่
 
 - **Endpoint**: `POST /api/tasks`
@@ -229,10 +259,10 @@ task-backend/
   ```
 - **Response**: Task Object ที่สร้างเสร็จ
 
-
 ---
 
 ### 2. Update Task
+
 แก้ไขรายละเอียดงาน
 
 - **Endpoint**: `PUT /api/tasks/:id`
@@ -251,6 +281,7 @@ task-backend/
 - **Response**: Task Object ที่อัปเดตแล้ว
 
 ### 3. Delete Task
+
 ลบงานออกจากระบบ (Hard Delete)
 
 - **Endpoint**: `DELETE /api/tasks/:id`
@@ -264,6 +295,7 @@ task-backend/
 ## 7. Admin Dashboard APIs (New!)
 
 ### 1. Get Dashboard Stats
+
 ดึงข้อมูลสถิติรวมสำหรับหน้า Admin Dashboard
 
 - **Endpoint**: `GET /api/admin/stats`
@@ -274,9 +306,9 @@ task-backend/
     "activeProjects": 5,
     "completedTasks": 120,
     "userDistribution": [
-        { "role": "Admin", "count": 2 },
-        { "role": "PM", "count": 3 },
-        { "role": "Member", "count": 5 }
+      { "role": "Admin", "count": 2 },
+      { "role": "PM", "count": 3 },
+      { "role": "Member", "count": 5 }
     ]
   }
   ```
@@ -284,22 +316,22 @@ task-backend/
 ---
 
 ## 8. Database Connection
+
 ไฟล์ `src/config/db.js` ทำหน้าที่สร้าง Pool Connection ไปยัง PostgreSQL
 
 ```javascript
 /* src/config/db.js */
-import pkg from 'pg';
-import dotenv from 'dotenv';
+import pkg from "pg";
+import dotenv from "dotenv";
 
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 ```
-
 
 ---
 
@@ -308,6 +340,7 @@ const pool = new Pool({
 API สำหรับจัดการสมาชิกในโปรเจกต์ (เพิ่มและลบ)
 
 ### 1. Add Project Member
+
 เพิ่มสมาชิกเข้าโปรเจกต์
 
 - **Endpoint**: `POST /api/projects/:id/members`
@@ -318,6 +351,7 @@ API สำหรับจัดการสมาชิกในโปรเจ�
 - **Response**: 201 Created
 
 ### 2. Remove Project Member
+
 ลบสมาชิกออกจากโปรเจกต์
 
 - **Endpoint**: `DELETE /api/projects/:id/members/:userId`
@@ -328,6 +362,7 @@ API สำหรับจัดการสมาชิกในโปรเจ�
 ## 6. Personal Board APIs (New!)
 
 ### 1. Get User Tasks
+
 ดึงงานทั้งหมดที่ User คนนั้นได้รับมอบหมาย (สำหรับหน้า My Kanban Board)
 
 - **Endpoint**: `GET /api/tasks/user/:userId`
@@ -342,4 +377,7 @@ API สำหรับจัดการสมาชิกในโปรเจ�
     }
   ]
   ```
+
+```
+
 ```

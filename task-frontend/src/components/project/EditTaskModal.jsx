@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Modal from '../common/Modal';
 import { Calendar, ClipboardList } from 'lucide-react';
 import api from '../../utils/api';
@@ -68,7 +69,7 @@ const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated, loc
         } catch (err) {
             console.error(err);
             const errMsg = err.response?.data?.error || err.response?.data?.message || 'Error updating task';
-            alert(`Failed: ${errMsg}`);
+            toast.error(`Failed: ${errMsg}`);
         } finally {
             setIsSubmitting(false);
         }
@@ -84,7 +85,7 @@ const EditTaskModal = ({ isOpen, onClose, task, members = [], onTaskUpdated, loc
         } catch (err) {
             console.error(err);
             const errMsg = err.response?.data?.error || err.response?.data?.message || 'Failed to delete task';
-            alert(`Error: ${errMsg}`);
+            toast.error(`Error: ${errMsg}`);
         }
     };
 

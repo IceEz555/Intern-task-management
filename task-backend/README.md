@@ -15,9 +15,13 @@ This is the RESTful API backend for the Task Management System, handling data pe
 ```
 src/
 ├── config/         # Database configuration (db.js)
-├── controllers/    # Request handlers (auth, user logic)
+├── controllers/    # Request handlers (auth, user, etc.)
+├── middleware/     # JWT Authentication (checkAuth.js)
 ├── routes/         # API Route definitions
-└── server.js       # Entry point (root)
+└── server.js       # Backend Service Entry (Port 5001)
+
+apiGateway/         # API Gateway Entry (Port 5000)
+└── gatewayServer.js
 ```
 
 ## 🚀 Getting Started
@@ -30,28 +34,39 @@ src/
 2.  **Install Dependencies**
 
     ```bash
+    # Install Backend Deps
     npm install
+
+    # Install Gateway Deps
+    cd apiGateway && npm install && cd ..
     ```
 
 3.  **Configure Environment**
 
-    - Create a `.env` file in this directory (or update the existing one).
-    - You can copy the example file: `cp .env.example .env`
-    - Add your DB credentials:
-      ```env
-      DB_USER=postgres
-      DB_HOST=localhost
-      DB_DATABASE=intern_task_db
-      DB_PASSWORD=postgres
-      DB_PORT=5432
-      PORT=5000
+    - Copy `.env.example` to `.env`:
+      ```bash
+      cp .env.example .env
       ```
+    - Verify `DB_CREDENTIALS` and `JWT_SECRET`.
 
-4.  **Run Main Server**
+4.  **Run Services**
+    You need to run both Backend and Gateway (or use Docker).
+
     ```bash
-    npm run dev
+    # Terminal 1: Backend Service
+    npm run dev  # Runs on Port 5001
+
+    # Terminal 2: API Gateway
+    cd apiGateway && npm start # Runs on Port 5000
     ```
-    The server will start on `http://localhost:5000`.
+
+    > **Note**: Frontend connects to **Port 5000** (Gateway).
+
+## 📚 Documentation
+
+Detailed API documentation is recommended to be moved to `docs/backend/`.
+
+- [Backend API Documentation](../docs/backend/backend_api_documentation.md)
 
 ## 📡 API Endpoints
 
@@ -62,9 +77,9 @@ src/
 ### User Management
 
 - `GET /api/users`: List all users.
-- `POST /api/users`: Create a new user (Planned).
-- `PUT /api/users/:id`: Update a user (Planned).
-- `DELETE /api/users/:id`: Delete a user (Planned).
+- `POST /api/users`: Create a new user.
+- `PUT /api/users/:id`: Update a user.
+- `DELETE /api/users/:id`: Delete a user.
 
 ---
 

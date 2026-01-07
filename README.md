@@ -7,7 +7,7 @@ A web-based Task Management System built for managing projects, tasks, and users
 - **Frontend**: React + Vite + Tailwind CSS
 - **Backend**: Node.js + Express
 - **Database**: PostgreSQL
-- **Authentication**: JWT (JSON Web Token) - _Planned/In-progress_
+- **Authentication**: JWT (JSON Web Token) - _Implemented_
 
 ## 📂 Project Structure
 
@@ -19,9 +19,9 @@ A web-based Task Management System built for managing projects, tasks, and users
 - **Authentication**: Login for Admin, Project Manager, and Member.
 - **User Management**:
   - View all users (Admin only)
-  - Create new users (Admin only) - _Backend Implemented, Frontend Integrated_
-  - Edit user details (Admin only) - _Backend Implemented, Frontend Integrated_
-  - Delete users (Admin only) - _Backend Implemented, Frontend Integrated_
+  - Create new users (Admin only) - _Implemented_
+  - Edit user details (Admin only) - _Implemented_
+  - Delete users (Admin only) - _Implemented_
 - **Dashboard**: Role-based redirection and dashboard views.
 - **AI Integration**:
   - AI Assistant for project queries (Streamlit integration).
@@ -74,7 +74,7 @@ The AI Service consists of a FastAPI backend (for RAG logic) and a Streamlit UI.
      ```bash
      # Terminal 1: Run FastAPI (Logic Layer)
      # Runs on http://localhost:8000
-     fastapi dev src/server.py
+     python -m uvicorn src.server:app --host 0.0.0.0 --port 8000 --reload
 
      # Terminal 2: Run Streamlit (Chat UI)
      # Runs on http://localhost:8501

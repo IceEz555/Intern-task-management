@@ -14,10 +14,13 @@ import NotFound from './pages/Shared/NotFound';
 import MemberDashboard from './pages/Member/MemberDashboard';
 import MemberTask from './pages/Member/MemberTask'
 
+import { Toaster } from 'react-hot-toast';
+
 function App() {
 
   return (
     <>
+      <Toaster position="top-right" />
       <div>
         <Routes>
           {/* 1. หน้าแรก (Home) */}

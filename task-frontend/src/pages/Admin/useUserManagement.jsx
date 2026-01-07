@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import api from "../../utils/api";
 // Import Logic ที่เราทำไว้ใน Step 1
 import { getInitials, validatePassword, filterUsersList } from "./UserManagement.logic";
@@ -86,7 +87,7 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
         // ใช้ validatePassword จาก Logic File (ส่ง param ให้ครบ: pwd, confirm, isCreateMode)
         const error = validatePassword(formData.password, formData.confirmPassword, true);
         if (error) {
-            alert(error);
+            toast.error(error);
             return;
         }
         try {
@@ -97,13 +98,13 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
             };
             setUsers(prev => [...prev, newUser]);
             closeModal();
-            alert("User created successfully!");
+            toast.success("User created successfully!");
         } catch (error) {
             console.error("Error creating user:", error);
             if (error.response && error.response.status === 409) {
-                alert("Email already registered.");
+                toast.error("Email already registered.");
             } else {
-                alert("Failed to create user.");
+                toast.error("Failed to create user.");
             }
         }
     };
@@ -112,7 +113,7 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
         e.preventDefault();
         const error = validatePassword(formData.password, formData.confirmPassword, false);
         if (error) {
-            alert(error);
+            toast.error(error);
             return;
         }
         try {
@@ -131,13 +132,13 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
             };
             setUsers(prev => prev.map(u => u.user_id === currentUser.user_id ? updatedUser : u));
             closeModal();
-            alert("User updated successfully!");
+            toast.success("User updated successfully!");
         } catch (error) {
             console.error("Error updating user:", error);
             if (error.response && error.response.status === 409) {
-                alert("Email already exists.");
+                toast.error("Email already exists.");
             } else {
-                alert("Failed to update user.");
+                toast.error("Failed to update user.");
             }
         }
     };
@@ -147,10 +148,10 @@ export const useUserManagement = () => { // แก้ชื่อให้ถู
             await api.delete(`/api/users/${currentUser.user_id}`);
             setUsers(prev => prev.filter(u => u.user_id !== currentUser.user_id));
             closeModal();
-            alert("User deleted successfully.");
+            toast.success("User deleted successfully.");
         } catch (error) {
             console.error("Error deleting user:", error);
-            alert("Failed to delete user.");
+            toast.error("Failed to delete user.");
         }
     };
 

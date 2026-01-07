@@ -116,7 +116,7 @@ export function Login() {
                                         className={`demo-btn ${selectedRole === 'Admin' ? 'active' : ''}`}
                                         onClick={() => {
                                             setSelectedRole("Admin");
-                                            setEmail("admin@taskflow.com");
+                                            setEmail("admin@internflow.com");
                                             setPassword("Pass1234");
                                         }}
                                     >
@@ -127,7 +127,7 @@ export function Login() {
                                         className={`demo-btn ${selectedRole === 'PM' ? 'active' : ''}`}
                                         onClick={() => {
                                             setSelectedRole("PM");
-                                            setEmail("sarah@taskflow.com");
+                                            setEmail("sarah@internflow.com");
                                             setPassword("P@ss123456");
                                         }}
                                     >
@@ -138,7 +138,7 @@ export function Login() {
                                         className={`demo-btn ${selectedRole === 'Member' ? 'active' : ''}`}
                                         onClick={() => {
                                             setSelectedRole("Member");
-                                            setEmail("mike@taskflow.com");
+                                            setEmail("mike@internflow.com");
                                             setPassword("P@ss123456");
                                         }}
                                     >

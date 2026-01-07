@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
+import toast from 'react-hot-toast';
 import '../../assets/styles/Modal.css';
 import api from '../../utils/api';
 
@@ -66,7 +67,7 @@ const AddMemberModal = ({ isOpen, onClose, projectId, projectName, currentMember
             onClose();
         } catch (error) {
             console.error("Failed to update members:", error);
-            alert("Failed to update team members");
+            toast.error("Failed to update team members");
         } finally {
             setSaving(false);
         }
