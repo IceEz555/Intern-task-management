@@ -115,3 +115,4 @@ elif tabs == 'About':
     This system is a Retrieval-Augmented Generation (RAG) chatbot
     designed for answering questions about a Task Management System.
     """)
+
