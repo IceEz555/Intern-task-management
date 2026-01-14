@@ -10,6 +10,7 @@ const AdminDashboard = () => {
     // State for data
     const [stats, setStats] = useState([]);
     const [userDist, setUserDist] = useState([]); // New state for chart
+    const [weeklyActivity, setWeeklyActivity] = useState([]); // New state for weekly activity
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -44,6 +45,7 @@ const AdminDashboard = () => {
                 ];
                 setStats(realStats);
                 setUserDist(data.userDistribution);
+                setWeeklyActivity(data.weeklyActivity || []);
             } catch (error) {
                 console.error("Failed to fetch dashboard data", error);
             } finally {
@@ -107,6 +109,7 @@ const AdminDashboard = () => {
                 <div className="charts-grid">
 
                     {/* Weekly Activity (Mock Chart) */}
+                            {/* Weekly Activity (Real Data) */}
                     <div className="chart-card">
                         <div className="chart-header">
                             <div className="chart-title-wrapper">
@@ -114,23 +117,30 @@ const AdminDashboard = () => {
                                 <h3 className="chart-title">Weekly Activity</h3>
                             </div>
                             <select className="chart-select">
-                                <option>This Week</option>
-                                <option>Last Week</option>
+                                <option>Last 7 Days</option>
                             </select>
                         </div>
                         <div className="bar-chart-container">
-                            {/* Fake Bars */}
-                            {[40, 70, 45, 90, 60, 80, 50].map((h, i) => (
-                                <div key={i} className="bar-wrapper">
-                                    <div
-                                        className="bar-fill"
-                                        style={{ height: `${h}%` }}
-                                    ></div>
-                                </div>
-                            ))}
+                            {/* Real Bars */}
+                            {weeklyActivity.map((item, i) => {
+                                // Calculate max value for scaling (default to 10 if all 0)
+                                const maxCount = Math.max(...weeklyActivity.map(w => w.count), 10);
+                                const heightPct = (item.count / maxCount) * 100;
+
+                                return (
+                                    <div key={i} className="bar-wrapper" title={`${item.count} tasks`}>
+                                        <div
+                                            className="bar-fill"
+                                            style={{ height: `${heightPct}%` }}
+                                        ></div>
+                                    </div>
+                                );
+                            })}
                         </div>
                         <div className="chart-labels">
-                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                            {weeklyActivity.map((item, i) => (
+                                <span key={i}>{item.day}</span>
+                            ))}
                         </div>
                     </div>
 
